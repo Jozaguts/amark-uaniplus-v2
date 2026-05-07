@@ -1,9 +1,17 @@
 <script setup lang="ts">
+import MegaMenu from '~/components/header/MegaMenu.vue'
+
 type TabKey = 'women' | 'men' | 'kids' | 'dogs' | 'cats'
 type NavKey = 'newToday' | 'clothing' | 'dresses' | 'shoes' | 'accessories' | 'designers' | 'stores' | 'hotList' | 'sale'
+type MegaMenuLink = { labelKey: string, badgeKey?: string, italic?: boolean }
+type MegaMenuColumn = { titleKey: string, items?: MegaMenuLink[], groups?: MegaMenuLink[][] }
+type MegaMenuImage = { titleKey: string, altKey: string, src: string }
+type MegaMenuConfig = { columns: MegaMenuColumn[], images?: MegaMenuImage[] }
+type NavItem = { key: NavKey, menu?: MegaMenuConfig }
 
 const route = useRoute()
 const localePath = useLocalePath()
+const activeMegaMenuKey = ref<NavKey | null>(null)
 
 const tabs = [
   { key: 'women', to: '/women' },
@@ -14,16 +22,176 @@ const tabs = [
 ] satisfies Array<{ key: TabKey, to: string }>
 
 const navItems = [
-  'newToday',
-  'clothing',
-  'dresses',
-  'shoes',
-  'accessories',
-  'designers',
-  'stores',
-  'hotList',
-  'sale',
-] satisfies NavKey[]
+  { key: 'newToday' },
+  {
+    key: 'clothing',
+    menu: {
+      columns: [
+        {
+          titleKey: 'header.mega.clothing.category.title',
+          groups: [
+            [
+              { labelKey: 'header.mega.clothing.category.shopAll' },
+              { labelKey: 'header.mega.clothing.category.bestSellers' },
+              { labelKey: 'header.mega.clothing.category.foundations' },
+              { labelKey: 'header.mega.clothing.category.activewear' },
+              { labelKey: 'header.mega.clothing.category.denim' },
+              { labelKey: 'header.mega.clothing.category.dresses' },
+              { labelKey: 'header.mega.clothing.category.jackets' },
+              { labelKey: 'header.mega.clothing.category.jumpsuits' },
+              { labelKey: 'header.mega.clothing.category.kids' },
+              { labelKey: 'header.mega.clothing.category.lingerie' },
+            ],
+            [
+              { labelKey: 'header.mega.clothing.category.loungewear' },
+              { labelKey: 'header.mega.clothing.category.matchingSets' },
+              { labelKey: 'header.mega.clothing.category.pants' },
+              { labelKey: 'header.mega.clothing.category.rompers' },
+              { labelKey: 'header.mega.clothing.category.shorts' },
+              { labelKey: 'header.mega.clothing.category.skirts' },
+              { labelKey: 'header.mega.clothing.category.sweaters' },
+              { labelKey: 'header.mega.clothing.category.swimsuits' },
+              { labelKey: 'header.mega.clothing.category.tops' },
+              { labelKey: 'header.mega.clothing.category.weddingShop' },
+            ],
+          ],
+        },
+        {
+          titleKey: 'header.mega.clothing.trending.title',
+          items: [
+            { labelKey: 'header.mega.clothing.trending.vacayMostWanted' },
+            { labelKey: 'header.mega.clothing.trending.bestOfSpring' },
+            { labelKey: 'header.mega.clothing.trending.cuteMatchingSets' },
+            { labelKey: 'header.mega.clothing.trending.coolGirlCasual' },
+            { labelKey: 'header.mega.clothing.trending.resortDresses' },
+            { labelKey: 'header.mega.clothing.trending.richGirlVibes' },
+            { labelKey: 'header.mega.clothing.trending.westernChic' },
+            { labelKey: 'header.mega.clothing.trending.sexyNightOut' },
+            { labelKey: 'header.mega.clothing.trending.bestDressedGuest' },
+            { labelKey: 'header.mega.clothing.trending.officeApproved' },
+            { labelKey: 'header.mega.clothing.trending.itGirlEssentials' },
+          ],
+        },
+      ],
+      images: [
+        { titleKey: 'header.mega.images.richGirlOutfits.title', altKey: 'header.mega.images.richGirlOutfits.alt', src: '/images/header-mega/rich-girl-outfits.png' },
+        { titleKey: 'header.mega.images.summerPreview.title', altKey: 'header.mega.images.summerPreview.alt', src: '/images/header-mega/summer-preview.png' },
+      ],
+    },
+  },
+  {
+    key: 'dresses',
+    menu: {
+      columns: [
+        {
+          titleKey: 'header.mega.dresses.length.title',
+          items: [
+            { labelKey: 'header.mega.dresses.length.shopAll' },
+            { labelKey: 'header.mega.dresses.length.mini' },
+            { labelKey: 'header.mega.dresses.length.midi' },
+            { labelKey: 'header.mega.dresses.length.maxi' },
+            { labelKey: 'header.mega.dresses.length.gowns' },
+          ],
+        },
+        {
+          titleKey: 'header.mega.dresses.trending.title',
+          items: [
+            { labelKey: 'header.mega.dresses.trending.spring' },
+            { labelKey: 'header.mega.dresses.trending.chicEvent' },
+            { labelKey: 'header.mega.dresses.trending.vacayDays' },
+            { labelKey: 'header.mega.dresses.trending.everyday' },
+            { labelKey: 'header.mega.dresses.trending.sexyNightOut' },
+            { labelKey: 'header.mega.dresses.trending.bumpFriendly' },
+            { labelKey: 'header.mega.dresses.trending.floral' },
+            { labelKey: 'header.mega.dresses.trending.white' },
+          ],
+        },
+        {
+          titleKey: 'header.mega.dresses.occasion.title',
+          items: [
+            { labelKey: 'header.mega.dresses.occasion.wedding' },
+            { labelKey: 'header.mega.dresses.occasion.blackTie' },
+            { labelKey: 'header.mega.dresses.occasion.prom' },
+            { labelKey: 'header.mega.dresses.occasion.graduation' },
+            { labelKey: 'header.mega.dresses.occasion.vacation' },
+            { labelKey: 'header.mega.dresses.occasion.nightOut' },
+            { labelKey: 'header.mega.dresses.occasion.cocktail' },
+            { labelKey: 'header.mega.dresses.occasion.weekend' },
+            { labelKey: 'header.mega.dresses.occasion.work' },
+            { labelKey: 'header.mega.dresses.occasion.dayEvent' },
+            { labelKey: 'header.mega.dresses.occasion.bride' },
+            { labelKey: 'header.mega.dresses.occasion.bridesmaid' },
+          ],
+        },
+      ],
+      images: [
+        { titleKey: 'header.mega.images.vacayNights.title', altKey: 'header.mega.images.vacayNights.alt', src: '/images/header-mega/vacay-nights.png' },
+        { titleKey: 'header.mega.images.dressesSeason.title', altKey: 'header.mega.images.dressesSeason.alt', src: '/images/header-mega/dresses-season.png' },
+      ],
+    },
+  },
+  { key: 'shoes' },
+  {
+    key: 'accessories',
+    menu: {
+      columns: [
+        {
+          titleKey: 'header.mega.accessories.bags.title',
+          items: [
+            { labelKey: 'header.mega.common.viewAll' },
+            { labelKey: 'header.mega.accessories.bags.clutches' },
+            { labelKey: 'header.mega.accessories.bags.crossbody' },
+            { labelKey: 'header.mega.accessories.bags.shoulderBags' },
+            { labelKey: 'header.mega.accessories.bags.totes' },
+            { labelKey: 'header.mega.accessories.bags.travelBags' },
+            { labelKey: 'header.mega.accessories.bags.luxuryBags', badgeKey: 'header.mega.common.fwrd', italic: true },
+          ],
+        },
+        {
+          titleKey: 'header.mega.accessories.jewelry.title',
+          items: [
+            { labelKey: 'header.mega.common.viewAll' },
+            { labelKey: 'header.mega.accessories.jewelry.bracelets' },
+            { labelKey: 'header.mega.accessories.jewelry.earrings' },
+            { labelKey: 'header.mega.accessories.jewelry.necklaces' },
+            { labelKey: 'header.mega.accessories.jewelry.rings' },
+            { labelKey: 'header.mega.accessories.jewelry.fineJewelry' },
+            { labelKey: 'header.mega.accessories.jewelry.luxuryJewelry', badgeKey: 'header.mega.common.fwrd', italic: true },
+          ],
+        },
+        {
+          titleKey: 'header.mega.accessories.accessories.title',
+          items: [
+            { labelKey: 'header.mega.common.viewAll' },
+            { labelKey: 'header.mega.accessories.accessories.belts' },
+            { labelKey: 'header.mega.accessories.accessories.hatsHair' },
+            { labelKey: 'header.mega.accessories.accessories.sunglasses' },
+            { labelKey: 'header.mega.accessories.accessories.travel' },
+            { labelKey: 'header.mega.accessories.accessories.luxuryAccessories', badgeKey: 'header.mega.common.fwrd', italic: true },
+          ],
+        },
+        {
+          titleKey: 'header.mega.accessories.home.title',
+          items: [
+            { labelKey: 'header.mega.common.viewAll' },
+            { labelKey: 'header.mega.accessories.home.bath' },
+            { labelKey: 'header.mega.accessories.home.candles' },
+            { labelKey: 'header.mega.accessories.home.kitchen' },
+            { labelKey: 'header.mega.accessories.home.outdoor' },
+            { labelKey: 'header.mega.accessories.home.mothersDay' },
+          ],
+        },
+      ],
+      images: [
+        { titleKey: 'header.mega.images.mothersDayGifts.title', altKey: 'header.mega.images.mothersDayGifts.alt', src: '/images/header-mega/mothers-day-gifts.png' },
+      ],
+    },
+  },
+  { key: 'designers' },
+  { key: 'stores' },
+  { key: 'hotList' },
+  { key: 'sale' },
+] satisfies NavItem[]
 
 function normalizePath(path: string): string {
   return path.replace(/^\/(en|es)(?=\/)/, '').replace(/\/$/, '') || '/'
@@ -31,6 +199,18 @@ function normalizePath(path: string): string {
 
 function isActiveTab(path: string): boolean {
   return normalizePath(route.path) === path
+}
+
+const activeMegaMenu = computed(() => {
+  return navItems.find(item => item.key === activeMegaMenuKey.value)?.menu
+})
+
+function openMegaMenu(item: NavItem): void {
+  activeMegaMenuKey.value = item.menu ? item.key : null
+}
+
+function closeMegaMenu(): void {
+  activeMegaMenuKey.value = null
 }
 </script>
 
@@ -74,17 +254,33 @@ function isActiveTab(path: string): boolean {
         </div>
       </div>
 
-      <div class="hidden h-[41px] items-center justify-center lg:flex">
-        <nav class="flex items-center gap-[34px] text-[15px] font-bold uppercase leading-none tracking-[0.16em]">
-          <a
+      <div
+        class="hidden lg:block"
+        @mouseenter.stop
+        @mouseleave="closeMegaMenu"
+      >
+        <nav class="flex h-[41px] items-center justify-center gap-[34px] text-[15px] font-bold uppercase leading-none tracking-[0.16em]">
+          <div
             v-for="item in navItems"
-            :key="item"
-            href="#"
-            class="whitespace-nowrap"
+            :key="item.key"
+            class="flex h-full items-center"
+            @mouseenter="openMegaMenu(item)"
           >
-            {{ $t(`header.nav.${item}`) }}
-          </a>
+            <a
+              href="#"
+              class="border-b border-transparent pb-[8px] pt-[8px] whitespace-nowrap"
+              :class="activeMegaMenuKey === item.key && 'border-black'"
+            >
+              {{ $t(`header.nav.${item.key}`) }}
+            </a>
+          </div>
         </nav>
+
+        <MegaMenu
+          v-if="activeMegaMenu"
+          :columns="activeMegaMenu.columns"
+          :images="activeMegaMenu.images"
+        />
       </div>
 
       <div class="lg:hidden">
@@ -122,11 +318,11 @@ function isActiveTab(path: string): boolean {
         <nav class="flex h-[41px] items-center gap-[26px] overflow-hidden bg-black px-[20px] text-[14px] font-bold uppercase leading-none tracking-[0.15em] text-white">
           <a
             v-for="item in navItems"
-            :key="item"
+            :key="item.key"
             href="#"
             class="shrink-0 whitespace-nowrap"
           >
-            {{ $t(`header.nav.${item}`) }}
+            {{ $t(`header.nav.${item.key}`) }}
           </a>
         </nav>
       </div>

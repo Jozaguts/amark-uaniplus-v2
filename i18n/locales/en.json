@@ -28,6 +28,145 @@
       "language": "Change language",
       "currency": "USD",
       "login": "Login"
+    },
+    "mega": {
+      "common": {
+        "viewAll": "View All",
+        "fwrd": "FWRD"
+      },
+      "clothing": {
+        "category": {
+          "title": "Shop by Category",
+          "shopAll": "Shop All Clothing",
+          "bestSellers": "Shop Best Sellers",
+          "foundations": "The Foundations Shop",
+          "activewear": "Activewear",
+          "denim": "Denim",
+          "dresses": "Dresses",
+          "jackets": "Jackets & Coats",
+          "jumpsuits": "Jumpsuits",
+          "kids": "Kids",
+          "lingerie": "Lingerie & Sleepwear",
+          "loungewear": "Loungewear",
+          "matchingSets": "Matching Sets",
+          "pants": "Pants",
+          "rompers": "Rompers",
+          "shorts": "Shorts",
+          "skirts": "Skirts",
+          "sweaters": "Sweaters & Knits",
+          "swimsuits": "Swimsuits & Cover-Ups",
+          "tops": "Tops",
+          "weddingShop": "The Wedding Shop"
+        },
+        "trending": {
+          "title": "Trending",
+          "vacayMostWanted": "Vacay Most Wanted",
+          "bestOfSpring": "Best Of Spring",
+          "cuteMatchingSets": "Cute Matching Sets",
+          "coolGirlCasual": "Cool Girl Casual",
+          "resortDresses": "Resort Dresses",
+          "richGirlVibes": "Rich Girl Vibes",
+          "westernChic": "Western Chic",
+          "sexyNightOut": "Sexy Night Out",
+          "bestDressedGuest": "Best Dressed Guest",
+          "officeApproved": "Office Approved",
+          "itGirlEssentials": "It Girl Essentials"
+        }
+      },
+      "dresses": {
+        "length": {
+          "title": "Shop By Length",
+          "shopAll": "Shop All Dresses",
+          "mini": "Mini",
+          "midi": "Midi",
+          "maxi": "Maxi",
+          "gowns": "Gowns"
+        },
+        "trending": {
+          "title": "Trending",
+          "spring": "Spring",
+          "chicEvent": "Chic Event Dresses",
+          "vacayDays": "Vacay Days",
+          "everyday": "Everyday Dresses",
+          "sexyNightOut": "Sexy Night Out",
+          "bumpFriendly": "Bump Friendly",
+          "floral": "Floral",
+          "white": "White"
+        },
+        "occasion": {
+          "title": "Occasion",
+          "wedding": "Wedding",
+          "blackTie": "Black Tie",
+          "prom": "Prom",
+          "graduation": "Graduation",
+          "vacation": "Vacation",
+          "nightOut": "Night Out",
+          "cocktail": "Cocktail",
+          "weekend": "Weekend",
+          "work": "Work",
+          "dayEvent": "Day Event",
+          "bride": "For The Bride",
+          "bridesmaid": "For The Bridesmaid"
+        }
+      },
+      "accessories": {
+        "bags": {
+          "title": "Bags",
+          "clutches": "Clutches",
+          "crossbody": "Crossbody",
+          "shoulderBags": "Shoulder Bags",
+          "totes": "Totes",
+          "travelBags": "Travel Bags",
+          "luxuryBags": "Luxury Bags"
+        },
+        "jewelry": {
+          "title": "Jewelry",
+          "bracelets": "Bracelets",
+          "earrings": "Earrings",
+          "necklaces": "Necklaces",
+          "rings": "Rings",
+          "fineJewelry": "Fine Jewelry",
+          "luxuryJewelry": "Luxury Jewelry"
+        },
+        "accessories": {
+          "title": "Accessories",
+          "belts": "Belts",
+          "hatsHair": "Hats & Hair Accessories",
+          "sunglasses": "Sunglasses & Eyewear",
+          "travel": "Travel",
+          "luxuryAccessories": "Luxury Accessories"
+        },
+        "home": {
+          "title": "Home",
+          "bath": "Bath",
+          "candles": "Candles & Home Fragrance",
+          "kitchen": "Kitchen & Dining",
+          "outdoor": "Outdoor",
+          "mothersDay": "Mother's Day Gifts"
+        }
+      },
+      "images": {
+        "richGirlOutfits": {
+          "title": "Rich Girl Outfits",
+          "alt": "Model wearing a rich girl outfit"
+        },
+        "summerPreview": {
+          "title": "Summer Preview",
+          "alt": "Model wearing a summer preview look"
+        },
+        "vacayNights": {
+          "title": "Vacay Nights",
+          "alt": "Model wearing a green vacation dress"
+        },
+        "dressesSeason": {
+          "title": "Dresses of the Season",
+          "alt": "Model wearing a white seasonal dress"
+        },
+        "mothersDayGifts": {
+          "title": "Mother's Day Gifts",
+          "alt": "Mother's Day beauty and gift products"
+        }
+      }
     }
   }
 }

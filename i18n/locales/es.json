@@ -28,6 +28,145 @@
       "language": "Cambiar idioma",
       "currency": "USD",
       "login": "Iniciar sesión"
+    },
+    "mega": {
+      "common": {
+        "viewAll": "Ver todo",
+        "fwrd": "FWRD"
+      },
+      "clothing": {
+        "category": {
+          "title": "Comprar por categoría",
+          "shopAll": "Toda la ropa",
+          "bestSellers": "Más vendidos",
+          "foundations": "Básicos esenciales",
+          "activewear": "Ropa deportiva",
+          "denim": "Denim",
+          "dresses": "Vestidos",
+          "jackets": "Chamarras y abrigos",
+          "jumpsuits": "Jumpsuits",
+          "kids": "Niños",
+          "lingerie": "Lencería y pijamas",
+          "loungewear": "Ropa cómoda",
+          "matchingSets": "Conjuntos",
+          "pants": "Pantalones",
+          "rompers": "Rompers",
+          "shorts": "Shorts",
+          "skirts": "Faldas",
+          "sweaters": "Suéteres y tejidos",
+          "swimsuits": "Trajes de baño",
+          "tops": "Tops",
+          "weddingShop": "Tienda de bodas"
+        },
+        "trending": {
+          "title": "Tendencias",
+          "vacayMostWanted": "Lo más buscado para vacaciones",
+          "bestOfSpring": "Lo mejor de primavera",
+          "cuteMatchingSets": "Conjuntos favoritos",
+          "coolGirlCasual": "Casual cool",
+          "resortDresses": "Vestidos resort",
+          "richGirlVibes": "Rich Girl Vibes",
+          "westernChic": "Western Chic",
+          "sexyNightOut": "Noche sexy",
+          "bestDressedGuest": "Invitada mejor vestida",
+          "officeApproved": "Aprobado para oficina",
+          "itGirlEssentials": "Esenciales It Girl"
+        }
+      },
+      "dresses": {
+        "length": {
+          "title": "Comprar por largo",
+          "shopAll": "Todos los vestidos",
+          "mini": "Mini",
+          "midi": "Midi",
+          "maxi": "Maxi",
+          "gowns": "Vestidos largos"
+        },
+        "trending": {
+          "title": "Tendencias",
+          "spring": "Primavera",
+          "chicEvent": "Vestidos para evento",
+          "vacayDays": "Días de vacaciones",
+          "everyday": "Vestidos diarios",
+          "sexyNightOut": "Noche sexy",
+          "bumpFriendly": "Maternidad",
+          "floral": "Floral",
+          "white": "Blanco"
+        },
+        "occasion": {
+          "title": "Ocasión",
+          "wedding": "Boda",
+          "blackTie": "Etiqueta",
+          "prom": "Graduación",
+          "graduation": "Graduación",
+          "vacation": "Vacaciones",
+          "nightOut": "Salida de noche",
+          "cocktail": "Cóctel",
+          "weekend": "Fin de semana",
+          "work": "Trabajo",
+          "dayEvent": "Evento de día",
+          "bride": "Para la novia",
+          "bridesmaid": "Para la dama de honor"
+        }
+      },
+      "accessories": {
+        "bags": {
+          "title": "Bolsas",
+          "clutches": "Clutches",
+          "crossbody": "Crossbody",
+          "shoulderBags": "Bolsas de hombro",
+          "totes": "Totes",
+          "travelBags": "Bolsas de viaje",
+          "luxuryBags": "Bolsas de lujo"
+        },
+        "jewelry": {
+          "title": "Joyería",
+          "bracelets": "Pulseras",
+          "earrings": "Aretes",
+          "necklaces": "Collares",
+          "rings": "Anillos",
+          "fineJewelry": "Joyería fina",
+          "luxuryJewelry": "Joyería de lujo"
+        },
+        "accessories": {
+          "title": "Accesorios",
+          "belts": "Cinturones",
+          "hatsHair": "Sombreros y accesorios para cabello",
+          "sunglasses": "Lentes de sol",
+          "travel": "Viaje",
+          "luxuryAccessories": "Accesorios de lujo"
+        },
+        "home": {
+          "title": "Hogar",
+          "bath": "Baño",
+          "candles": "Velas y fragancias",
+          "kitchen": "Cocina y comedor",
+          "outdoor": "Exterior",
+          "mothersDay": "Regalos para mamá"
+        }
+      },
+      "images": {
+        "richGirlOutfits": {
+          "title": "Looks Rich Girl",
+          "alt": "Modelo usando un look rich girl"
+        },
+        "summerPreview": {
+          "title": "Preview de verano",
+          "alt": "Modelo usando un look de verano"
+        },
+        "vacayNights": {
+          "title": "Noches de vacaciones",
+          "alt": "Modelo usando un vestido verde de vacaciones"
+        },
+        "dressesSeason": {
+          "title": "Vestidos de temporada",
+          "alt": "Modelo usando un vestido blanco de temporada"
+        },
+        "mothersDayGifts": {
+          "title": "Regalos para mamá",
+          "alt": "Productos de belleza y regalos para mamá"
+        }
+      }
     }
   }
 }
