@@ -1,5 +1,14 @@
 {
   "welcome": "Welcome",
+  "women": {
+    "home": {
+      "title": "Womens Homepage",
+      "hero": {
+        "alt": "Wedding Season. Invites coming in, the perfect dresses coming right up.",
+        "ctaLabel": "Shop wedding season dresses"
+      }
+    }
+  },
   "header": {
     "tabs": {
       "women": "Women",

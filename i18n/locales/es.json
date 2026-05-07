@@ -1,5 +1,14 @@
 {
   "welcome": "Bienvenido",
+  "women": {
+    "home": {
+      "title": "Página principal de mujer",
+      "hero": {
+        "alt": "Temporada de bodas. Llegan las invitaciones y los vestidos perfectos también.",
+        "ctaLabel": "Comprar vestidos para temporada de bodas"
+      }
+    }
+  },
   "header": {
     "tabs": {
       "women": "Mujer",
