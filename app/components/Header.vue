@@ -204,14 +204,38 @@ function isActiveTab(path: string): boolean {
 const activeMegaMenu = computed(() => {
   return navItems.find(item => item.key === activeMegaMenuKey.value)?.menu
 })
+// esto es para forzar el estado activo
+// const forcedMegaMenuKey = computed(() => {
+//   const value = route.query.megaMenu
+//
+//   if (typeof value !== 'string')
+//     return null
+//
+//   const item = navItems.find(navItem => navItem.key === value && navItem.menu)
+//
+//   return item?.key ?? null
+// })
 
 function openMegaMenu(item: NavItem): void {
+  // esto es para forzar el estado activo
+  // if (forcedMegaMenuKey.value)
+  //   return
+
   activeMegaMenuKey.value = item.menu ? item.key : null
 }
 
 function closeMegaMenu(): void {
+  // esto es para forzar el estado activo
+  // if (forcedMegaMenuKey.value)
+  //   return
+
   activeMegaMenuKey.value = null
 }
+// esto es para forzar el estado activo
+// watchEffect(() => {
+//   if (forcedMegaMenuKey.value)
+//     activeMegaMenuKey.value = forcedMegaMenuKey.value
+// })
 </script>
 
 <template>
