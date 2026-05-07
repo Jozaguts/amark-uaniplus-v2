@@ -1,35 +1,59 @@
 # Repository Guidelines
 
+## Project Purpose
+
+This project is a Nuxt 4 site focused on high-fidelity visual replication from a reference website. The stack is Vue 3, Nuxt 4, Tailwind CSS, TypeScript, and pnpm. Add libraries only when there is a real need; prefer native Nuxt/Vue/Tailwind patterns first.
+
+Use the provided URL and screenshots as references. Do not copy protected assets unless the user confirms permission.
+
 ## Project Structure & Module Organization
 
-This is a minimal Nuxt 4 application. The main app entry is `app/app.vue`, which currently renders the Nuxt welcome screen and route announcer. Nuxt configuration lives in `nuxt.config.ts`, TypeScript settings in `tsconfig.json`, and static public assets in `public/`. Generated Nuxt artifacts are written to `.nuxt/` and should not be edited directly. Dependencies are managed with `pnpm-lock.yaml`, so prefer pnpm.
+The current app entry is `app/app.vue`. Nuxt config lives in `nuxt.config.ts`, TypeScript settings in `tsconfig.json`, and static files in `public/`. Do not edit `.nuxt/` or `node_modules/`.
 
-As the app grows, keep Nuxt conventions: pages in `app/pages/`, reusable Vue components in `app/components/`, composables in `app/composables/`, layouts in `app/layouts/`, and server routes or API handlers in `server/`.
+Follow Nuxt conventions:
 
-## Build, Test, and Development Commands
+- `app/pages/`: route pages.
+- `app/components/`: reusable Vue components.
+- `app/composables/`: shared `useThing.ts` composables.
+- `app/layouts/`: Nuxt layouts.
+- `server/`: server routes and utilities.
+- `app/assets/`: build-processed assets.
+- `public/`: direct static files.
 
-- `pnpm install`: install dependencies and run Nuxt preparation through `postinstall`.
-- `pnpm dev`: start the local development server, usually at `http://localhost:3000`.
-- `pnpm build`: build the production application.
-- `pnpm generate`: generate a static version of the site.
-- `pnpm preview`: preview the production build locally after `pnpm build`.
+## Commands
 
-## Coding Style & Naming Conventions
+- `pnpm install`: install dependencies.
+- `pnpm dev`: start the local server, usually `http://localhost:3000`.
+- `pnpm build`: build for production.
+- `pnpm generate`: generate a static site.
+- `pnpm preview`: preview the production build after `pnpm build`.
 
-Use Vue 3 single-file components with TypeScript where practical. Keep indentation at two spaces in Vue, TypeScript, JSON, and config files. Name Vue components in PascalCase, for example `ProductCard.vue`; name composables with the `useThing.ts` pattern; and keep route files lowercase, for example `app/pages/about.vue`.
+## Coding Style
 
-This repository does not currently define ESLint, Prettier, or a formatter script. Follow the existing Nuxt style: ESM modules, concise config files, and single quotes in TypeScript.
+Use Vue single-file components with TypeScript where practical. Keep two-space indentation. Name components in PascalCase (`HeroSection.vue`), composables as `useX.ts`, and pages with lowercase URL names (`app/pages/about.vue`).
+
+Follow `antfu` conventions for TypeScript, pnpm, organization, and future ESLint setup. If linting is added, prefer `@antfu/eslint-config` and expose `pnpm lint`.
+
+## Visual Replication Workflow
+
+Start with URL, desktop screenshot, mobile screenshot, and key states such as menu open, hover, modal, carousel, or validation. Implement section by section.
+
+Use Tailwind for layout, spacing, color, typography, and responsive rules. Avoid broad custom CSS. Create reusable components only when repetition is real.
+
+Verify desktop and mobile before closing UI work. Text must not overflow, overlap, or disappear.
 
 ## Testing Guidelines
 
-No test framework or test script is configured yet. When adding tests, prefer Vitest for unit tests and Playwright for browser flows. Place tests close to the feature or in a clear `tests/` directory, and name files with `.test.ts` or `.spec.ts`. Add `pnpm test` with the first test suite.
+No test framework is configured. When introduced, prefer Vitest for unit logic and Playwright for browser flows. Name tests `*.test.ts` or `*.spec.ts`. Add `pnpm test`.
 
 ## Commit & Pull Request Guidelines
 
-Git history currently only contains the initial `init` commit, so there is no established commit convention. Use short, imperative commit messages such as `Add landing page shell` or `Configure test runner`.
+History only contains `init`, so no convention is established. Use short, imperative messages such as `Add replicated hero section`.
 
-Pull requests should include a concise summary, any setup or migration notes, screenshots for visible UI changes, and the commands run for verification, such as `pnpm build`.
+Pull requests should include a summary, reference URL/screenshots, UI screenshots, and verification commands such as `pnpm build`.
 
 ## Agent-Specific Instructions
 
-Do not edit generated directories such as `.nuxt/` or dependency folders such as `node_modules/`. Keep changes scoped to source, config, documentation, or public assets unless the task explicitly requires dependency updates.
+Use `.agents/skills/nuxt` as the primary Nuxt skill because this repo uses Nuxt 4. Treat `.codex/skills/nuxt` as secondary because it is Nuxt 3.x-based. Use `antfu` for tooling and code style.
+
+For replication tasks, use URL plus screenshots. Browse the live site for interaction, responsive behavior, or exact structure. Use screenshots for visual fidelity.
