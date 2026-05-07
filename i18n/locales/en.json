@@ -1,3 +1,27 @@
 {
-  "welcome": "Welcome"
+  "welcome": "Welcome",
+  "header": {
+    "tabs": {
+      "women": "Women",
+      "men": "Men",
+      "beauty": "Beauty"
+    },
+    "nav": {
+      "newToday": "New Today",
+      "clothing": "Clothing",
+      "dresses": "Dresses",
+      "shoes": "Shoes",
+      "accessories": "Accessories",
+      "designers": "Designers",
+      "stores": "Stores",
+      "hotList": "Hot List",
+      "sale": "Sale"
+    },
+    "actions": {
+      "menu": "Open menu",
+      "search": "Search",
+      "wishlist": "Wishlist",
+      "bag": "Shopping bag"
+    }
+  }
 }
