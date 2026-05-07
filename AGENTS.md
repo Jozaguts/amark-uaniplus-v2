@@ -34,6 +34,8 @@ Use Vue single-file components with TypeScript where practical. Keep two-space i
 
 Follow `antfu` conventions for TypeScript, pnpm, organization, and future ESLint setup. If linting is added, prefer `@antfu/eslint-config` and expose `pnpm lint`.
 
+All user-facing text must use i18n. Add or update translation keys in root locale files `i18n/locales/en.json` and `i18n/locales/es.json` together; do not hardcode visible copy in Vue templates or scripts.
+
 ## Visual Replication Workflow
 
 Start with URL, desktop screenshot, mobile screenshot, and key states such as menu open, hover, modal, carousel, or validation. Implement section by section.
