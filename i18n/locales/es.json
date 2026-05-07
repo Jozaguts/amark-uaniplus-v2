@@ -105,9 +105,9 @@
           }
         }
       },
-      "fwrdPromo": {
-        "ctaLabel": "Comprar en FWRD",
-        "alt": "Comprar en FWRD.com"
+      "uandiplusPromo": {
+        "ctaLabel": "Comprar en uandiplus",
+        "alt": "Comprar en uandiplus.com"
       }
     }
   },
@@ -143,7 +143,7 @@
     "mega": {
       "common": {
         "viewAll": "Ver todo",
-        "fwrd": "FWRD"
+        "uandiplus": "uandiplus"
       },
       "clothing": {
         "category": {
@@ -278,6 +278,83 @@
           "alt": "Productos de belleza y regalos para mamá"
         }
       }
+    }
+  },
+  "footer": {
+    "heading": "Pie de página",
+    "opensNewWindow": "se abre en una ventana nueva",
+    "newsletter": {
+      "title": "Eleva tu estilo",
+      "copyBefore": "Suscríbete a nuestro newsletter y ",
+      "discount": "OBTÉN 10% DE DESCUENTO",
+      "copyAfter": ". Es como tener una mejor amiga con mucho estilo. Cancela cuando quieras.",
+      "privacy": "Política de privacidad",
+      "emailLabel": "Correo electrónico",
+      "placeholder": "Ingresa tu e-mail.",
+      "submit": "Suscribirse"
+    },
+    "survey": {
+      "title": "Ayúdanos a mejorar",
+      "copy": "Responde una breve encuesta sobre tu visita de hoy.",
+      "cta": "Iniciar encuesta"
+    },
+    "app": {
+      "title": "Lleva uandiplus contigo",
+      "copy": "Descarga nuestra app fácil de usar, disponible para iPhone, iPad y Android.",
+      "download": "Descargar en App Store"
+    },
+    "customerCare": {
+      "title": "Atención al cliente",
+      "links": {
+        "contact": "Contáctanos",
+        "phone": "01-800-872-0441",
+        "payment": "Opciones de pago",
+        "faqs": "Preguntas frecuentes",
+        "trackOrder": "Rastrea tu pedido",
+        "shipping": "Envíos y entregas",
+        "returns": "Devoluciones y cambios",
+        "sizeGuide": "Guía de tallas",
+        "gifting": "Regalos uandiplus",
+        "why": "Por qué uandiplus",
+        "feedback": "Comentarios",
+        "accessibility": "Accesibilidad"
+      }
+    },
+    "information": {
+      "title": "Información",
+      "links": {
+        "about": "Sobre nosotros",
+        "stores": "Tiendas",
+        "socialImpact": "Impacto social",
+        "careers": "Carreras",
+        "ambassadors": "Embajadores",
+        "affiliate": "Marketing de afiliados",
+        "investors": "Inversionistas",
+        "press": "Prensa"
+      }
+    },
+    "social": {
+      "title": "Conecta",
+      "links": {
+        "tiktok": "Conectar con uandiplus TikTok, se abre en una ventana nueva",
+        "youtube": "Conectar con uandiplus YouTube, se abre en una ventana nueva",
+        "instagram": "Conectar con uandiplus Instagram, se abre en una ventana nueva",
+        "facebook": "Conectar con uandiplus Facebook, se abre en una ventana nueva"
+      }
+    },
+    "promo": {
+      "ctaLabel": "Comprar en uandiplus",
+      "alt": "Comprar en uandiplus.com"
+    },
+    "legal": {
+      "navLabel": "Enlaces legales del pie de página",
+      "copyright": "2026 © uandiplus. Todos los derechos reservados.",
+      "terms": "Términos",
+      "privacy": "Privacidad",
+      "cookiePreferences": "Preferencias de cookies",
+      "caPrivacy": "Derechos de privacidad de CA",
+      "caTransparency": "Ley de transparencia de CA",
+      "privacyChoices": "Tus opciones de privacidad"
     }
   }
 }

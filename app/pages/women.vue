@@ -124,9 +124,9 @@ const exclusiveKickers = [
   },
 ] as const
 
-const fwrdPromo = {
-  ctaLabelKey: 'women.home.fwrdPromo.ctaLabel',
-  altKey: 'women.home.fwrdPromo.alt',
+const uandiplusPromo = {
+  ctaLabelKey: 'women.home.uandiplusPromo.ctaLabel',
+  altKey: 'women.home.uandiplusPromo.alt',
   src: 'https://is4.revolveassets.com/images/up/2025/July/070925_FWxPromo_RWhomepagebanner_1x.jpg',
   srcset: 'https://is4.revolveassets.com/images/up/2025/July/070925_FWxPromo_RWhomepagebanner_1x.jpg 1x, https://is4.revolveassets.com/images/up/2025/July/070925_FWxPromo_RWhomepagebanner_2x.jpg 2x',
 } as const
@@ -350,13 +350,13 @@ const fwrdPromo = {
         <a
           href="#"
           class="mt-[32px] block pt-[32px]"
-          :aria-label="$t(fwrdPromo.ctaLabelKey)"
+          :aria-label="$t(uandiplusPromo.ctaLabelKey)"
         >
           <img
             class="block h-auto w-full align-middle"
-            :src="fwrdPromo.src"
-            :srcset="fwrdPromo.srcset"
-            :alt="$t(fwrdPromo.altKey)"
+            :src="uandiplusPromo.src"
+            :srcset="uandiplusPromo.srcset"
+            :alt="$t(uandiplusPromo.altKey)"
           >
         </a>
       </div>

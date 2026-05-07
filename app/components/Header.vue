@@ -144,7 +144,7 @@ const navItems = [
             { labelKey: 'header.mega.accessories.bags.shoulderBags' },
             { labelKey: 'header.mega.accessories.bags.totes' },
             { labelKey: 'header.mega.accessories.bags.travelBags' },
-            { labelKey: 'header.mega.accessories.bags.luxuryBags', badgeKey: 'header.mega.common.fwrd', italic: true },
+            { labelKey: 'header.mega.accessories.bags.luxuryBags', badgeKey: 'header.mega.common.uandiplus', italic: true },
           ],
         },
         {
@@ -156,7 +156,7 @@ const navItems = [
             { labelKey: 'header.mega.accessories.jewelry.necklaces' },
             { labelKey: 'header.mega.accessories.jewelry.rings' },
             { labelKey: 'header.mega.accessories.jewelry.fineJewelry' },
-            { labelKey: 'header.mega.accessories.jewelry.luxuryJewelry', badgeKey: 'header.mega.common.fwrd', italic: true },
+            { labelKey: 'header.mega.accessories.jewelry.luxuryJewelry', badgeKey: 'header.mega.common.uandiplus', italic: true },
           ],
         },
         {
@@ -167,7 +167,7 @@ const navItems = [
             { labelKey: 'header.mega.accessories.accessories.hatsHair' },
             { labelKey: 'header.mega.accessories.accessories.sunglasses' },
             { labelKey: 'header.mega.accessories.accessories.travel' },
-            { labelKey: 'header.mega.accessories.accessories.luxuryAccessories', badgeKey: 'header.mega.common.fwrd', italic: true },
+            { labelKey: 'header.mega.accessories.accessories.luxuryAccessories', badgeKey: 'header.mega.common.uandiplus', italic: true },
           ],
         },
         {
@@ -256,7 +256,7 @@ function closeMegaMenu(): void {
 
         <a
           href="#"
-          aria-label="REVOLVE"
+          aria-label="uandiplus"
           class="font-serif text-[28px] font-bold leading-none tracking-[0.24em]"
         >
          <Icon name="icon:uandi" size="40"></Icon>

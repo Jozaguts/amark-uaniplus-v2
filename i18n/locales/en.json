@@ -105,9 +105,9 @@
           }
         }
       },
-      "fwrdPromo": {
-        "ctaLabel": "Shop FWRD",
-        "alt": "Shop FWRD.com"
+      "uandiplusPromo": {
+        "ctaLabel": "Shop uandiplus",
+        "alt": "Shop uandiplus.com"
       }
     }
   },
@@ -143,7 +143,7 @@
     "mega": {
       "common": {
         "viewAll": "View All",
-        "fwrd": "FWRD"
+        "uandiplus": "uandiplus"
       },
       "clothing": {
         "category": {
@@ -278,6 +278,83 @@
           "alt": "Mother's Day beauty and gift products"
         }
       }
+    }
+  },
+  "footer": {
+    "heading": "Footer",
+    "opensNewWindow": "opens in a new window",
+    "newsletter": {
+      "title": "Elevate your fashion game",
+      "copyBefore": "Sign up for our email newsletter and ",
+      "discount": "GET 10% OFF",
+      "copyAfter": ". It's like having a stylish BFF. Opt out any time.",
+      "privacy": "Privacy Policy",
+      "emailLabel": "Email Address",
+      "placeholder": "Enter your e-mail.",
+      "submit": "Sign up"
+    },
+    "survey": {
+      "title": "Help Us Improve",
+      "copy": "Take a brief survey about today's visit.",
+      "cta": "Begin Survey"
+    },
+    "app": {
+      "title": "Get uandiplus on the go",
+      "copy": "Download our super easy-to-use app available for your iPhone, iPad and Android.",
+      "download": "Download on the App Store"
+    },
+    "customerCare": {
+      "title": "Customer Care",
+      "links": {
+        "contact": "Contact Us",
+        "phone": "01-800-872-0441",
+        "payment": "Payment Options",
+        "faqs": "FAQs",
+        "trackOrder": "Track Your Order",
+        "shipping": "Shipping & Delivery",
+        "returns": "Returns & Exchanges",
+        "sizeGuide": "Size Guide",
+        "gifting": "Gifting uandiplus",
+        "why": "Why uandiplus",
+        "feedback": "Feedback",
+        "accessibility": "Accessibility"
+      }
+    },
+    "information": {
+      "title": "Information",
+      "links": {
+        "about": "About Us",
+        "stores": "Stores",
+        "socialImpact": "Social Impact",
+        "careers": "Careers",
+        "ambassadors": "Ambassadors",
+        "affiliate": "Affiliate Marketing",
+        "investors": "Investors",
+        "press": "Press"
+      }
+    },
+    "social": {
+      "title": "Connect",
+      "links": {
+        "tiktok": "Connect to uandiplus TikTok, opens in a new window",
+        "youtube": "Connect to uandiplus YouTube, opens in a new window",
+        "instagram": "Connect to uandiplus Instagram, opens in a new window",
+        "facebook": "Connect to uandiplus Facebook, opens in a new window"
+      }
+    },
+    "promo": {
+      "ctaLabel": "Shop uandiplus",
+      "alt": "Shop uandiplus.com"
+    },
+    "legal": {
+      "navLabel": "Footer legal links",
+      "copyright": "2026 © uandiplus. All Rights Reserved.",
+      "terms": "Terms",
+      "privacy": "Privacy",
+      "cookiePreferences": "Cookie Preferences",
+      "caPrivacy": "CA Privacy Rights",
+      "caTransparency": "CA Transparency Act",
+      "privacyChoices": "Your Privacy Choices"
     }
   }
 }
