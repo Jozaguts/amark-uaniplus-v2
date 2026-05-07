@@ -104,6 +104,10 @@
             "alt": "Inspiración de regalos para mamá"
           }
         }
+      },
+      "fwrdPromo": {
+        "ctaLabel": "Comprar en FWRD",
+        "alt": "Comprar en FWRD.com"
       }
     }
   },

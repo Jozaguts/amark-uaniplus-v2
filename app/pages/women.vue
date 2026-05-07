@@ -123,6 +123,13 @@ const exclusiveKickers = [
     srcset: 'https://is4.revolveassets.com/images/up/2026/May/050426_RW_MothersDayGifts_Kicker.jpg 1x, https://is4.revolveassets.com/images/up/2026/May/050426_RW_MothersDayGifts_Kicker_2x.jpg 2x',
   },
 ] as const
+
+const fwrdPromo = {
+  ctaLabelKey: 'women.home.fwrdPromo.ctaLabel',
+  altKey: 'women.home.fwrdPromo.alt',
+  src: 'https://is4.revolveassets.com/images/up/2025/July/070925_FWxPromo_RWhomepagebanner_1x.jpg',
+  srcset: 'https://is4.revolveassets.com/images/up/2025/July/070925_FWxPromo_RWhomepagebanner_1x.jpg 1x, https://is4.revolveassets.com/images/up/2025/July/070925_FWxPromo_RWhomepagebanner_2x.jpg 2x',
+} as const
 </script>
 
 <template>
@@ -335,6 +342,23 @@ const exclusiveKickers = [
             </a>
           </article>
         </div>
+      </div>
+    </section>
+
+    <section class="flex justify-center">
+      <div class="w-full max-w-[1400px] px-8">
+        <a
+          href="#"
+          class="mt-[32px] block pt-[32px]"
+          :aria-label="$t(fwrdPromo.ctaLabelKey)"
+        >
+          <img
+            class="block h-auto w-full align-middle"
+            :src="fwrdPromo.src"
+            :srcset="fwrdPromo.srcset"
+            :alt="$t(fwrdPromo.altKey)"
+          >
+        </a>
       </div>
     </section>
   </div>
