@@ -84,6 +84,26 @@
             "alt": "Inspiración de looks para escapada europea"
           }
         }
+      },
+      "exclusive": {
+        "title": "Colecciones nuevas y exclusivas",
+        "items": {
+          "office": {
+            "title": "Aprobado para oficina",
+            "ctaLabel": "Comprar estilos para oficina",
+            "alt": "Inspiración de looks para oficina"
+          },
+          "hotList": {
+            "title": "The Hot List",
+            "ctaLabel": "Comprar the hot list",
+            "alt": "Inspiración de looks hot list"
+          },
+          "mothersDay": {
+            "title": "Regalos para mamá",
+            "ctaLabel": "Comprar regalos para mamá",
+            "alt": "Inspiración de regalos para mamá"
+          }
+        }
       }
     }
   },

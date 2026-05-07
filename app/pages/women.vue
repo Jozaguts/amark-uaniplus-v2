@@ -99,6 +99,30 @@ const spotlightBuckets = [
     srcset: 'https://is4.revolveassets.com/images/up/2026/May/050426_RW_EuroEscape_Spotlight.jpg 1x, https://is4.revolveassets.com/images/up/2026/May/050426_RW_EuroEscape_Spotlight_2x.jpg 2x',
   },
 ] as const
+
+const exclusiveKickers = [
+  {
+    titleKey: 'women.home.exclusive.items.office.title',
+    ctaLabelKey: 'women.home.exclusive.items.office.ctaLabel',
+    altKey: 'women.home.exclusive.items.office.alt',
+    src: 'https://is4.revolveassets.com/images/up/2026/May/050426_RW_OfficeApproved_Kicker.jpg',
+    srcset: 'https://is4.revolveassets.com/images/up/2026/May/050426_RW_OfficeApproved_Kicker.jpg 1x, https://is4.revolveassets.com/images/up/2026/May/050426_RW_OfficeApproved_Kicker_2x.jpg 2x',
+  },
+  {
+    titleKey: 'women.home.exclusive.items.hotList.title',
+    ctaLabelKey: 'women.home.exclusive.items.hotList.ctaLabel',
+    altKey: 'women.home.exclusive.items.hotList.alt',
+    src: 'https://is4.revolveassets.com/images/up/2026/May/050426_RW_TheHotList_Kicker.jpg',
+    srcset: 'https://is4.revolveassets.com/images/up/2026/May/050426_RW_TheHotList_Kicker.jpg 1x, https://is4.revolveassets.com/images/up/2026/May/050426_RW_TheHotList_Kicker_2x.jpg 2x',
+  },
+  {
+    titleKey: 'women.home.exclusive.items.mothersDay.title',
+    ctaLabelKey: 'women.home.exclusive.items.mothersDay.ctaLabel',
+    altKey: 'women.home.exclusive.items.mothersDay.alt',
+    src: 'https://is4.revolveassets.com/images/up/2026/May/050426_RW_MothersDayGifts_Kicker.jpg',
+    srcset: 'https://is4.revolveassets.com/images/up/2026/May/050426_RW_MothersDayGifts_Kicker.jpg 1x, https://is4.revolveassets.com/images/up/2026/May/050426_RW_MothersDayGifts_Kicker_2x.jpg 2x',
+  },
+] as const
 </script>
 
 <template>
@@ -266,6 +290,47 @@ const spotlightBuckets = [
                   :srcset="item.srcset"
                   :alt="$t(item.altKey)"
                 >
+              </div>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="flex justify-center">
+      <div class="mt-[32px] w-full max-w-[1400px] px-8 pb-0">
+        <h2 class="sr-only">
+          {{ $t('women.home.exclusive.title') }}
+        </h2>
+
+        <div class="-ml-4 flex flex-wrap">
+          <article
+            v-for="item in exclusiveKickers"
+            :key="item.titleKey"
+            class="relative mb-[58px] ml-4 flex w-[calc(33.333333%-16px)] flex-col justify-between"
+          >
+            <a
+              href="#"
+              class="flex flex-1 flex-col text-black no-underline hover:no-underline"
+              :aria-label="$t(item.ctaLabelKey)"
+            >
+              <div class="flex w-full flex-grow flex-col items-center justify-center pb-[15px] text-center">
+                <h3 class="m-0 text-[18px] font-semibold uppercase leading-tight tracking-[0.142em]">
+                  {{ $t(item.titleKey) }}
+                </h3>
+              </div>
+
+              <div class="relative block aspect-[100/123.502304] w-full overflow-hidden">
+                <img
+                  class="absolute left-0 top-0 h-full w-full object-cover align-middle"
+                  :src="item.src"
+                  :srcset="item.srcset"
+                  :alt="$t(item.altKey)"
+                >
+              </div>
+
+              <div class="relative mt-[4px] text-center text-[12px] font-semibold uppercase leading-[1.15] tracking-[0.05em] hover:underline">
+                {{ $t('women.home.shops.shopNow') }}
               </div>
             </a>
           </article>

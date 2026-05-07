@@ -84,6 +84,26 @@
             "alt": "Euro escape outfit inspiration"
           }
         }
+      },
+      "exclusive": {
+        "title": "New and Exclusive Collections",
+        "items": {
+          "office": {
+            "title": "Office Approved",
+            "ctaLabel": "Shop office approved styles",
+            "alt": "Office approved outfit inspiration"
+          },
+          "hotList": {
+            "title": "The Hot List",
+            "ctaLabel": "Shop the hot list",
+            "alt": "The hot list outfit inspiration"
+          },
+          "mothersDay": {
+            "title": "Mother's Day Gifts",
+            "ctaLabel": "Shop Mother's Day gifts",
+            "alt": "Mother's Day gift inspiration"
+          }
+        }
       }
     }
   },
