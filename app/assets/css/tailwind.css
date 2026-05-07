@@ -1,4 +1,9 @@
 @import "tailwindcss";
+
+@source "../components/**/*.{vue,ts}";
+@source "../layouts/**/*.{vue,ts}";
+@source "../pages/**/*.{vue,ts}";
+
 @theme {
     --font-display: "Monserrat", sans-serif;
 }
