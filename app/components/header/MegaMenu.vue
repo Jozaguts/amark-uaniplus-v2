@@ -52,7 +52,7 @@ function columnSpanClass(column: MegaMenuColumn): string {
 </script>
 
 <template>
-  <div class="fixed inset-x-0 top-26 border-b border-[#f4f4f4] bg-white text-left normal-case tracking-normal">
+  <div class="fixed flex justify-center items-center inset-x-0 top-26 border-b border-[#f4f4f4] bg-white text-left normal-case tracking-normal">
     <div class="container mx-auto  px-8 pb-4 pt-5.5">
       <div class="grid grid-cols-12 gap-4">
         <div
