@@ -4,7 +4,9 @@
     "tabs": {
       "women": "Mujer",
       "men": "Hombre",
-      "beauty": "Belleza"
+      "kids": "Niños",
+      "dogs": "Perros",
+      "cats": "Gatos"
     },
     "nav": {
       "newToday": "Lo nuevo de hoy",
@@ -21,7 +23,11 @@
       "menu": "Abrir menú",
       "search": "Buscar",
       "wishlist": "Favoritos",
-      "bag": "Bolsa de compras"
+      "bag": "Bolsa de compras",
+      "cart": "Carrito de compras",
+      "language": "Cambiar idioma",
+      "currency": "USD",
+      "login": "Iniciar sesión"
     }
   }
 }

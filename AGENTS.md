@@ -59,3 +59,5 @@ Pull requests should include a summary, reference URL/screenshots, UI screenshot
 Use `.agents/skills/nuxt` as the primary Nuxt skill because this repo uses Nuxt 4. Treat `.codex/skills/nuxt` as secondary because it is Nuxt 3.x-based. Use `antfu` for tooling and code style.
 
 For replication tasks, use URL plus screenshots. Browse the live site for interaction, responsive behavior, or exact structure. Use screenshots for visual fidelity.
+
+Do not include routine verification footers such as `pnpm build passed` or the current dev server URL in final responses unless the user explicitly asks for verification details or a server status update.

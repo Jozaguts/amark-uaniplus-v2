@@ -1,9 +1,17 @@
 <script setup lang="ts">
+type TabKey = 'women' | 'men' | 'kids' | 'dogs' | 'cats'
+type NavKey = 'newToday' | 'clothing' | 'dresses' | 'shoes' | 'accessories' | 'designers' | 'stores' | 'hotList' | 'sale'
+
+const route = useRoute()
+const localePath = useLocalePath()
+
 const tabs = [
-  { key: 'women', active: true },
-  { key: 'men', active: false },
-  { key: 'beauty', active: false },
-] as const
+  { key: 'women', to: '/women' },
+  { key: 'men', to: '/men' },
+  { key: 'kids', to: '/kids' },
+  { key: 'dogs', to: '/dogs' },
+  { key: 'cats', to: '/cats' },
+] satisfies Array<{ key: TabKey, to: string }>
 
 const navItems = [
   'newToday',
@@ -15,7 +23,15 @@ const navItems = [
   'stores',
   'hotList',
   'sale',
-] as const
+] satisfies NavKey[]
+
+function normalizePath(path: string): string {
+  return path.replace(/^\/(en|es)(?=\/)/, '').replace(/\/$/, '') || '/'
+}
+
+function isActiveTab(path: string): boolean {
+  return normalizePath(route.path) === path
+}
 </script>
 
 <template>
@@ -23,15 +39,15 @@ const navItems = [
     <div class="fixed inset-x-0 top-0 z-50 border-b border-[#e8e8e8] bg-white text-black">
       <div class="hidden h-[63px] grid-cols-[1fr_auto_1fr] items-start px-[288px] pt-[21px] lg:grid">
         <nav class="flex items-center gap-[18px] pt-px text-[12px] font-semibold leading-none">
-          <a
+          <NuxtLink
             v-for="tab in tabs"
             :key="tab.key"
-            href="#"
+            :to="localePath(tab.to)"
             class="capitalize text-[#6d6d6d]"
-            :class="tab.active && 'border-b border-black pb-[3px] text-black'"
+            :class="isActiveTab(tab.to) && 'border-b border-black pb-[3px] text-black'"
           >
             {{ $t(`header.tabs.${tab.key}`) }}
-          </a>
+          </NuxtLink>
         </nav>
 
         <a
@@ -39,27 +55,22 @@ const navItems = [
           aria-label="REVOLVE"
           class="font-serif text-[28px] font-bold leading-none tracking-[0.24em]"
         >
-          REVOLVEss
+         <Icon name="icon:uandi" size="40"></Icon>
         </a>
 
-        <div class="flex items-start justify-end gap-[24px]">
-          <label class="flex h-[24px] w-[200px] items-center border-b border-black">
-            <span class="sr-only">{{ $t('header.actions.search') }}</span>
-            <input
-              class="h-full min-w-0 flex-1 border-0 bg-transparent text-[12px] leading-none text-black outline-none placeholder:text-[#777]"
-              type="search"
-              :placeholder="$t('header.actions.search')"
-            >
-            <Icon name="icon:search" class="size-[18px]" />
-          </label>
-
-          <a href="#" :aria-label="$t('header.actions.wishlist')" class="pt-[1px]">
-            <Icon name="icon:heart" class="size-[24px]" />
+        <div class="flex items-center justify-end gap-[21px] pt-[-1px] text-[16px] font-bold leading-none">
+          <a href="#" :aria-label="$t('header.actions.cart')" class="pt-px">
+            <Icon name="icon:shoping-cart" class="size-[25px]" />
           </a>
 
-          <a href="#" :aria-label="$t('header.actions.bag')" class="pt-[1px]">
-            <Icon name="icon:shop" class="size-[24px]" />
+          <a href="#" :aria-label="$t('header.actions.language')" class="flex items-center gap-[6px]">
+            <Icon name="icon:globe-light" class="size-[26px]" />
+            <span>{{ $t('header.actions.currency') }}</span>
           </a>
+
+          <NuxtLink :to="localePath('/login')" class="text-[16px] font-bold">
+            {{ $t('header.actions.login') }}
+          </NuxtLink>
         </div>
       </div>
 
@@ -85,25 +96,26 @@ const navItems = [
 
             <a
               href="#"
-              aria-label="REVOLVE"
-              class="font-serif text-[20px] font-bold leading-none tracking-[0.18em]"
+              aria-label="U&I"
+              class="flex items-center"
             >
-              REVOLVE
+              <Icon name="icon:uandi" size="40" />
             </a>
           </div>
 
-          <div class="flex items-center gap-[17px]">
-            <a href="#" :aria-label="$t('header.actions.search')">
-              <Icon name="icon:search" class="size-[26px]" />
+          <div class="flex items-center gap-[15px]">
+            <a href="#" :aria-label="$t('header.actions.cart')">
+              <Icon name="icon:shoping-cart" class="size-[25px]" />
             </a>
 
-            <a href="#" :aria-label="$t('header.actions.wishlist')">
-              <Icon name="icon:heart" class="size-[25px]" />
+            <a href="#" :aria-label="$t('header.actions.language')" class="flex items-center gap-[4px] text-[13px] font-bold">
+              <Icon name="icon:globe-light" class="size-[24px]" />
+              <span>{{ $t('header.actions.currency') }}</span>
             </a>
 
-            <a href="#" :aria-label="$t('header.actions.bag')">
-              <Icon name="icon:shop" class="size-[25px]" />
-            </a>
+            <NuxtLink :to="localePath('/login')" class="text-[13px] font-bold">
+              {{ $t('header.actions.login') }}
+            </NuxtLink>
           </div>
         </div>
 
