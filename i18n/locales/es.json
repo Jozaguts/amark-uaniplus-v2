@@ -6,6 +6,84 @@
       "hero": {
         "alt": "Temporada de bodas. Llegan las invitaciones y los vestidos perfectos también.",
         "ctaLabel": "Comprar vestidos para temporada de bodas"
+      },
+      "buckets": {
+        "shopNow": "Comprar ahora",
+        "justIn": {
+          "title": "Recién llegado",
+          "ctaLabel": "Comprar novedades",
+          "alt": "Spotlight de novedades",
+          "count": "719",
+          "overlay": "Novedades"
+        },
+        "sets": {
+          "title": "Alerta de sets",
+          "ctaLabel": "Comprar conjuntos",
+          "alt": "Alerta de sets. Estilos que amarás para vacaciones, fines casuales y más."
+        }
+      },
+      "shops": {
+        "title": "Tiendas",
+        "description": "Tu destino para cada estilo, tendencia, ocasión y mucho más.",
+        "shopNow": "Comprar ahora",
+        "items": {
+          "vacay": {
+            "title": "Looks para vacaciones",
+            "ctaLabel": "Comprar looks para vacaciones",
+            "alt": "Inspiración de looks para vacaciones"
+          },
+          "event": {
+            "title": "Vestidos para eventos",
+            "ctaLabel": "Comprar vestidos para eventos",
+            "alt": "Inspiración de vestidos para eventos"
+          },
+          "summer": {
+            "title": "Preview de verano",
+            "ctaLabel": "Comprar preview de verano",
+            "alt": "Inspiración de looks de verano"
+          },
+          "coolGirl": {
+            "title": "Cápsula cool girl",
+            "ctaLabel": "Comprar cápsula cool girl",
+            "alt": "Inspiración de looks cool girl"
+          },
+          "perfectSets": {
+            "title": "Sets perfectos",
+            "ctaLabel": "Comprar sets perfectos",
+            "alt": "Inspiración de conjuntos perfectos"
+          },
+          "graduation": {
+            "title": "Vestidos de graduación",
+            "ctaLabel": "Comprar vestidos de graduación",
+            "alt": "Inspiración de vestidos de graduación"
+          }
+        }
+      },
+      "spotlight": {
+        "title": "Spotlight",
+        "shopHeartloom": "Comprar Heartloom",
+        "items": {
+          "outfit": {
+            "title": "Nueva inspiración",
+            "ctaLabel": "Comprar nueva inspiración de looks",
+            "alt": "Nueva inspiración de looks"
+          },
+          "essentials": {
+            "title": "Esenciales atemporales",
+            "ctaLabel": "Comprar esenciales atemporales de Heartloom",
+            "alt": "Esenciales atemporales"
+          },
+          "dresses": {
+            "title": "Vestidos delicados",
+            "ctaLabel": "Comprar vestidos delicados",
+            "alt": "Vestidos delicados"
+          },
+          "euro": {
+            "title": "Escapada europea",
+            "ctaLabel": "Comprar escapada europea",
+            "alt": "Inspiración de looks para escapada europea"
+          }
+        }
       }
     }
   },

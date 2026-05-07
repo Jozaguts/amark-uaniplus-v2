@@ -6,6 +6,84 @@
       "hero": {
         "alt": "Wedding Season. Invites coming in, the perfect dresses coming right up.",
         "ctaLabel": "Shop wedding season dresses"
+      },
+      "buckets": {
+        "shopNow": "Shop Now",
+        "justIn": {
+          "title": "Just In",
+          "ctaLabel": "Shop new arrivals",
+          "alt": "New arrivals spotlight",
+          "count": "719",
+          "overlay": "New Arrivals"
+        },
+        "sets": {
+          "title": "Cute Sets Alert",
+          "ctaLabel": "Shop matching sets",
+          "alt": "Cute sets alert. Styles you'll love for vacations, casual weekends and more."
+        }
+      },
+      "shops": {
+        "title": "Shops",
+        "description": "Our one-stop destination for every style, trend, occasion you're shopping for + more.",
+        "shopNow": "Shop Now",
+        "items": {
+          "vacay": {
+            "title": "Cute Vacay Outfits",
+            "ctaLabel": "Shop cute vacation outfits",
+            "alt": "Cute vacation outfit inspiration"
+          },
+          "event": {
+            "title": "Special Event Dresses",
+            "ctaLabel": "Shop special event dresses",
+            "alt": "Special event dress inspiration"
+          },
+          "summer": {
+            "title": "Summer Preview",
+            "ctaLabel": "Shop summer preview",
+            "alt": "Summer preview outfit inspiration"
+          },
+          "coolGirl": {
+            "title": "Cool Girl Capsule",
+            "ctaLabel": "Shop cool girl capsule",
+            "alt": "Cool girl capsule outfit inspiration"
+          },
+          "perfectSets": {
+            "title": "Perfect Sets",
+            "ctaLabel": "Shop perfect sets",
+            "alt": "Perfect matching set inspiration"
+          },
+          "graduation": {
+            "title": "Graduation Dresses",
+            "ctaLabel": "Shop graduation dresses",
+            "alt": "Graduation dress inspiration"
+          }
+        }
+      },
+      "spotlight": {
+        "title": "Spotlight",
+        "shopHeartloom": "Shop Heartloom",
+        "items": {
+          "outfit": {
+            "title": "New Outfit Inspo",
+            "ctaLabel": "Shop new outfit inspiration",
+            "alt": "New outfit inspiration"
+          },
+          "essentials": {
+            "title": "Timeless Essentials",
+            "ctaLabel": "Shop Heartloom timeless essentials",
+            "alt": "Timeless essentials"
+          },
+          "dresses": {
+            "title": "Pretty Little Dresses",
+            "ctaLabel": "Shop pretty little dresses",
+            "alt": "Pretty little dresses"
+          },
+          "euro": {
+            "title": "Euro Escape",
+            "ctaLabel": "Shop Euro escape",
+            "alt": "Euro escape outfit inspiration"
+          }
+        }
       }
     }
   },
