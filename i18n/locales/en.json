@@ -111,6 +111,175 @@
       }
     }
   },
+  "men": {
+    "home": {
+      "title": "Mens Homepage",
+      "cta": {
+        "shopNow": "Shop Now",
+        "shopEdit": "Shop the Edit",
+        "shopCollection": "Shop the Collection"
+      },
+      "topTiles": {
+        "sale": {
+          "alt": "New markdowns. Up to 30% off."
+        },
+        "golf": {
+          "alt": "The golf shop. Shop the edit."
+        }
+      },
+      "features": {
+        "newArrivals": {
+          "title": "New Arrivals",
+          "description": "Don't sleep on this edit of the best new arrivals.",
+          "ctaLabel": "Shop new arrivals",
+          "alt": "Men's new arrivals edit"
+        },
+        "newProportions": {
+          "title": "New Proportions",
+          "description": "The silhouette shift leans into cropped tops and extra-baggy bottoms, defining a new balance of structure and ease.",
+          "ctaLabel": "Shop the new proportions edit",
+          "alt": "Men's new proportions edit"
+        },
+        "northFace": {
+          "title": "The North Face x Sky High Farm",
+          "description": "Introducing the Goodness Grows capsule collection, which unites functional outdoor gear with a Hudson Valley-based nonprofit's broader food equity mission.",
+          "ctaLabel": "Shop The North Face x Sky High Farm collection",
+          "alt": "The North Face x Sky High Farm collection"
+        }
+      },
+      "categories": {
+        "shorts": {
+          "title": "Shorts",
+          "ctaLabel": "Shop shorts",
+          "alt": "Men's shorts edit"
+        },
+        "swim": {
+          "title": "Swim",
+          "ctaLabel": "Shop swim",
+          "alt": "Men's swim edit"
+        },
+        "polos": {
+          "title": "Polos",
+          "ctaLabel": "Shop polos",
+          "alt": "Men's polos edit"
+        },
+        "hats": {
+          "title": "Hats",
+          "ctaLabel": "Shop hats",
+          "alt": "Men's hats edit"
+        },
+        "tees": {
+          "title": "Tees",
+          "ctaLabel": "Shop tees",
+          "alt": "Men's tees edit"
+        },
+        "shirts": {
+          "title": "Shirts",
+          "ctaLabel": "Shop shirts",
+          "alt": "Men's shirts edit"
+        }
+      }
+    }
+  },
+  "kids": {
+    "home": {
+      "title": "Kids Homepage",
+      "hero": {
+        "slides": {
+          "play": {
+            "ctaLabel": "Shop playful kids styles",
+            "alt": "Kids wearing playful warm-weather outfits"
+          },
+          "weekend": {
+            "ctaLabel": "Shop weekend kids outfits",
+            "alt": "Kids dressed for a relaxed weekend"
+          },
+          "sun": {
+            "ctaLabel": "Shop sunny day kids essentials",
+            "alt": "Kids enjoying a sunny day outdoors"
+          }
+        }
+      },
+      "categories": {
+        "new": { "title": "New Arrivals", "ctaLabel": "Shop kids new arrivals", "alt": "Kids new arrivals edit" },
+        "girls": { "title": "Girls", "ctaLabel": "Shop girls styles", "alt": "Girls outfit edit" },
+        "boys": { "title": "Boys", "ctaLabel": "Shop boys styles", "alt": "Boys outfit edit" },
+        "baby": { "title": "Baby", "ctaLabel": "Shop baby styles", "alt": "Baby essentials edit" },
+        "shoes": { "title": "Shoes", "ctaLabel": "Shop kids shoes", "alt": "Kids shoes edit" },
+        "accessories": { "title": "Accessories", "ctaLabel": "Shop kids accessories", "alt": "Kids accessories edit" }
+      },
+      "products": {
+        "title": "Shop Best Sellers",
+        "ctaLabel": "Shop kids best sellers",
+        "items": {
+          "rainbow": { "name": "Rainbow Play Dress", "brand": "Kids Dresses", "price": "$68", "ctaLabel": "Shop Rainbow Play Dress", "alt": "Rainbow play dress for kids" },
+          "denim": { "name": "Everyday Denim Set", "brand": "Kids Sets", "price": "$74", "ctaLabel": "Shop Everyday Denim Set", "alt": "Everyday denim set for kids" },
+          "sneaker": { "name": "Sunny Step Sneakers", "brand": "Kids Shoes", "price": "$52", "ctaLabel": "Shop Sunny Step Sneakers", "alt": "Sunny Step sneakers for kids" },
+          "romper": { "name": "Soft Cotton Romper", "brand": "Baby", "price": "$44", "ctaLabel": "Shop Soft Cotton Romper", "alt": "Soft cotton romper for babies" }
+        }
+      }
+    }
+  },
+  "dogs": {
+    "home": {
+      "title": "Dogs Homepage",
+      "hero": {
+        "slides": {
+          "walk": { "ctaLabel": "Shop dog walking essentials", "alt": "Dog ready for a walk outdoors" },
+          "cozy": { "ctaLabel": "Shop cozy dog styles", "alt": "Dog wearing a cozy outfit" },
+          "play": { "ctaLabel": "Shop dog play essentials", "alt": "Dog playing outside" }
+        }
+      },
+      "categories": {
+        "new": { "title": "New Arrivals", "ctaLabel": "Shop dog new arrivals", "alt": "Dog new arrivals edit" },
+        "apparel": { "title": "Apparel", "ctaLabel": "Shop dog apparel", "alt": "Dog apparel edit" },
+        "walk": { "title": "Walk", "ctaLabel": "Shop dog walking gear", "alt": "Dog walking gear edit" },
+        "beds": { "title": "Beds", "ctaLabel": "Shop dog beds", "alt": "Dog beds edit" },
+        "toys": { "title": "Toys", "ctaLabel": "Shop dog toys", "alt": "Dog toys edit" },
+        "grooming": { "title": "Grooming", "ctaLabel": "Shop dog grooming", "alt": "Dog grooming edit" }
+      },
+      "products": {
+        "title": "Shop Best Sellers",
+        "ctaLabel": "Shop dog best sellers",
+        "items": {
+          "harness": { "name": "Everyday Walk Harness", "brand": "Harnesses", "price": "$58", "ctaLabel": "Shop Everyday Walk Harness", "alt": "Everyday walk harness for dogs" },
+          "sweater": { "name": "Soft Knit Sweater", "brand": "Dog Apparel", "price": "$64", "ctaLabel": "Shop Soft Knit Sweater", "alt": "Soft knit sweater for dogs" },
+          "leash": { "name": "City Leash Set", "brand": "Leashes", "price": "$46", "ctaLabel": "Shop City Leash Set", "alt": "City leash set for dogs" },
+          "bed": { "name": "Cloud Rest Bed", "brand": "Dog Beds", "price": "$98", "ctaLabel": "Shop Cloud Rest Bed", "alt": "Cloud Rest dog bed" }
+        }
+      }
+    }
+  },
+  "cats": {
+    "home": {
+      "title": "Cats Homepage",
+      "hero": {
+        "slides": {
+          "lounge": { "ctaLabel": "Shop cat lounge essentials", "alt": "Cat lounging in a bright room" },
+          "play": { "ctaLabel": "Shop cat play essentials", "alt": "Cat ready to play" },
+          "cozy": { "ctaLabel": "Shop cozy cat picks", "alt": "Cat resting in a cozy setting" }
+        }
+      },
+      "categories": {
+        "new": { "title": "New Arrivals", "ctaLabel": "Shop cat new arrivals", "alt": "Cat new arrivals edit" },
+        "beds": { "title": "Beds", "ctaLabel": "Shop cat beds", "alt": "Cat beds edit" },
+        "toys": { "title": "Toys", "ctaLabel": "Shop cat toys", "alt": "Cat toys edit" },
+        "scratchers": { "title": "Scratchers", "ctaLabel": "Shop cat scratchers", "alt": "Cat scratchers edit" },
+        "carriers": { "title": "Carriers", "ctaLabel": "Shop cat carriers", "alt": "Cat carriers edit" },
+        "grooming": { "title": "Grooming", "ctaLabel": "Shop cat grooming", "alt": "Cat grooming edit" }
+      },
+      "products": {
+        "title": "Shop Best Sellers",
+        "ctaLabel": "Shop cat best sellers",
+        "items": {
+          "bed": { "name": "Velvet Window Bed", "brand": "Cat Beds", "price": "$72", "ctaLabel": "Shop Velvet Window Bed", "alt": "Velvet window bed for cats" },
+          "tower": { "name": "Modern Climb Tower", "brand": "Scratchers", "price": "$118", "ctaLabel": "Shop Modern Climb Tower", "alt": "Modern climb tower for cats" },
+          "teaser": { "name": "Feather Teaser Set", "brand": "Cat Toys", "price": "$24", "ctaLabel": "Shop Feather Teaser Set", "alt": "Feather teaser toy set for cats" },
+          "carrier": { "name": "Soft Travel Carrier", "brand": "Carriers", "price": "$86", "ctaLabel": "Shop Soft Travel Carrier", "alt": "Soft travel carrier for cats" }
+        }
+      }
+    }
+  },
   "header": {
     "tabs": {
       "women": "Women",

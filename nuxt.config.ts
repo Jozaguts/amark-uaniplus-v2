@@ -5,7 +5,7 @@ const { resolve } = createResolver(import.meta.url)
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/i18n', '@nuxt/fonts', '@nuxt/icon'],
+  modules: ['@nuxtjs/i18n', '@nuxt/fonts', '@nuxt/icon', 'nuxt-swiper'],
   css: ['~/assets/sass/main.sass', '~/assets/css/tailwind.css'],
   i18n: {
     locales: [
@@ -13,6 +13,7 @@ export default defineNuxtConfig({
       { code: 'es', language: 'es-MX', file: 'es.json' }
     ],
     defaultLocale: 'en',
+    strategy: 'prefix_except_default',
   },
   vite: {
     plugins: [

@@ -111,6 +111,175 @@
       }
     }
   },
+  "men": {
+    "home": {
+      "title": "Página principal de hombre",
+      "cta": {
+        "shopNow": "Comprar ahora",
+        "shopEdit": "Comprar el edit",
+        "shopCollection": "Comprar la colección"
+      },
+      "topTiles": {
+        "sale": {
+          "alt": "Nuevas rebajas. Hasta 30% de descuento."
+        },
+        "golf": {
+          "alt": "La tienda de golf. Comprar el edit."
+        }
+      },
+      "features": {
+        "newArrivals": {
+          "title": "Novedades",
+          "description": "No te pierdas este edit con las mejores novedades.",
+          "ctaLabel": "Comprar novedades",
+          "alt": "Edit de novedades para hombre"
+        },
+        "newProportions": {
+          "title": "Nuevas proporciones",
+          "description": "El cambio de silueta apuesta por tops recortados y pantalones extra amplios para definir un nuevo balance entre estructura y comodidad.",
+          "ctaLabel": "Comprar el edit de nuevas proporciones",
+          "alt": "Edit de nuevas proporciones para hombre"
+        },
+        "northFace": {
+          "title": "The North Face x Sky High Farm",
+          "description": "Presentamos la colección Goodness Grows, que une ropa outdoor funcional con la misión de equidad alimentaria de una organización sin fines de lucro de Hudson Valley.",
+          "ctaLabel": "Comprar la colección The North Face x Sky High Farm",
+          "alt": "Colección The North Face x Sky High Farm"
+        }
+      },
+      "categories": {
+        "shorts": {
+          "title": "Shorts",
+          "ctaLabel": "Comprar shorts",
+          "alt": "Edit de shorts para hombre"
+        },
+        "swim": {
+          "title": "Trajes de baño",
+          "ctaLabel": "Comprar trajes de baño",
+          "alt": "Edit de trajes de baño para hombre"
+        },
+        "polos": {
+          "title": "Polos",
+          "ctaLabel": "Comprar polos",
+          "alt": "Edit de polos para hombre"
+        },
+        "hats": {
+          "title": "Gorras",
+          "ctaLabel": "Comprar gorras",
+          "alt": "Edit de gorras para hombre"
+        },
+        "tees": {
+          "title": "Playeras",
+          "ctaLabel": "Comprar playeras",
+          "alt": "Edit de playeras para hombre"
+        },
+        "shirts": {
+          "title": "Camisas",
+          "ctaLabel": "Comprar camisas",
+          "alt": "Edit de camisas para hombre"
+        }
+      }
+    }
+  },
+  "kids": {
+    "home": {
+      "title": "Página principal de niños",
+      "hero": {
+        "slides": {
+          "play": {
+            "ctaLabel": "Comprar estilos divertidos para niños",
+            "alt": "Niños usando looks divertidos de clima cálido"
+          },
+          "weekend": {
+            "ctaLabel": "Comprar looks de fin de semana para niños",
+            "alt": "Niños vestidos para un fin de semana relajado"
+          },
+          "sun": {
+            "ctaLabel": "Comprar esenciales para días soleados",
+            "alt": "Niños disfrutando un día soleado al aire libre"
+          }
+        }
+      },
+      "categories": {
+        "new": { "title": "Novedades", "ctaLabel": "Comprar novedades para niños", "alt": "Edit de novedades para niños" },
+        "girls": { "title": "Niñas", "ctaLabel": "Comprar estilos para niñas", "alt": "Edit de looks para niñas" },
+        "boys": { "title": "Niños", "ctaLabel": "Comprar estilos para niños", "alt": "Edit de looks para niños" },
+        "baby": { "title": "Bebé", "ctaLabel": "Comprar estilos para bebé", "alt": "Edit de esenciales para bebé" },
+        "shoes": { "title": "Zapatos", "ctaLabel": "Comprar zapatos para niños", "alt": "Edit de zapatos para niños" },
+        "accessories": { "title": "Accesorios", "ctaLabel": "Comprar accesorios para niños", "alt": "Edit de accesorios para niños" }
+      },
+      "products": {
+        "title": "Comprar best sellers",
+        "ctaLabel": "Comprar best sellers para niños",
+        "items": {
+          "rainbow": { "name": "Vestido Rainbow Play", "brand": "Vestidos de niños", "price": "$68", "ctaLabel": "Comprar Vestido Rainbow Play", "alt": "Vestido Rainbow Play para niños" },
+          "denim": { "name": "Set Everyday Denim", "brand": "Sets de niños", "price": "$74", "ctaLabel": "Comprar Set Everyday Denim", "alt": "Set Everyday Denim para niños" },
+          "sneaker": { "name": "Tenis Sunny Step", "brand": "Zapatos de niños", "price": "$52", "ctaLabel": "Comprar Tenis Sunny Step", "alt": "Tenis Sunny Step para niños" },
+          "romper": { "name": "Romper Soft Cotton", "brand": "Bebé", "price": "$44", "ctaLabel": "Comprar Romper Soft Cotton", "alt": "Romper Soft Cotton para bebés" }
+        }
+      }
+    }
+  },
+  "dogs": {
+    "home": {
+      "title": "Página principal de perros",
+      "hero": {
+        "slides": {
+          "walk": { "ctaLabel": "Comprar esenciales de paseo para perros", "alt": "Perro listo para pasear al aire libre" },
+          "cozy": { "ctaLabel": "Comprar estilos cozy para perros", "alt": "Perro usando un outfit cozy" },
+          "play": { "ctaLabel": "Comprar esenciales de juego para perros", "alt": "Perro jugando afuera" }
+        }
+      },
+      "categories": {
+        "new": { "title": "Novedades", "ctaLabel": "Comprar novedades para perros", "alt": "Edit de novedades para perros" },
+        "apparel": { "title": "Ropa", "ctaLabel": "Comprar ropa para perros", "alt": "Edit de ropa para perros" },
+        "walk": { "title": "Paseo", "ctaLabel": "Comprar accesorios de paseo para perros", "alt": "Edit de paseo para perros" },
+        "beds": { "title": "Camas", "ctaLabel": "Comprar camas para perros", "alt": "Edit de camas para perros" },
+        "toys": { "title": "Juguetes", "ctaLabel": "Comprar juguetes para perros", "alt": "Edit de juguetes para perros" },
+        "grooming": { "title": "Grooming", "ctaLabel": "Comprar grooming para perros", "alt": "Edit de grooming para perros" }
+      },
+      "products": {
+        "title": "Comprar best sellers",
+        "ctaLabel": "Comprar best sellers para perros",
+        "items": {
+          "harness": { "name": "Arnés Everyday Walk", "brand": "Arneses", "price": "$58", "ctaLabel": "Comprar Arnés Everyday Walk", "alt": "Arnés Everyday Walk para perros" },
+          "sweater": { "name": "Suéter Soft Knit", "brand": "Ropa para perros", "price": "$64", "ctaLabel": "Comprar Suéter Soft Knit", "alt": "Suéter Soft Knit para perros" },
+          "leash": { "name": "Set de Correa City", "brand": "Correas", "price": "$46", "ctaLabel": "Comprar Set de Correa City", "alt": "Set de correa City para perros" },
+          "bed": { "name": "Cama Cloud Rest", "brand": "Camas para perros", "price": "$98", "ctaLabel": "Comprar Cama Cloud Rest", "alt": "Cama Cloud Rest para perros" }
+        }
+      }
+    }
+  },
+  "cats": {
+    "home": {
+      "title": "Página principal de gatos",
+      "hero": {
+        "slides": {
+          "lounge": { "ctaLabel": "Comprar esenciales de descanso para gatos", "alt": "Gato descansando en una habitación luminosa" },
+          "play": { "ctaLabel": "Comprar esenciales de juego para gatos", "alt": "Gato listo para jugar" },
+          "cozy": { "ctaLabel": "Comprar picks cozy para gatos", "alt": "Gato descansando en un ambiente cozy" }
+        }
+      },
+      "categories": {
+        "new": { "title": "Novedades", "ctaLabel": "Comprar novedades para gatos", "alt": "Edit de novedades para gatos" },
+        "beds": { "title": "Camas", "ctaLabel": "Comprar camas para gatos", "alt": "Edit de camas para gatos" },
+        "toys": { "title": "Juguetes", "ctaLabel": "Comprar juguetes para gatos", "alt": "Edit de juguetes para gatos" },
+        "scratchers": { "title": "Rascadores", "ctaLabel": "Comprar rascadores para gatos", "alt": "Edit de rascadores para gatos" },
+        "carriers": { "title": "Transportadoras", "ctaLabel": "Comprar transportadoras para gatos", "alt": "Edit de transportadoras para gatos" },
+        "grooming": { "title": "Grooming", "ctaLabel": "Comprar grooming para gatos", "alt": "Edit de grooming para gatos" }
+      },
+      "products": {
+        "title": "Comprar best sellers",
+        "ctaLabel": "Comprar best sellers para gatos",
+        "items": {
+          "bed": { "name": "Cama Velvet Window", "brand": "Camas para gatos", "price": "$72", "ctaLabel": "Comprar Cama Velvet Window", "alt": "Cama Velvet Window para gatos" },
+          "tower": { "name": "Torre Modern Climb", "brand": "Rascadores", "price": "$118", "ctaLabel": "Comprar Torre Modern Climb", "alt": "Torre Modern Climb para gatos" },
+          "teaser": { "name": "Set Feather Teaser", "brand": "Juguetes para gatos", "price": "$24", "ctaLabel": "Comprar Set Feather Teaser", "alt": "Set Feather Teaser para gatos" },
+          "carrier": { "name": "Transportadora Soft Travel", "brand": "Transportadoras", "price": "$86", "ctaLabel": "Comprar Transportadora Soft Travel", "alt": "Transportadora Soft Travel para gatos" }
+        }
+      }
+    }
+  },
   "header": {
     "tabs": {
       "women": "Mujer",
