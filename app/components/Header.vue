@@ -11,6 +11,8 @@ type NavItem = { key: NavKey, menu?: MegaMenuConfig }
 
 const route = useRoute()
 const localePath = useLocalePath()
+const switchLocalePath = useSwitchLocalePath()
+const { locale } = useI18n()
 const activeMegaMenuKey = ref<NavKey | null>(null)
 
 const tabs = [
@@ -204,6 +206,12 @@ function isActiveTab(path: string): boolean {
 const activeMegaMenu = computed(() => {
   return navItems.find(item => item.key === activeMegaMenuKey.value)?.menu
 })
+
+const nextLocale = computed(() => locale.value === 'es' ? 'en' : 'es')
+
+const nextLocalePath = computed(() => switchLocalePath(nextLocale.value))
+
+const nextLocaleLabel = computed(() => nextLocale.value.toUpperCase())
 // esto es para forzar el estado activo
 // const forcedMegaMenuKey = computed(() => {
 //   const value = route.query.megaMenu
@@ -267,10 +275,10 @@ function closeMegaMenu(): void {
             <Icon name="icon:shoping-cart" class="size-[25px]" />
           </a>
 
-          <a href="#" :aria-label="$t('header.actions.language')" class="flex items-center gap-[6px]">
+          <NuxtLink :to="nextLocalePath" :aria-label="$t('header.actions.language')" class="flex items-center gap-[6px]">
             <Icon name="icon:globe-light" class="size-[26px]" />
-            <span>{{ $t('header.actions.currency') }}</span>
-          </a>
+            <span>{{ nextLocaleLabel }}</span>
+          </NuxtLink>
 
           <NuxtLink :to="localePath('/login')" class="text-[16px] font-bold">
             {{ $t('header.actions.login') }}
@@ -328,10 +336,10 @@ function closeMegaMenu(): void {
               <Icon name="icon:shoping-cart" class="size-[25px]" />
             </a>
 
-            <a href="#" :aria-label="$t('header.actions.language')" class="flex items-center gap-[4px] text-[13px] font-bold">
+            <NuxtLink :to="nextLocalePath" :aria-label="$t('header.actions.language')" class="flex items-center gap-[4px] text-[13px] font-bold">
               <Icon name="icon:globe-light" class="size-[24px]" />
-              <span>{{ $t('header.actions.currency') }}</span>
-            </a>
+              <span>{{ nextLocaleLabel }}</span>
+            </NuxtLink>
 
             <NuxtLink :to="localePath('/login')" class="text-[13px] font-bold">
               {{ $t('header.actions.login') }}
