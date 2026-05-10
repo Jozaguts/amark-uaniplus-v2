@@ -450,9 +450,88 @@
     }
   },
   "catalog": {
+    "sections": {
+      "women": "Women",
+      "men": "Men",
+      "kids": "Kids",
+      "dogs": "Dogs",
+      "cats": "Cats"
+    },
+    "breadcrumb": {
+      "sale": "Sale",
+      "allSaleItems": "All Sale Items"
+    },
     "category": {
       "title": "Category",
-      "active": "Selected category"
+      "active": "Selected category",
+      "itemCount": "3,758 Items",
+      "headings": {
+        "women": "Women's Designer Clothing on Sale",
+        "men": "Men's Designer Clothing on Sale",
+        "kids": "Kids Designer Clothing on Sale",
+        "dogs": "Dog Designer Essentials on Sale",
+        "cats": "Cat Designer Essentials on Sale"
+      },
+      "filters": {
+        "designer": "Designer",
+        "size": "Size",
+        "color": "Color",
+        "price": "Price",
+        "selectedDash": "—",
+        "sortBy": "Sort By",
+        "newestMarkdowns": "Newest Markdowns",
+        "view": "View",
+        "favorite": "Add to favorites",
+        "quickView": "Quick View"
+      },
+      "sidebar": {
+        "category": {
+          "title": "Category",
+          "allSaleItems": "All Sale Items",
+          "lastChance": "Last Chance",
+          "finalSale": "Final Sale"
+        },
+        "shopYourSize": {
+          "title": "Shop Your Size",
+          "apparel": "Apparel",
+          "denim": "Denim",
+          "shoes": "Shoes"
+        },
+        "shopByCategory": {
+          "title": "Shop By Category",
+          "accessories": "Accessories",
+          "athleticWear": "Athletic Wear",
+          "bags": "Bags",
+          "beauty": "Beauty",
+          "denim": "Denim",
+          "home": "Home",
+          "jacketsCoats": "Jackets & Coats",
+          "jewelry": "Jewelry",
+          "lounge": "Lounge",
+          "pants": "Pants",
+          "polos": "Polos",
+          "shirts": "Shirts",
+          "shoes": "Shoes",
+          "shorts": "Shorts",
+          "suits": "Suits",
+          "sweatersKnits": "Sweaters & Knits",
+          "sweatshirtsHoodies": "Sweatshirts & Hoodies",
+          "swim": "Swim",
+          "tShirts": "T-Shirts",
+          "tops": "Tops",
+          "underwear": "Underwear"
+        }
+      },
+      "products": {
+        "tuckerOxford": { "name": "Tucker Oxford Dress Shoe", "brand": "Rag & Bone", "salePrice": "3,577.20 MXN", "retailPrice": "7,909.74 MXN", "alt": "Tucker Oxford Dress Shoe by Rag & Bone" },
+        "saninoPolo": { "name": "Sanino Polo", "brand": "SAMSOE SAMSOE", "salePrice": "3,418.36 MXN", "retailPrice": "4,869.13 MXN", "alt": "Sanino Polo by SAMSOE SAMSOE" },
+        "salevoSweater": { "name": "Salevo Sweater", "brand": "SAMSOE SAMSOE", "salePrice": "4,113.80 MXN", "retailPrice": "5,862.82 MXN", "alt": "Salevo Sweater by SAMSOE SAMSOE" },
+        "saxonJacket": { "name": "Saxon Jacket", "brand": "ALLSAINTS", "salePrice": "11,626.17 MXN", "retailPrice": "17,866.57 MXN", "alt": "Saxon Jacket by ALLSAINTS" },
+        "mBondi9": { "name": "M Bondi 9", "brand": "HOKA", "salePrice": "2,782.29 MXN", "retailPrice": "3,477.90 MXN", "alt": "M Bondi 9 by HOKA" },
+        "uOraPrimo": { "name": "U Ora Primo Ext Sneaker", "brand": "HOKA", "salePrice": "2,066.88 MXN", "retailPrice": "2,583.52 MXN", "alt": "U Ora Primo Ext Sneaker by HOKA" },
+        "uHopara": { "name": "U Hopara", "brand": "HOKA", "salePrice": "2,146.39 MXN", "retailPrice": "2,682.99 MXN", "alt": "U Hopara by HOKA" },
+        "mMafateX": { "name": "M Mafate X", "brand": "HOKA", "salePrice": "3,577.20 MXN", "retailPrice": "4,471.59 MXN", "alt": "M Mafate X by HOKA" }
+      }
     },
     "product": {
       "title": "Product Details",

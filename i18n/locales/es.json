@@ -450,9 +450,88 @@
     }
   },
   "catalog": {
+    "sections": {
+      "women": "Mujer",
+      "men": "Hombre",
+      "kids": "Niños",
+      "dogs": "Perros",
+      "cats": "Gatos"
+    },
+    "breadcrumb": {
+      "sale": "Rebaja",
+      "allSaleItems": "Todos los artículos en rebaja"
+    },
     "category": {
       "title": "Categoría",
-      "active": "Categoría seleccionada"
+      "active": "Categoría seleccionada",
+      "itemCount": "3,758 artículos",
+      "headings": {
+        "women": "Ropa de diseñador para mujer en rebaja",
+        "men": "Ropa de diseñador para hombre en rebaja",
+        "kids": "Ropa de diseñador para niños en rebaja",
+        "dogs": "Esenciales de diseñador para perros en rebaja",
+        "cats": "Esenciales de diseñador para gatos en rebaja"
+      },
+      "filters": {
+        "designer": "Diseñador",
+        "size": "Talla",
+        "color": "Color",
+        "price": "Precio",
+        "selectedDash": "—",
+        "sortBy": "Ordenar por",
+        "newestMarkdowns": "Rebajas más recientes",
+        "view": "Ver",
+        "favorite": "Agregar a favoritos",
+        "quickView": "Vista rápida"
+      },
+      "sidebar": {
+        "category": {
+          "title": "Categoría",
+          "allSaleItems": "Todos los artículos en rebaja",
+          "lastChance": "Última oportunidad",
+          "finalSale": "Venta final"
+        },
+        "shopYourSize": {
+          "title": "Compra tu talla",
+          "apparel": "Ropa",
+          "denim": "Denim",
+          "shoes": "Calzado"
+        },
+        "shopByCategory": {
+          "title": "Comprar por categoría",
+          "accessories": "Accesorios",
+          "athleticWear": "Ropa deportiva",
+          "bags": "Bolsas",
+          "beauty": "Belleza",
+          "denim": "Denim",
+          "home": "Hogar",
+          "jacketsCoats": "Chamarras y abrigos",
+          "jewelry": "Joyería",
+          "lounge": "Ropa cómoda",
+          "pants": "Pantalones",
+          "polos": "Polos",
+          "shirts": "Camisas",
+          "shoes": "Calzado",
+          "shorts": "Shorts",
+          "suits": "Trajes",
+          "sweatersKnits": "Suéteres y tejidos",
+          "sweatshirtsHoodies": "Sudaderas",
+          "swim": "Trajes de baño",
+          "tShirts": "Playeras",
+          "tops": "Tops",
+          "underwear": "Ropa interior"
+        }
+      },
+      "products": {
+        "tuckerOxford": { "name": "Tucker Oxford Dress Shoe", "brand": "Rag & Bone", "salePrice": "3,577.20 MXN", "retailPrice": "7,909.74 MXN", "alt": "Zapato Tucker Oxford Dress Shoe de Rag & Bone" },
+        "saninoPolo": { "name": "Sanino Polo", "brand": "SAMSOE SAMSOE", "salePrice": "3,418.36 MXN", "retailPrice": "4,869.13 MXN", "alt": "Sanino Polo de SAMSOE SAMSOE" },
+        "salevoSweater": { "name": "Salevo Sweater", "brand": "SAMSOE SAMSOE", "salePrice": "4,113.80 MXN", "retailPrice": "5,862.82 MXN", "alt": "Salevo Sweater de SAMSOE SAMSOE" },
+        "saxonJacket": { "name": "Saxon Jacket", "brand": "ALLSAINTS", "salePrice": "11,626.17 MXN", "retailPrice": "17,866.57 MXN", "alt": "Saxon Jacket de ALLSAINTS" },
+        "mBondi9": { "name": "M Bondi 9", "brand": "HOKA", "salePrice": "2,782.29 MXN", "retailPrice": "3,477.90 MXN", "alt": "M Bondi 9 de HOKA" },
+        "uOraPrimo": { "name": "U Ora Primo Ext Sneaker", "brand": "HOKA", "salePrice": "2,066.88 MXN", "retailPrice": "2,583.52 MXN", "alt": "U Ora Primo Ext Sneaker de HOKA" },
+        "uHopara": { "name": "U Hopara", "brand": "HOKA", "salePrice": "2,146.39 MXN", "retailPrice": "2,682.99 MXN", "alt": "U Hopara de HOKA" },
+        "mMafateX": { "name": "M Mafate X", "brand": "HOKA", "salePrice": "3,577.20 MXN", "retailPrice": "4,471.59 MXN", "alt": "M Mafate X de HOKA" }
+      }
     },
     "product": {
       "title": "Detalle del producto",
