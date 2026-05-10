@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import CategoryHeroSlider from '~/components/category-landing/CategoryHeroSlider.vue'
+import CategoryProductCarousel from '~/components/category-landing/CategoryProductCarousel.vue'
+import CategoryTileGrid from '~/components/category-landing/CategoryTileGrid.vue'
+
 const heroSlides = [
   {
     ctaLabelKey: 'dogs.home.hero.slides.walk.ctaLabel',
@@ -93,12 +97,17 @@ const products = [
 </script>
 
 <template>
-  <CategoryLanding
-    title-key="dogs.home.title"
-    :hero-slides="heroSlides"
-    :categories="categories"
-    products-title-key="dogs.home.products.title"
-    products-cta-label-key="dogs.home.products.ctaLabel"
-    :products="products"
-  />
+  <main class="page mt-4">
+    <h1 class="sr-only">
+      {{ $t('dogs.home.title') }}
+    </h1>
+
+    <CategoryHeroSlider :slides="heroSlides" />
+    <CategoryTileGrid :categories="categories" />
+    <CategoryProductCarousel
+      title-key="dogs.home.products.title"
+      cta-label-key="dogs.home.products.ctaLabel"
+      :products="products"
+    />
+  </main>
 </template>
