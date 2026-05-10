@@ -449,6 +449,16 @@
       }
     }
   },
+  "catalog": {
+    "category": {
+      "title": "Category",
+      "active": "Selected category"
+    },
+    "product": {
+      "title": "Product Details",
+      "active": "Product slug"
+    }
+  },
   "footer": {
     "heading": "Footer",
     "opensNewWindow": "opens in a new window",

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { categoryPath, slugFromKey } = useCatalogNavigation('women')
+
 const buckets = [
   {
     titleKey: 'women.home.buckets.justIn.title',
@@ -140,8 +142,8 @@ const uandiplusPromo = {
 
     <section class="w-full">
       <div class="relative left-1/2 mb-[22px] w-full max-w-[1400px] -translate-x-1/2">
-        <a
-          href="#"
+        <NuxtLink
+          :to="categoryPath(slugFromKey('women.home.hero.ctaLabel'))"
           class="relative block aspect-[100/46.285714]"
           :aria-label="$t('women.home.hero.ctaLabel')"
         >
@@ -151,7 +153,7 @@ const uandiplusPromo = {
             srcset="https://is4.revolveassets.com/images/up/2026/May/050726_RW_WeddingSeason_01.jpg 1x, https://is4.revolveassets.com/images/up/2026/May/050726_RW_WeddingSeason_01_2x.jpg 2x"
             :alt="$t('women.home.hero.alt')"
           >
-        </a>
+        </NuxtLink>
       </div>
     </section>
 
@@ -163,8 +165,8 @@ const uandiplusPromo = {
             :key="bucket.titleKey"
             class="relative mb-[58px] flex flex-[1_1_48%] flex-col justify-between"
           >
-            <a
-              href="#"
+            <NuxtLink
+              :to="categoryPath(slugFromKey(bucket.titleKey))"
               class="flex flex-1 flex-col text-black no-underline hover:no-underline"
               :aria-label="$t(bucket.ctaLabelKey)"
             >
@@ -194,7 +196,7 @@ const uandiplusPromo = {
                   {{ $t(bucket.overlayTextKey) }}
                 </p>
               </div>
-            </a>
+            </NuxtLink>
           </article>
         </div>
       </div>
@@ -218,13 +220,13 @@ const uandiplusPromo = {
             <p class="inline-block text-[14px] leading-[1.5] tracking-[0.05em] text-black">
               {{ $t('women.home.shops.description') }}
               <span aria-hidden="true"> | </span>
-              <a
-                href="#"
+              <NuxtLink
+                :to="categoryPath(slugFromKey('women.home.shops.title'))"
                 class="inline-block font-semibold"
               >
                 {{ $t('women.home.shops.shopNow') }}
                 <span class="sr-only">{{ $t('women.home.shops.title') }}</span>
-              </a>
+              </NuxtLink>
             </p>
           </div>
         </div>
@@ -235,8 +237,8 @@ const uandiplusPromo = {
             :key="kicker.titleKey"
             class="relative mb-[58px] ml-4 flex w-[calc(33.333333%-16px)] flex-col justify-between"
           >
-            <a
-              href="#"
+            <NuxtLink
+              :to="categoryPath(slugFromKey(kicker.titleKey))"
               class="flex flex-1 flex-col text-black no-underline hover:no-underline"
               :aria-label="$t(kicker.ctaLabelKey)"
             >
@@ -258,7 +260,7 @@ const uandiplusPromo = {
               <div class="relative mt-[4px] text-center text-[12px] font-semibold uppercase leading-[1.15] tracking-[0.05em] hover:underline">
                 {{ $t('women.home.shops.shopNow') }}
               </div>
-            </a>
+            </NuxtLink>
           </article>
         </div>
       </div>
@@ -276,8 +278,8 @@ const uandiplusPromo = {
             :key="item.titleKey"
             class="relative mb-[58px] flex flex-[1_1_48%] flex-col justify-between"
           >
-            <a
-              href="#"
+            <NuxtLink
+              :to="categoryPath(slugFromKey(item.titleKey))"
               class="flex flex-1 flex-col text-black no-underline hover:no-underline"
               :aria-label="$t(item.ctaLabelKey)"
             >
@@ -298,7 +300,7 @@ const uandiplusPromo = {
                   :alt="$t(item.altKey)"
                 >
               </div>
-            </a>
+            </NuxtLink>
           </article>
         </div>
       </div>
@@ -316,8 +318,8 @@ const uandiplusPromo = {
             :key="item.titleKey"
             class="relative mb-[58px] ml-4 flex w-[calc(33.333333%-16px)] flex-col justify-between"
           >
-            <a
-              href="#"
+            <NuxtLink
+              :to="categoryPath(slugFromKey(item.titleKey))"
               class="flex flex-1 flex-col text-black no-underline hover:no-underline"
               :aria-label="$t(item.ctaLabelKey)"
             >
@@ -339,7 +341,7 @@ const uandiplusPromo = {
               <div class="relative mt-[4px] text-center text-[12px] font-semibold uppercase leading-[1.15] tracking-[0.05em] hover:underline">
                 {{ $t('women.home.shops.shopNow') }}
               </div>
-            </a>
+            </NuxtLink>
           </article>
         </div>
       </div>
@@ -347,8 +349,8 @@ const uandiplusPromo = {
 
     <section class="flex justify-center">
       <div class="w-full max-w-[1400px] px-8">
-        <a
-          href="#"
+        <NuxtLink
+          :to="categoryPath(slugFromKey(uandiplusPromo.ctaLabelKey))"
           class="mt-[32px] block pt-[32px]"
           :aria-label="$t(uandiplusPromo.ctaLabelKey)"
         >
@@ -358,7 +360,7 @@ const uandiplusPromo = {
             :srcset="uandiplusPromo.srcset"
             :alt="$t(uandiplusPromo.altKey)"
           >
-        </a>
+        </NuxtLink>
       </div>
     </section>
   </div>

@@ -104,9 +104,10 @@ const products = [
       {{ $t('kids.home.title') }}
     </h1>
 
-    <CategoryHeroSlider :slides="heroSlides" />
-    <CategoryTileGrid :categories="categories" />
+    <CategoryHeroSlider section="kids" :slides="heroSlides" />
+    <CategoryTileGrid section="kids" :categories="categories" />
     <CategoryProductCarousel
+      section="kids"
       title-key="kids.home.products.title"
       cta-label-key="kids.home.products.ctaLabel"
       :products="products"

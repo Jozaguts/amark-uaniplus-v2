@@ -1,24 +1,16 @@
 <script setup lang="ts">
 import type { CategoryTile } from '~/types/category-landing'
+import type { CatalogSection } from '~/composables/useCatalogNavigation'
 
-defineProps<{
+const props = defineProps<{
   categories: readonly CategoryTile[]
+  section?: CatalogSection
 }>()
 
-const route = useRoute()
-
-function slugFromKey(key: string) {
-  const parts = key.split('.')
-
-  return parts.at(-2) || parts.at(-1) || 'item'
-}
-
-function scopedPath(segment: string) {
-  return `${route.path.replace(/\/$/, '')}/${segment}`.replace(/\/{2,}/g, '/')
-}
+const { categoryPath, slugFromKey } = useCatalogNavigation(props.section)
 
 function categoryHref(category: CategoryTile) {
-  return category.href || scopedPath(slugFromKey(category.titleKey))
+  return category.href || categoryPath(category.categorySlug || slugFromKey(category.titleKey))
 }
 </script>
 

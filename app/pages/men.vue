@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { categoryPath, slugFromKey } = useCatalogNavigation('men')
+
 const topTiles = [
   {
     altKey: 'men.home.topTiles.sale.alt',
@@ -100,10 +102,10 @@ const categoryRows = [
 
     <section class="flex justify-center">
       <div class="mt-[1%] grid w-full max-w-[1400px] grid-cols-1 gap-4 px-8 md:grid-cols-2">
-        <a
+        <NuxtLink
           v-for="tile in topTiles"
           :key="tile.altKey"
-          href="#"
+          :to="categoryPath(slugFromKey(tile.altKey))"
           :aria-label="$t(tile.altKey)"
         >
           <img
@@ -112,7 +114,7 @@ const categoryRows = [
             :srcset="tile.srcset"
             :alt="$t(tile.altKey)"
           >
-        </a>
+        </NuxtLink>
       </div>
     </section>
 
@@ -130,19 +132,19 @@ const categoryRows = [
             <p class="m-0 text-[14px] leading-[1.5]">
               {{ $t(feature.descriptionKey) }}
             </p>
-            <a
-              href="#"
+            <NuxtLink
+              :to="categoryPath(slugFromKey(feature.titleKey))"
               class="text-[14px] font-semibold uppercase leading-none tracking-[0.071em] underline-offset-2 hover:underline"
               :aria-label="$t(feature.ctaLabelKey)"
             >
               <span class="sr-only">{{ $t(feature.titleKey) }}</span>
               {{ $t(feature.ctaKey) }}
-            </a>
+            </NuxtLink>
           </div>
         </div>
 
-        <a
-          href="#"
+        <NuxtLink
+          :to="categoryPath(slugFromKey(feature.titleKey))"
           :aria-label="$t(feature.ctaLabelKey)"
         >
           <img
@@ -151,7 +153,7 @@ const categoryRows = [
             :srcset="feature.srcset"
             :alt="$t(feature.altKey)"
           >
-        </a>
+        </NuxtLink>
 
         <div
           v-if="index === 1"
@@ -164,16 +166,16 @@ const categoryRows = [
             <h2 class="text-[20px] font-semibold uppercase leading-tight tracking-[0.071em]">
               {{ $t(item.titleKey) }}
             </h2>
-            <a
-              href="#"
+            <NuxtLink
+              :to="categoryPath(slugFromKey(item.titleKey))"
               class="mb-[8px] block text-[14px] font-semibold uppercase leading-none tracking-[0.071em] underline-offset-2 hover:underline"
               :aria-label="$t(item.ctaLabelKey)"
             >
               <span class="sr-only">{{ $t(item.titleKey) }}</span>
               {{ $t('men.home.cta.shopNow') }}
-            </a>
-            <a
-              href="#"
+            </NuxtLink>
+            <NuxtLink
+              :to="categoryPath(slugFromKey(item.titleKey))"
               :aria-label="$t(item.ctaLabelKey)"
             >
               <img
@@ -182,7 +184,7 @@ const categoryRows = [
                 :srcset="item.srcset"
                 :alt="$t(item.altKey)"
               >
-            </a>
+            </NuxtLink>
           </article>
         </div>
 
@@ -197,16 +199,16 @@ const categoryRows = [
             <h2 class="text-[20px] font-semibold uppercase leading-tight tracking-[0.071em]">
               {{ $t(item.titleKey) }}
             </h2>
-            <a
-              href="#"
+            <NuxtLink
+              :to="categoryPath(slugFromKey(item.titleKey))"
               class="mb-[8px] block text-[14px] font-semibold uppercase leading-none tracking-[0.071em] underline-offset-2 hover:underline"
               :aria-label="$t(item.ctaLabelKey)"
             >
               <span class="sr-only">{{ $t(item.titleKey) }}</span>
               {{ $t('men.home.cta.shopNow') }}
-            </a>
-            <a
-              href="#"
+            </NuxtLink>
+            <NuxtLink
+              :to="categoryPath(slugFromKey(item.titleKey))"
               :aria-label="$t(item.ctaLabelKey)"
             >
               <img
@@ -215,7 +217,7 @@ const categoryRows = [
                 :srcset="item.srcset"
                 :alt="$t(item.altKey)"
               >
-            </a>
+            </NuxtLink>
           </article>
         </div>
       </div>

@@ -2,9 +2,11 @@
 import CategoryHeroSlider from '~/components/category-landing/CategoryHeroSlider.vue'
 import CategoryProductCarousel from '~/components/category-landing/CategoryProductCarousel.vue'
 import CategoryTileGrid from '~/components/category-landing/CategoryTileGrid.vue'
+import type { CatalogSection } from '~/composables/useCatalogNavigation'
 import type { CategoryTile, HeroSlide, ProductCard } from '~/types/category-landing'
 
 defineProps<{
+  section: CatalogSection
   titleKey: string
   heroSlides: readonly HeroSlide[]
   categories: readonly CategoryTile[]
@@ -20,9 +22,10 @@ defineProps<{
       {{ $t(titleKey) }}
     </h1>
 
-    <CategoryHeroSlider :slides="heroSlides" />
-    <CategoryTileGrid :categories="categories" />
+    <CategoryHeroSlider :section="section" :slides="heroSlides" />
+    <CategoryTileGrid :section="section" :categories="categories" />
     <CategoryProductCarousel
+      :section="section"
       :title-key="productsTitleKey"
       :cta-label-key="productsCtaLabelKey"
       :products="products"

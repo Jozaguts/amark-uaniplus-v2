@@ -1,30 +1,22 @@
 <script setup lang="ts">
 import type { ProductCard } from '~/types/category-landing'
+import type { CatalogSection } from '~/composables/useCatalogNavigation'
 
-defineProps<{
+const props = defineProps<{
   titleKey: string
   ctaLabelKey: string
   products: readonly ProductCard[]
+  section?: CatalogSection
 }>()
 
-const route = useRoute()
-
-function slugFromKey(key: string) {
-  const parts = key.split('.')
-
-  return parts.at(-2) || parts.at(-1) || 'item'
-}
-
-function scopedPath(segment: string) {
-  return `${route.path.replace(/\/$/, '')}/${segment}`.replace(/\/{2,}/g, '/')
-}
+const { categoryPath, productPath, slugFromKey } = useCatalogNavigation(props.section)
 
 function productHref(product: ProductCard) {
-  return product.href || scopedPath(`products/${slugFromKey(product.nameKey)}`)
+  return product.href || productPath(product.slug || slugFromKey(product.nameKey))
 }
 
 function productCategoryHref(product: ProductCard) {
-  return product.categoryHref || scopedPath(slugFromKey(product.categoryKey))
+  return product.categoryHref || categoryPath(product.categorySlug || slugFromKey(product.categoryKey))
 }
 </script>
 
@@ -32,7 +24,7 @@ function productCategoryHref(product: ProductCard) {
   <section class="flex container px-8 mx-auto max-w-[100em] flex-col justify-center">
     <div class="container px-16 py-8 mx-auto max-w-[100em] w-full">
       <NuxtLink
-        :to="route.path"
+        :to="categoryPath(slugFromKey(titleKey))"
         class="inline-block text-black no-underline hover:no-underline mt-8"
         :aria-label="$t(ctaLabelKey)"
       >

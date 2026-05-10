@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import type { HeroSlide } from '~/types/category-landing'
+import type { CatalogSection } from '~/composables/useCatalogNavigation'
 
 const props = defineProps<{
   slides: readonly HeroSlide[]
+  section?: CatalogSection
 }>()
 
-const route = useRoute()
+const { categoryPath, slugFromKey } = useCatalogNavigation(props.section)
 
 const fallbackSlide = computed(() => props.slides[0])
 
 function slideHref(slide?: HeroSlide) {
-  return slide?.href || route.path
+  if (!slide)
+    return categoryPath('featured')
+
+  return slide.href || categoryPath(slide.categorySlug || slugFromKey(slide.ctaLabelKey))
 }
 </script>
 

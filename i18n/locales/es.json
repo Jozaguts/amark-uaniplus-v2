@@ -449,6 +449,16 @@
       }
     }
   },
+  "catalog": {
+    "category": {
+      "title": "Categoría",
+      "active": "Categoría seleccionada"
+    },
+    "product": {
+      "title": "Detalle del producto",
+      "active": "Slug del producto"
+    }
+  },
   "footer": {
     "heading": "Pie de página",
     "opensNewWindow": "se abre en una ventana nueva",
