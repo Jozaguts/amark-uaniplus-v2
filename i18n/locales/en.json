@@ -535,7 +535,59 @@
     },
     "product": {
       "title": "Product Details",
-      "active": "Product slug"
+      "active": "Product slug",
+      "backToResults": "Back To Results",
+      "gallery": {
+        "previous": "Previous slides",
+        "next": "Next slides",
+        "thumbnail": "View {number} thumbnail",
+        "views": {
+          "1": "View 1 of 5 Tucker Oxford Dress Shoe in Dark Espresso",
+          "2": "View 2 of 5 Tucker Oxford Dress Shoe in Dark Espresso",
+          "3": "View 3 of 5 Tucker Oxford Dress Shoe in Dark Espresso",
+          "4": "View 4 of 5 Tucker Oxford Dress Shoe in Dark Espresso",
+          "5": "View 5 of 5 Tucker Oxford Dress Shoe in Dark Espresso"
+        }
+      },
+      "detail": {
+        "name": "Tucker Oxford Dress Shoe",
+        "brand": "Rag & Bone",
+        "salePrice": "3,577.20 MXN",
+        "retailPrice": "7,909.74 MXN",
+        "duties": "Duties & Taxes Included!",
+        "favorite": "Add to favorites",
+        "sizeLabel": "Size (EU):",
+        "sizeGuide": "Size Guide",
+        "findSize": "Can't Find Your Size?",
+        "inventory": "Only 1 left!",
+        "colorLabel": "Color:",
+        "colorValue": "Dark Espresso",
+        "addToBag": "Add To Bag",
+        "buyNow": "Buy Now",
+        "addToLists": "+ Add to My Lists",
+        "delivery": "Estimated Delivery : May 13 - May 15",
+        "shipping": "Free Shipping on orders of 2,000 MXN or more"
+      },
+      "tabs": {
+        "description": "Description",
+        "sizeFit": "Size & Fit",
+        "aboutBrand": "About The Brand"
+      },
+      "description": {
+        "leather": "Leather upper and rubber sole",
+        "madeIn": "Made in China",
+        "laceUp": "Lace-up front",
+        "roundToe": "Round toe",
+        "heel": "Approx 44mm/ 1.75 inch heel Approx 25mm/ 1 inch platform",
+        "styleNo": "uandiplus Style No. RGBR-MZ51",
+        "manufacturerStyleNo": "Manufacturer Style No. MGF24FF000LE0"
+      },
+      "sizeFit": {
+        "viewSizeGuide": "View Size Guide"
+      },
+      "aboutBrand": {
+        "copy": "Rag & Bone is rooted in a dedication to craftsmanship, innovation and timeless style. Each collection is designed in New York and developed through time-honored manufacturing techniques from around the world."
+      }
     }
   },
   "footer": {

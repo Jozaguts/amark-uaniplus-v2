@@ -535,7 +535,59 @@
     },
     "product": {
       "title": "Detalle del producto",
-      "active": "Slug del producto"
+      "active": "Slug del producto",
+      "backToResults": "Volver a resultados",
+      "gallery": {
+        "previous": "Slides anteriores",
+        "next": "Siguientes slides",
+        "thumbnail": "Miniatura de vista {number}",
+        "views": {
+          "1": "Vista 1 de 5 del Tucker Oxford Dress Shoe en Dark Espresso",
+          "2": "Vista 2 de 5 del Tucker Oxford Dress Shoe en Dark Espresso",
+          "3": "Vista 3 de 5 del Tucker Oxford Dress Shoe en Dark Espresso",
+          "4": "Vista 4 de 5 del Tucker Oxford Dress Shoe en Dark Espresso",
+          "5": "Vista 5 de 5 del Tucker Oxford Dress Shoe en Dark Espresso"
+        }
+      },
+      "detail": {
+        "name": "Tucker Oxford Dress Shoe",
+        "brand": "Rag & Bone",
+        "salePrice": "3,577.20 MXN",
+        "retailPrice": "7,909.74 MXN",
+        "duties": "Impuestos incluidos",
+        "favorite": "Agregar a favoritos",
+        "sizeLabel": "Talla (EU):",
+        "sizeGuide": "Guía de tallas",
+        "findSize": "¿No encuentras tu talla?",
+        "inventory": "¡Solo queda 1!",
+        "colorLabel": "Color:",
+        "colorValue": "Dark Espresso",
+        "addToBag": "Agregar a bolsa",
+        "buyNow": "Comprar ahora",
+        "addToLists": "+ Agregar a mis listas",
+        "delivery": "Entrega estimada: mayo 13 - mayo 15",
+        "shipping": "Envío gratis en órdenes de 2,000 MXN o más"
+      },
+      "tabs": {
+        "description": "Descripción",
+        "sizeFit": "Talla y fit",
+        "aboutBrand": "Sobre la marca"
+      },
+      "description": {
+        "leather": "Parte superior de piel y suela de goma",
+        "madeIn": "Hecho en China",
+        "laceUp": "Ajuste con agujetas",
+        "roundToe": "Punta redonda",
+        "heel": "Tacón aprox. de 44 mm / 1.75 pulgadas y plataforma aprox. de 25 mm / 1 pulgada",
+        "styleNo": "uandiplus Style No. RGBR-MZ51",
+        "manufacturerStyleNo": "Manufacturer Style No. MGF24FF000LE0"
+      },
+      "sizeFit": {
+        "viewSizeGuide": "Ver guía de tallas"
+      },
+      "aboutBrand": {
+        "copy": "Rag & Bone se basa en la dedicación a la artesanía, la innovación y el estilo atemporal. Cada colección se diseña en Nueva York y se desarrolla con técnicas de manufactura tradicionales de todo el mundo."
+      }
     }
   },
   "footer": {
