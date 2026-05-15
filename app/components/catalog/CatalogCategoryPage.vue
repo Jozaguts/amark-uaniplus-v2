@@ -1,6 +1,12 @@
 <script setup lang="ts">
+import type { RouteLocationRaw } from 'vue-router'
 import type { CatalogProduct, CatalogSidebarGroup } from '~/types/catalog'
 import type { CatalogNavigationItem } from '~/types/catalog-navigation'
+import type {
+  CatalogProductsBreadcrumb,
+  CatalogProductsItem,
+  CatalogProductsResponse,
+} from '~/types/catalog-products'
 
 const props = defineProps<{
   category: CatalogNavigationItem
@@ -8,67 +14,8 @@ const props = defineProps<{
 
 const route = useRoute()
 const localePath = useLocalePath()
+const { locale, t } = useI18n()
 const { findByPath } = useCatalogNavigationTree()
-const { productPath } = useCatalogNavigation()
-
-const productSeeds = [
-  {
-    id: 'RGBR-MZ51',
-    slug: 'tucker-oxford-dress-shoe',
-    image: 'https://is4.revolveassets.com/images/p4/n/tv/RGBR-MZ51_V1.jpg',
-    srcset: 'https://is4.revolveassets.com/images/p4/n/tv/RGBR-MZ51_V1.jpg 1x, https://is4.revolveassets.com/images/p4/n/uv/RGBR-MZ51_V1.jpg 2x',
-    key: 'tuckerOxford',
-  },
-  {
-    id: 'SSAM-MK24',
-    slug: 'sanino-polo',
-    image: 'https://is4.revolveassets.com/images/p4/n/tv/SSAM-MK24_V1.jpg',
-    srcset: 'https://is4.revolveassets.com/images/p4/n/tv/SSAM-MK24_V1.jpg 1x, https://is4.revolveassets.com/images/p4/n/uv/SSAM-MK24_V1.jpg 2x',
-    key: 'saninoPolo',
-  },
-  {
-    id: 'SSAM-MK25',
-    slug: 'salevo-sweater',
-    image: 'https://is4.revolveassets.com/images/p4/n/tv/SSAM-MK25_V1.jpg',
-    srcset: 'https://is4.revolveassets.com/images/p4/n/tv/SSAM-MK25_V1.jpg 1x, https://is4.revolveassets.com/images/p4/n/uv/SSAM-MK25_V1.jpg 2x',
-    key: 'salevoSweater',
-  },
-  {
-    id: 'ALLR-MO88',
-    slug: 'saxon-jacket',
-    image: 'https://is4.revolveassets.com/images/p4/n/tv/ALLR-MO88_V1.jpg',
-    srcset: 'https://is4.revolveassets.com/images/p4/n/tv/ALLR-MO88_V1.jpg 1x, https://is4.revolveassets.com/images/p4/n/uv/ALLR-MO88_V1.jpg 2x',
-    key: 'saxonJacket',
-  },
-  {
-    id: 'HOKF-MZ143',
-    slug: 'm-bondi-9',
-    image: 'https://is4.revolveassets.com/images/p4/n/tv/HOKF-MZ143_V1.jpg',
-    srcset: 'https://is4.revolveassets.com/images/p4/n/tv/HOKF-MZ143_V1.jpg 1x, https://is4.revolveassets.com/images/p4/n/uv/HOKF-MZ143_V1.jpg 2x',
-    key: 'mBondi9',
-  },
-  {
-    id: 'HOKF-MZ147',
-    slug: 'u-ora-primo-ext-sneaker',
-    image: 'https://is4.revolveassets.com/images/p4/n/tv/HOKF-MZ147_V1.jpg',
-    srcset: 'https://is4.revolveassets.com/images/p4/n/tv/HOKF-MZ147_V1.jpg 1x, https://is4.revolveassets.com/images/p4/n/uv/HOKF-MZ147_V1.jpg 2x',
-    key: 'uOraPrimo',
-  },
-  {
-    id: 'HOKF-MZ153',
-    slug: 'u-hopara',
-    image: 'https://is4.revolveassets.com/images/p4/n/tv/HOKF-MZ153_V1.jpg',
-    srcset: 'https://is4.revolveassets.com/images/p4/n/tv/HOKF-MZ153_V1.jpg 1x, https://is4.revolveassets.com/images/p4/n/uv/HOKF-MZ153_V1.jpg 2x',
-    key: 'uHopara',
-  },
-  {
-    id: 'HOKF-MZ154',
-    slug: 'm-mafate-x',
-    image: 'https://is4.revolveassets.com/images/p4/n/tv/HOKF-MZ154_V1.jpg',
-    srcset: 'https://is4.revolveassets.com/images/p4/n/tv/HOKF-MZ154_V1.jpg 1x, https://is4.revolveassets.com/images/p4/n/uv/HOKF-MZ154_V1.jpg 2x',
-    key: 'mMafateX',
-  },
-] as const
 
 function linkTarget(url: string): string {
   if (/^https?:\/\//.test(url))
@@ -77,21 +24,94 @@ function linkTarget(url: string): string {
   return localePath(url)
 }
 
+function queryValue(key: string): string | undefined {
+  const value = route.query[key]
+
+  if (Array.isArray(value))
+    return typeof value[0] === 'string' ? value[0] : undefined
+
+  return typeof value === 'string' && value ? value : undefined
+}
+
+function queryValues(key: string): string[] {
+  const value = route.query[key]
+
+  if (Array.isArray(value))
+    return value.filter((item): item is string => typeof item === 'string')
+
+  return typeof value === 'string' && value ? [value] : []
+}
+
+const requestQuery = computed(() => {
+  const query: Record<string, string | string[] | number | undefined> = {
+    locale: locale.value,
+    page: queryValue('page') ?? '1',
+    per_page: 12,
+    sort: queryValue('sort'),
+    price_min: queryValue('price_min'),
+    price_max: queryValue('price_max'),
+  }
+
+  const sizes = queryValues('sizes')
+  const colors = queryValues('colors')
+
+  if (sizes.length)
+    query['sizes[]'] = sizes
+
+  if (colors.length)
+    query['colors[]'] = colors
+
+  return query
+})
+
+const {
+  data: productsResponse,
+  pending,
+  error,
+} = useStorefrontFetch<CatalogProductsResponse>(
+  () => `/storefront/catalog/categories/${props.category.path}/products`,
+  {
+    key: computed(() => `catalog-products:${props.category.path}:${locale.value}:${JSON.stringify(route.query)}`),
+    query: requestQuery,
+    default: () => ({ data: null }),
+    watch: [
+      computed(() => props.category.path),
+      computed(() => route.query),
+      locale,
+    ],
+  },
+)
+
+const payload = computed(() => productsResponse.value?.data ?? null)
+
 const pathSegments = computed(() => props.category.path.split('/').filter(Boolean))
 
-const breadcrumbItems = computed(() => {
+const navigationBreadcrumbItems = computed(() => {
   return pathSegments.value
     .map((_, index) => findByPath(pathSegments.value.slice(0, index + 1).join('/')))
     .filter((item): item is CatalogNavigationItem => Boolean(item))
+})
+
+const breadcrumbItems = computed<CatalogProductsBreadcrumb[]>(() => {
+  const breadcrumbs = payload.value?.category.breadcrumbs
+
+  if (breadcrumbs?.length)
+    return breadcrumbs
+
+  return navigationBreadcrumbItems.value.map(item => ({
+    name: item.name,
+    path: item.path,
+    url: item.url,
+  }))
 })
 
 const parentPath = computed(() => pathSegments.value.slice(0, -1).join('/'))
 
 const parentCategory = computed(() => parentPath.value ? findByPath(parentPath.value) : null)
 
-const topCategory = computed(() => breadcrumbItems.value[0] ?? props.category)
+const topCategory = computed(() => navigationBreadcrumbItems.value[0] ?? props.category)
 
-const selectedCategory = computed(() => String(route.query.category || props.category.slug))
+const selectedCategory = computed(() => props.category.slug)
 
 const sidebarGroups = computed<CatalogSidebarGroup[]>(() => [
   {
@@ -120,17 +140,46 @@ const sidebarGroups = computed<CatalogSidebarGroup[]>(() => [
   },
 ])
 
-const products = computed<CatalogProduct[]>(() => productSeeds.map(product => ({
-  id: product.id,
-  image: product.image,
-  srcset: product.srcset,
-  to: productPath(product.slug),
-  nameKey: `catalog.category.products.${product.key}.name`,
-  brandKey: `catalog.category.products.${product.key}.brand`,
-  salePriceKey: `catalog.category.products.${product.key}.salePrice`,
-  retailPriceKey: `catalog.category.products.${product.key}.retailPrice`,
-  altKey: `catalog.category.products.${product.key}.alt`,
-})))
+const categoryTitle = computed(() => payload.value?.category.name ?? props.category.name)
+
+const products = computed<CatalogProduct[]>(() => {
+  return (payload.value?.products ?? []).map(productToCatalogProduct)
+})
+
+const paginationPages = computed(() => {
+  const pagination = payload.value?.pagination
+
+  if (!pagination || pagination.last_page <= 1)
+    return []
+
+  return Array.from({ length: pagination.last_page }, (_, index) => index + 1)
+})
+
+function productToCatalogProduct(product: CatalogProductsItem): CatalogProduct {
+  return {
+    id: String(product.id),
+    name: product.name,
+    brand: product.brand ?? '',
+    salePrice: product.price.formatted,
+    retailPrice: product.price.compare_at_formatted ?? null,
+    alt: product.image.alt,
+    image: product.image.src,
+    srcset: product.image.srcset ?? undefined,
+    to: linkTarget(product.url),
+    designTo: product.design_url ? linkTarget(product.design_url) : localePath(`/design/product/${product.slug}`),
+    isDesignable: product.is_designable === true,
+  }
+}
+
+function pagePath(page: number): RouteLocationRaw {
+  return localePath({
+    path: route.path,
+    query: {
+      ...route.query,
+      page: String(page),
+    },
+  })
+}
 </script>
 
 <template>
@@ -160,22 +209,66 @@ const products = computed<CatalogProduct[]>(() => productSeeds.map(product => ({
       </nav>
 
       <h1 class="mt-[34px] text-[25px] font-semibold uppercase tracking-[0.16em]">
-        {{ category.name }}
+        {{ categoryTitle }}
       </h1>
 
       <div class="mt-[29px] flex flex-col gap-[48px] lg:flex-row">
         <CatalogSidebar :groups="sidebarGroups" />
 
         <section class="min-w-0 flex-1">
-          <CatalogFilterBar item-count-key="catalog.category.itemCount" />
+          <CatalogFilterBar
+            :filters="payload?.filters"
+            :pagination="payload?.pagination"
+            :sort="payload?.sort"
+          />
 
           <p class="sr-only">
             {{ $t('catalog.category.active') }}: {{ selectedCategory }}
           </p>
 
-          <div class="mt-[24px]">
+          <p
+            v-if="pending"
+            class="mt-[24px] text-[14px] text-[#606060]"
+          >
+            {{ t('catalog.category.loading') }}
+          </p>
+
+          <p
+            v-else-if="error"
+            class="mt-[24px] text-[14px] text-[#606060]"
+          >
+            {{ t('catalog.category.error') }}
+          </p>
+
+          <div
+            v-else-if="products.length"
+            class="mt-[24px]"
+          >
             <CatalogProductGrid :products="products" />
+
+            <nav
+              v-if="paginationPages.length"
+              class="mt-10 flex items-center justify-center gap-2"
+              aria-label="Pagination"
+            >
+              <NuxtLink
+                v-for="page in paginationPages"
+                :key="page"
+                :to="pagePath(page)"
+                class="flex size-9 items-center justify-center border border-black text-[13px]"
+                :class="page === payload?.pagination.current_page ? 'bg-black text-white' : 'bg-white text-black'"
+              >
+                {{ page }}
+              </NuxtLink>
+            </nav>
           </div>
+
+          <p
+            v-else
+            class="mt-[24px] text-[14px] text-[#606060]"
+          >
+            {{ t('catalog.category.empty') }}
+          </p>
         </section>
       </div>
     </div>

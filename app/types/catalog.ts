@@ -13,14 +13,21 @@ export interface CatalogSidebarGroup {
 
 export interface CatalogProduct {
   id: string
-  nameKey: string
-  brandKey: string
-  salePriceKey: string
-  retailPriceKey: string
-  altKey: string
+  name?: string
+  nameKey?: string
+  brand?: string
+  brandKey?: string
+  salePrice?: string
+  salePriceKey?: string
+  retailPrice?: string | null
+  retailPriceKey?: string
+  alt?: string
+  altKey?: string
   image: string
   srcset?: string
   to: RouteLocationRaw
+  designTo?: RouteLocationRaw
+  isDesignable?: boolean
 }
 
 export interface ProductGalleryImage {
