@@ -16,11 +16,13 @@
     "@tailwindcss/vite": "^4.2.4",
     "nuxt": "^4.4.4",
     "nuxt-swiper": "2.0.1",
+    "nuxt-vue3-google-signin": "0.0.13",
     "tailwindcss": "^4.2.4",
     "vue": "^3.5.33",
     "vue-router": "^5.0.6"
   },
   "devDependencies": {
     "sass": "^1.99.0"
-  }
+  },
+  "packageManager": "pnpm@11.1.2+sha512.415a1cc25974731e75455c1468371be74c5aa5fb7621b50d4056d222451609f11412f23fd602e6169f1e060466641f798597e1be961a10688836a67b16569499"
 }

@@ -5,7 +5,7 @@ const { resolve } = createResolver(import.meta.url)
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/i18n', '@nuxt/fonts', '@nuxt/icon', 'nuxt-swiper'],
+  modules: ['@nuxtjs/i18n', '@nuxt/fonts', '@nuxt/icon', 'nuxt-swiper', 'nuxt-vue3-google-signin'],
   css: ['~/assets/sass/main.sass', '~/assets/css/tailwind.css'],
   i18n: {
     locales: [
@@ -19,6 +19,18 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    server: {
+      host: '127.0.0.1',
+      port: 5173,
+      allowedHosts: [process.env.NUXT_PUBLIC_HOST ?? 'uandiplus.test','uandiplus.com'],
+      strictPort: true,
+      hmr: {
+        protocol: 'ws',
+        host: process.env.NUXT_PUBLIC_HOST ?? 'uandiplus.test',
+        port: 5173,
+        clientPort: 80,
+      },
+    },
   },
   icon: {
     customCollections: [
@@ -30,9 +42,23 @@ export default defineNuxtConfig({
       },
     ],
   },
-  ssr: false,
-
-  nitro: {
-    preset: 'static',
+  googleSignIn: {
+    clientId: process.env.GOOGLE_CLIENT_ID,
   },
+  devServer: {
+    host: '127.0.0.1',
+    port: 3000,
+  },
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE ?? '/api',
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY ?? '',
+      stripePublishableKey: process.env.NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? process.env.STRIPE_PUBLISHABLE_KEY ?? '',
+    },
+  },
+  // ssr: false,
+  //
+  // nitro: {
+  //   preset: 'static',
+  // },
 })
