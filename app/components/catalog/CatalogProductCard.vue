@@ -4,6 +4,15 @@ import type { CatalogProduct } from '~/types/catalog'
 defineProps<{
   product: CatalogProduct
 }>()
+
+const { t } = useI18n()
+
+function productText(value?: string | null, key?: string): string {
+  if (value)
+    return value
+
+  return key ? t(key) : ''
+}
 </script>
 
 <template>
@@ -27,7 +36,7 @@ defineProps<{
         <img
           :src="product.image"
           :srcset="product.srcset"
-          :alt="$t(product.altKey)"
+          :alt="productText(product.alt, product.altKey)"
           class="h-full w-full object-contain object-bottom"
           loading="lazy"
           width="576"
@@ -41,18 +50,29 @@ defineProps<{
 
       <div class="mt-[15px] min-h-[65px] px-[10px]">
         <h3 class="text-[13px] font-semibold leading-[1.25]">
-          {{ $t(product.nameKey) }}
+          {{ productText(product.name, product.nameKey) }}
         </h3>
         <p class="mt-[2px] text-[13px] uppercase leading-[1.25]">
-          {{ $t(product.brandKey) }}
+          {{ productText(product.brand, product.brandKey) }}
         </p>
         <p class="mt-[7px] text-[13px] font-semibold leading-[1.25] text-[#c62118]">
-          {{ $t(product.salePriceKey) }}
-          <s class="ml-[6px] font-normal text-[#6f7780]">
-            {{ $t(product.retailPriceKey) }}
+          {{ productText(product.salePrice, product.salePriceKey) }}
+          <s
+            v-if="product.retailPrice || product.retailPriceKey"
+            class="ml-[6px] font-normal text-[#6f7780]"
+          >
+            {{ productText(product.retailPrice, product.retailPriceKey) }}
           </s>
         </p>
       </div>
+    </NuxtLink>
+
+    <NuxtLink
+      v-if="product.isDesignable && product.designTo"
+      :to="product.designTo"
+      class="mx-[10px] mt-[13px] flex h-[42px] items-center justify-center border border-black bg-black text-[12px] font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:bg-white hover:text-black"
+    >
+      {{ $t('catalog.category.design.cta') }}
     </NuxtLink>
   </article>
 </template>
