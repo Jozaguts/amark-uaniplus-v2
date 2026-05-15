@@ -50,6 +50,7 @@ export interface LandingItem {
   cta_label?: string | null
   aria_label?: string | null
   url: string
+  cta_url?: string | null
   image: LandingImage
   overlay?: LandingOverlay | null
   sort_order?: number
