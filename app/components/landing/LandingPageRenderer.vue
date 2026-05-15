@@ -24,6 +24,10 @@ function itemAriaLabel(item: LandingItem): string {
   return item.aria_label || item.cta_label || item.title || item.image.alt
 }
 
+function itemCtaTarget(item: LandingItem): string {
+  return linkTarget(item.cta_url || item.url)
+}
+
 function sectionMaxWidth(section: LandingSection): string {
   return section.layout?.max_width || '1400px'
 }
@@ -214,13 +218,14 @@ function gridColumnsClass(section: LandingSection): string {
                     :alt="item.image.alt"
                   >
                 </div>
+              </NuxtLink>
 
-                <div
-                  v-if="item.cta_label"
-                  class="relative mt-[4px] text-center text-[12px] font-semibold uppercase leading-[1.15] tracking-[0.05em] hover:underline"
-                >
-                  {{ item.cta_label }}
-                </div>
+              <NuxtLink
+                v-if="item.cta_label"
+                :to="itemCtaTarget(item)"
+                class="relative mt-[4px] text-center text-[12px] font-semibold uppercase leading-[1.15] tracking-[0.05em] text-black hover:underline"
+              >
+                {{ item.cta_label }}
               </NuxtLink>
             </article>
           </div>
