@@ -6,6 +6,13 @@ defineProps<{
 }>()
 
 const { categoryPath, slugFromKey } = useCatalogNavigation()
+
+function fallbackItemPath(item: CatalogSidebarGroup['items'][number]) {
+  if (item.to)
+    return item.to
+
+  return categoryPath(item.active ? 'all-sale-items' : slugFromKey(item.labelKey ?? item.label ?? 'item'))
+}
 </script>
 
 <template>
@@ -22,17 +29,17 @@ const { categoryPath, slugFromKey } = useCatalogNavigation()
       <ul class="mt-[10px] space-y-[5px] text-[16px] leading-[1.15] text-[#6f7780]">
         <li
           v-for="item in group.items"
-          :key="item.labelKey"
+          :key="item.labelKey ?? item.label"
         >
           <NuxtLink
-            :to="categoryPath(item.active ? 'all-sale-items' : slugFromKey(item.labelKey))"
+            :to="fallbackItemPath(item)"
             class="inline-block hover:text-black hover:underline"
             :class="{
               'text-black underline': item.active,
               'text-[#c62118]': item.danger,
             }"
           >
-            {{ $t(item.labelKey) }}
+            {{ item.label ?? $t(item.labelKey ?? '') }}
           </NuxtLink>
         </li>
       </ul>

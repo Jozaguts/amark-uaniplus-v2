@@ -3,7 +3,9 @@ import type { RouteLocationRaw } from 'vue-router'
 export interface CatalogSidebarGroup {
   titleKey: string
   items: {
-    labelKey: string
+    labelKey?: string
+    label?: string
+    to?: RouteLocationRaw
     active?: boolean
     danger?: boolean
   }[]

@@ -16,6 +16,8 @@ const category = computed(() => findByPath(categoryPath.value))
 
 const childGroups = computed(() => category.value?.children ?? [])
 
+const isLeafCategory = computed(() => Boolean(category.value && !childGroups.value.length))
+
 const landingScopes = new Set(['fashion', 'accessories', 'digital-products'])
 
 const landingScope = computed(() => {
@@ -46,6 +48,11 @@ function linkTarget(url: string): string {
   <LandingPageRenderer
     v-if="landingPage"
     :page="landingPage"
+  />
+
+  <CatalogCategoryPage
+    v-else-if="category && isLeafCategory"
+    :category="category"
   />
 
   <section
