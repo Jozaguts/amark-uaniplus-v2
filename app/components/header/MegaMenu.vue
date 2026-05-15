@@ -46,6 +46,13 @@ function linkTarget(url: string): string {
   return localePath(url)
 }
 
+function imageLinkTarget(url?: string | null): string | null {
+  if (!url)
+    return null
+
+  return linkTarget(url)
+}
+
 function linkKey(item: CatalogNavigationMenuLink): string {
   return String(item.id ?? item.path ?? item.url)
 }
@@ -57,13 +64,13 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
 
 <template>
   <div class="fixed flex justify-center items-center inset-x-0 top-26 border-b border-[#f4f4f4] bg-white text-left normal-case tracking-normal">
-    <div class="container mx-auto  px-8 pb-4 pt-5.5">
-      <div class="grid grid-cols-12 gap-4">
+    <div class="mx-72 overflow-x-auto scrollbar-thin h-100">
+      <div class="grid grid-cols-12 gap-4 h-full">
         <div
           class="col-span-12"
           :class="textSpanClass"
         >
-          <div class="grid grid-cols-12 gap-4">
+          <div class="grid grid-cols-12 gap-4 h-full">
             <section
               v-for="column in columns"
               :key="column.title"
@@ -86,11 +93,11 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
                   <li
                     v-for="item in group"
                     :key="linkKey(item)"
-                    class="leading-[1.285714]"
+                    class=""
                   >
                     <span
                       v-if="hasChildren(item)"
-                      class="text-[14px] font-normal leading-[1.285714] text-[#6e6e6e]"
+                      class="text-[14px] font-normal  text-[#6e6e6e]"
                       :class="item.italic && 'italic'"
                     >
                       {{ item.label }}
@@ -105,7 +112,7 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
                     <NuxtLink
                       v-else
                       :to="linkTarget(item.url)"
-                      class="text-[14px] font-normal leading-[1.285714] text-[#6e6e6e]"
+                      class="text-[14px] font-normal  text-[#6e6e6e]"
                       :class="item.italic && 'italic'"
                     >
                       {{ item.label }}
@@ -124,11 +131,11 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
                       <li
                         v-for="child in item.children"
                         :key="linkKey(child)"
-                        class="leading-[1.285714]"
+                        class=""
                       >
                         <NuxtLink
                           :to="linkTarget(child.url)"
-                          class="text-[13px] font-normal leading-[1.285714] text-[#8a8a8a]"
+                          class="text-[13px] font-normal  text-[#8a8a8a]"
                         >
                           {{ child.label }}
                         </NuxtLink>
@@ -145,11 +152,11 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
                 <li
                   v-for="item in column.items"
                   :key="linkKey(item)"
-                  class="leading-[1.285714]"
+                  class=""
                 >
                   <span
                     v-if="hasChildren(item)"
-                    class="text-[14px] font-normal leading-[1.285714] text-[#6e6e6e]"
+                    class="text-[14px] font-normal  text-[#6e6e6e]"
                     :class="item.italic && 'italic'"
                   >
                     {{ item.label }}
@@ -164,7 +171,7 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
                   <NuxtLink
                     v-else
                     :to="linkTarget(item.url)"
-                    class="text-[14px] font-normal leading-[1.285714] text-[#6e6e6e]"
+                    class="text-[14px] font-normal  text-[#6e6e6e]  hover:underline "
                     :class="item.italic && 'italic'"
                   >
                     {{ item.label }}
@@ -183,11 +190,11 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
                     <li
                       v-for="child in item.children"
                       :key="linkKey(child)"
-                      class="leading-[1.285714]"
+                      class=""
                     >
                       <NuxtLink
                         :to="linkTarget(child.url)"
-                        class="text-[13px] font-normal leading-[1.285714] text-[#8a8a8a]"
+                        class="text-[13px] font-normal  text-[#8a8a8a]"
                       >
                         {{ child.label }}
                       </NuxtLink>
@@ -205,13 +212,13 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
           :class="imageSpanClass"
         >
           <div
-            class="grid gap-[16px]"
-            :class="images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'"
+            class="grid gap-[16px] grid-cols-3"
           >
-            <NuxtLink
+            <component
+              :is="imageLinkTarget(image.url) ? 'NuxtLink' : 'div'"
               v-for="image in images"
               :key="image.src"
-              :to="linkTarget(image.url)"
+              :to="imageLinkTarget(image.url) || undefined"
               class="block whitespace-normal leading-normal"
             >
               <img
@@ -228,7 +235,7 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
               >
                 {{ image.description }}
               </span>
-            </NuxtLink>
+            </component>
           </div>
         </div>
       </div>
