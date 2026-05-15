@@ -465,6 +465,10 @@
       "title": "Categoría",
       "active": "Categoría seleccionada",
       "itemCount": "3,758 artículos",
+      "items": "{count} artículos",
+      "loading": "Cargando productos...",
+      "empty": "No se encontraron productos.",
+      "error": "No pudimos cargar estos productos.",
       "headings": {
         "women": "Ropa de diseñador para mujer en rebaja",
         "men": "Ropa de diseñador para hombre en rebaja",
@@ -481,6 +485,10 @@
         "sortBy": "Ordenar por",
         "newestMarkdowns": "Rebajas más recientes",
         "view": "Ver",
+        "viewCount": "Ver {count}",
+        "min": "Mínimo",
+        "max": "Máximo",
+        "done": "Aplicar",
         "favorite": "Agregar a favoritos",
         "quickView": "Vista rápida"
       },
@@ -531,7 +539,19 @@
         "uOraPrimo": { "name": "U Ora Primo Ext Sneaker", "brand": "HOKA", "salePrice": "2,066.88 MXN", "retailPrice": "2,583.52 MXN", "alt": "U Ora Primo Ext Sneaker de HOKA" },
         "uHopara": { "name": "U Hopara", "brand": "HOKA", "salePrice": "2,146.39 MXN", "retailPrice": "2,682.99 MXN", "alt": "U Hopara de HOKA" },
         "mMafateX": { "name": "M Mafate X", "brand": "HOKA", "salePrice": "3,577.20 MXN", "retailPrice": "4,471.59 MXN", "alt": "M Mafate X de HOKA" }
+      },
+      "design": {
+        "cta": "Personalizar"
       }
+    },
+    "design": {
+      "back": "Volver a la tienda",
+      "kicker": "Estudio de diseño",
+      "title": "Personalizar producto",
+      "description": "Este producto está disponible para el flujo de diseño. Las herramientas del editor se cargarán aquí cuando conectemos el contrato de diseño.",
+      "preview": "Vista previa del diseño",
+      "product": "Producto",
+      "start": "Empezar diseño"
     },
     "product": {
       "title": "Detalle del producto",

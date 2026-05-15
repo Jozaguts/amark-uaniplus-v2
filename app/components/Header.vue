@@ -37,6 +37,14 @@ function isActiveNavigationItem(item: CatalogNavigationItem): boolean {
   return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`)
 }
 
+function subNavigationItemClass(item: CatalogNavigationItem): string {
+  const isActive = activeMegaMenuKey.value === itemKey(item) || isActiveNavigationItem(item)
+
+  return isActive
+    ? 'border-black text-black'
+    : 'border-transparent text-black'
+}
+
 function hasChildren(item: CatalogNavigationItem): boolean {
   return Boolean(item.children?.length)
 }
@@ -191,8 +199,8 @@ watch(
               <button
                 v-if="hasChildren(item)"
                 type="button"
-                class="border-b border-transparent pb-[8px] pt-[8px] whitespace-nowrap"
-                :class="(activeMegaMenuKey === itemKey(item) || isActiveNavigationItem(item)) && 'border-black'"
+                class="whitespace-nowrap border-b-2 pb-[8px] pt-[8px]"
+                :class="subNavigationItemClass(item)"
                 @click="toggleMegaMenu(item)"
               >
                 {{ item.name }}
@@ -201,8 +209,8 @@ watch(
               <NuxtLink
                 v-else
                 :to="linkTarget(item.url)"
-                class="border-b border-transparent pb-[8px] pt-[8px] whitespace-nowrap"
-                :class="isActiveNavigationItem(item) && 'border-black'"
+                class="whitespace-nowrap border-b-2 pb-[8px] pt-[8px]"
+                :class="subNavigationItemClass(item)"
               >
                 {{ item.name }}
               </NuxtLink>
@@ -257,7 +265,8 @@ watch(
             >
               <span
                 v-if="hasChildren(item)"
-                class="shrink-0 whitespace-nowrap"
+                class="shrink-0 whitespace-nowrap border-b-2 pb-[8px] pt-[8px]"
+                :class="subNavigationItemClass(item)"
               >
                 {{ item.name }}
               </span>
@@ -265,7 +274,8 @@ watch(
               <NuxtLink
                 v-else
                 :to="linkTarget(item.url)"
-                class="shrink-0 whitespace-nowrap"
+                class="shrink-0 whitespace-nowrap border-b-2 pb-[8px] pt-[8px]"
+                :class="subNavigationItemClass(item)"
               >
                 {{ item.name }}
               </NuxtLink>

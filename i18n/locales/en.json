@@ -465,6 +465,10 @@
       "title": "Category",
       "active": "Selected category",
       "itemCount": "3,758 Items",
+      "items": "{count} Items",
+      "loading": "Loading products...",
+      "empty": "No products found.",
+      "error": "We could not load these products.",
       "headings": {
         "women": "Women's Designer Clothing on Sale",
         "men": "Men's Designer Clothing on Sale",
@@ -481,6 +485,10 @@
         "sortBy": "Sort By",
         "newestMarkdowns": "Newest Markdowns",
         "view": "View",
+        "viewCount": "View {count}",
+        "min": "Min",
+        "max": "Max",
+        "done": "Done",
         "favorite": "Add to favorites",
         "quickView": "Quick View"
       },
@@ -531,7 +539,19 @@
         "uOraPrimo": { "name": "U Ora Primo Ext Sneaker", "brand": "HOKA", "salePrice": "2,066.88 MXN", "retailPrice": "2,583.52 MXN", "alt": "U Ora Primo Ext Sneaker by HOKA" },
         "uHopara": { "name": "U Hopara", "brand": "HOKA", "salePrice": "2,146.39 MXN", "retailPrice": "2,682.99 MXN", "alt": "U Hopara by HOKA" },
         "mMafateX": { "name": "M Mafate X", "brand": "HOKA", "salePrice": "3,577.20 MXN", "retailPrice": "4,471.59 MXN", "alt": "M Mafate X by HOKA" }
+      },
+      "design": {
+        "cta": "Customize"
       }
+    },
+    "design": {
+      "back": "Back to store",
+      "kicker": "Design studio",
+      "title": "Customize product",
+      "description": "This product is available for the design flow. The editor tools will load here when the design contract is connected.",
+      "preview": "Design preview",
+      "product": "Product",
+      "start": "Start design"
     },
     "product": {
       "title": "Product Details",
