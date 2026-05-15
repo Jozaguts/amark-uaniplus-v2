@@ -36,10 +36,7 @@ export function useCatalogNavigation(section?: CatalogSection) {
   }
 
   function productPath(slug: string): RouteLocationRaw {
-    return localePath({
-      path: `/${currentSection.value}/product`,
-      query: { slug },
-    })
+    return localePath(`/products/${slug}`)
   }
 
   return {
