@@ -51,5 +51,5 @@ export interface CatalogNavigationPromotion {
   description?: string | null
   alt: string
   src: string
-  url: string
+  url?: string | null
 }

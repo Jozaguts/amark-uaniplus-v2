@@ -13,6 +13,12 @@ function normalizePath(path: string): string {
   return path.replace(/^\/(en|es)(?=\/)/, '').replace(/\/$/, '') || '/'
 }
 
+function normalizeCategoryPath(path: string): string {
+  return normalizePath(path)
+    .replace(/^\/+/, '')
+    .replace(/^categories\//, '')
+}
+
 function itemKey(item: CatalogNavigationItem): string {
   return String(item.id ?? item.path)
 }
@@ -47,6 +53,15 @@ const activeMainItem = computed(() => {
 
 const subNavigationItems = computed(() => activeMainItem.value?.children ?? [])
 
+const forcedMegaMenuValue = computed(() => {
+  const rawValue = route.query.nav ?? route.query.menu ?? route.query.activeNav
+  const value = Array.isArray(rawValue) ? rawValue[0] : rawValue
+
+  return typeof value === 'string' ? normalizeCategoryPath(value) : ''
+})
+
+const isMegaMenuForced = computed(() => Boolean(forcedMegaMenuValue.value))
+
 const activeMegaMenu = computed(() => {
   const item = subNavigationItems.value.find(navItem => itemKey(navItem) === activeMegaMenuKey.value)
 
@@ -56,8 +71,30 @@ const activeMegaMenu = computed(() => {
   return menuForItem(item)
 })
 
+const activeMegaMenuImages = computed(() => {
+  return activeMegaMenu.value?.images?.length
+    ? activeMegaMenu.value.images
+    : activeMainItem.value?.menu?.images ?? []
+})
+
 function openMegaMenu(item: CatalogNavigationItem): void {
-  activeMegaMenuKey.value = hasChildren(item) && menuForItem(item)?.columns?.length ? itemKey(item) : null
+  const menu = menuForItem(item)
+  const hasMenuContent = Boolean(menu?.columns?.length || menu?.images?.length || activeMainItem.value?.menu?.images?.length)
+
+  activeMegaMenuKey.value = hasChildren(item) && hasMenuContent ? itemKey(item) : null
+}
+
+function matchesForcedMegaMenu(item: CatalogNavigationItem): boolean {
+  const forcedValue = forcedMegaMenuValue.value
+
+  if (!forcedValue)
+    return false
+
+  return [
+    item.slug,
+    item.path,
+    item.url,
+  ].some(value => normalizeCategoryPath(value) === forcedValue || normalizeCategoryPath(value).endsWith(`/${forcedValue}`))
 }
 
 function toggleMegaMenu(item: CatalogNavigationItem): void {
@@ -70,12 +107,31 @@ function toggleMegaMenu(item: CatalogNavigationItem): void {
 }
 
 function closeMegaMenu(): void {
+  if (isMegaMenuForced.value)
+    return
+
   activeMegaMenuKey.value = null
 }
 
 watch(activeMainItem, () => {
   closeMegaMenu()
 })
+
+watch(
+  [subNavigationItems, forcedMegaMenuValue],
+  () => {
+    if (!forcedMegaMenuValue.value) {
+      activeMegaMenuKey.value = null
+      return
+    }
+
+    const item = subNavigationItems.value.find(matchesForcedMegaMenu)
+
+    if (item)
+      openMegaMenu(item)
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
@@ -124,7 +180,7 @@ watch(activeMainItem, () => {
         @mouseleave="closeMegaMenu"
       >
         <div
-            class="container max-w-8/12 mx-auto overflow-x-auto scrollbar-thin  ">
+            class="xs:hidden px-72 overflow-x-auto scrollbar-thin">
           <nav class="flex h-[41px] min-w-max items-center justify-center gap-[34px] text-[15px] font-bold uppercase leading-none tracking-[0.16em]">
             <div
               v-for="item in subNavigationItems"
@@ -157,7 +213,7 @@ watch(activeMainItem, () => {
         <MegaMenu
           v-if="activeMegaMenu"
           :columns="activeMegaMenu.columns"
-          :images="activeMegaMenu.images"
+          :images="activeMegaMenuImages"
         />
       </div>
 
