@@ -557,6 +557,8 @@
       "title": "Product Details",
       "active": "Product slug",
       "backToResults": "Back To Results",
+      "loading": "Loading product...",
+      "error": "We could not load this product.",
       "gallery": {
         "previous": "Previous slides",
         "next": "Next slides",
@@ -594,6 +596,7 @@
         "aboutBrand": "About The Brand"
       },
       "description": {
+        "empty": "No product details available.",
         "leather": "Leather upper and rubber sole",
         "madeIn": "Made in China",
         "laceUp": "Lace-up front",

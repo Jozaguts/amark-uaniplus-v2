@@ -35,11 +35,13 @@ export interface ProductGalleryImage {
   srcset?: string
   thumb: string
   thumbSrcset?: string
-  altKey: string
+  alt?: string
+  altKey?: string
 }
 
 export interface ProductSizeOption {
   label: string
+  value?: string
   disabled?: boolean
   selected?: boolean
 }

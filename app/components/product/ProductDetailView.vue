@@ -1,26 +1,78 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router'
-import type { ProductGalleryImage, ProductSizeOption } from '~/types/catalog'
+import type { ProductGalleryImage } from '~/types/catalog'
+import type { ProductDetailResponse, ProductGalleryItem } from '~/types/product-detail'
 
-defineProps<{
-  backTo: RouteLocationRaw
+const props = defineProps<{
+  slug: string
+  fallbackBackTo: RouteLocationRaw
 }>()
 
-const galleryImages: ProductGalleryImage[] = [1, 2, 3, 4, 5].map(number => ({
-  src: `https://is4.revolveassets.com/images/p4/n/uv/RGBR-MZ51_V${number}.jpg`,
-  srcset: `https://is4.revolveassets.com/images/p4/n/uv/RGBR-MZ51_V${number}.jpg 1x, https://is4.revolveassets.com/images/p4/n/z/RGBR-MZ51_V${number}.jpg 2x`,
-  thumb: `https://is4.revolveassets.com/images/p4/n/ct/RGBR-MZ51_V${number}.jpg`,
-  thumbSrcset: `https://is4.revolveassets.com/images/p4/n/ct/RGBR-MZ51_V${number}.jpg 1x, https://is4.revolveassets.com/images/p4/n/ps/RGBR-MZ51_V${number}.jpg 2x`,
-  altKey: `catalog.product.gallery.views.${number}`,
-}))
+const localePath = useLocalePath()
+const { locale, t } = useI18n()
 
-const sizes: ProductSizeOption[] = [
-  { label: '41', disabled: true },
-  { label: '42', disabled: true },
-  { label: '43', disabled: true },
-  { label: '44', disabled: true },
-  { label: '45', selected: true },
-]
+function linkTarget(url: string): string {
+  if (/^https?:\/\//.test(url))
+    return url
+
+  return localePath(url)
+}
+
+const {
+  data: productResponse,
+  pending,
+  error,
+} = useStorefrontFetch<ProductDetailResponse>(
+  () => `/storefront/products/${props.slug}`,
+  {
+    key: computed(() => `product-detail:${props.slug}:${locale.value}`),
+    query: computed(() => ({ locale: locale.value })),
+    default: () => ({ data: null }),
+    immediate: Boolean(props.slug),
+    watch: [
+      computed(() => props.slug),
+      locale,
+    ],
+  },
+)
+
+const product = computed(() => productResponse.value?.data ?? null)
+
+const galleryImages = computed<ProductGalleryImage[]>(() => {
+  return (product.value?.gallery ?? []).map(galleryItemToImage)
+})
+
+const backTo = computed<RouteLocationRaw>(() => {
+  const breadcrumbs = product.value?.breadcrumbs ?? []
+  const lastCategory = breadcrumbs.at(-1)
+
+  return lastCategory?.url ? linkTarget(lastCategory.url) : props.fallbackBackTo
+})
+
+const designTo = computed<RouteLocationRaw | undefined>(() => {
+  if (!product.value?.is_designable)
+    return undefined
+
+  return linkTarget(product.value.design_url || `/design/product/${product.value.slug}`)
+})
+
+function galleryItemToImage(image: ProductGalleryItem): ProductGalleryImage {
+  return {
+    src: image.src,
+    srcset: image.srcset ?? undefined,
+    thumb: image.thumb,
+    thumbSrcset: image.thumb_srcset ?? undefined,
+    alt: image.alt,
+  }
+}
+
+useSeoMeta({
+  title: () => product.value?.seo?.title || product.value?.name || t('catalog.product.title'),
+  description: () => product.value?.seo?.description || undefined,
+  ogTitle: () => product.value?.seo?.title || product.value?.name || t('catalog.product.title'),
+  ogDescription: () => product.value?.seo?.description || undefined,
+  ogImage: () => product.value?.seo?.image || product.value?.gallery?.[0]?.src || undefined,
+})
 </script>
 
 <template>
@@ -32,14 +84,34 @@ const sizes: ProductSizeOption[] = [
       {{ $t('catalog.product.backToResults') }}
     </NuxtLink>
 
-    <div class="mt-[27px] flex flex-col gap-[45px] lg:flex-row lg:items-start">
+    <p
+      v-if="pending"
+      class="mt-[27px] text-[14px] text-[#606060]"
+    >
+      {{ $t('catalog.product.loading') }}
+    </p>
+
+    <p
+      v-else-if="error || !product"
+      class="mt-[27px] text-[14px] text-[#606060]"
+    >
+      {{ $t('catalog.product.error') }}
+    </p>
+
+    <div
+      v-else
+      class="mt-[27px] flex flex-col gap-[45px] lg:flex-row lg:items-start"
+    >
       <div class="min-w-0 flex-1">
         <ProductGallery :images="galleryImages" />
       </div>
 
       <div class="pt-[2px]">
-        <ProductInfoPanel :sizes="sizes" />
-        <ProductDetailsTabs />
+        <ProductInfoPanel
+          :product="product"
+          :design-to="designTo"
+        />
+        <ProductDetailsTabs :content="product.content" />
       </div>
     </div>
   </main>

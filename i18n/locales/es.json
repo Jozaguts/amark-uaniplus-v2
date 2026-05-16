@@ -557,6 +557,8 @@
       "title": "Detalle del producto",
       "active": "Slug del producto",
       "backToResults": "Volver a resultados",
+      "loading": "Cargando producto...",
+      "error": "No pudimos cargar este producto.",
       "gallery": {
         "previous": "Slides anteriores",
         "next": "Siguientes slides",
@@ -594,6 +596,7 @@
         "aboutBrand": "Sobre la marca"
       },
       "description": {
+        "empty": "No hay detalles disponibles para este producto.",
         "leather": "Parte superior de piel y suela de goma",
         "madeIn": "Hecho en China",
         "laceUp": "Ajuste con agujetas",

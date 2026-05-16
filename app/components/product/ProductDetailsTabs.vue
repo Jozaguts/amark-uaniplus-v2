@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import type { ProductContent } from '~/types/product-detail'
+
+const props = defineProps<{
+  content?: ProductContent | null
+}>()
+
 const activeTab = shallowRef('description')
 
 const tabs = [
@@ -7,15 +13,7 @@ const tabs = [
   { key: 'aboutBrand', labelKey: 'catalog.product.tabs.aboutBrand' },
 ] as const
 
-const descriptionItems = [
-  'leather',
-  'madeIn',
-  'laceUp',
-  'roundToe',
-  'heel',
-  'styleNo',
-  'manufacturerStyleNo',
-] as const
+const descriptionItems = computed(() => props.content?.description ?? [])
 </script>
 
 <template>
@@ -40,28 +38,27 @@ const descriptionItems = [
 
     <div class="mt-[24px] text-[13px] leading-[1.6]">
       <ul
-        v-if="activeTab === 'description'"
+        v-if="activeTab === 'description' && descriptionItems.length"
         class="ml-[17px] list-disc"
       >
         <li
           v-for="item in descriptionItems"
           :key="item"
         >
-          {{ $t(`catalog.product.description.${item}`) }}
+          {{ item }}
         </li>
       </ul>
 
       <p v-else-if="activeTab === 'sizeFit'">
-        <button
-          type="button"
-          class="underline"
-        >
-          {{ $t('catalog.product.sizeFit.viewSizeGuide') }}
-        </button>
+        {{ content?.size_fit || $t('catalog.product.sizeFit.viewSizeGuide') }}
+      </p>
+
+      <p v-else-if="activeTab === 'aboutBrand'">
+        {{ content?.about_brand || $t('catalog.product.aboutBrand.copy') }}
       </p>
 
       <p v-else>
-        {{ $t('catalog.product.aboutBrand.copy') }}
+        {{ $t('catalog.product.description.empty') }}
       </p>
     </div>
   </section>

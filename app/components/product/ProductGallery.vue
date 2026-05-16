@@ -4,6 +4,15 @@ import type { ProductGalleryImage } from '~/types/catalog'
 defineProps<{
   images: ProductGalleryImage[]
 }>()
+
+const { t } = useI18n()
+
+function imageAlt(image: ProductGalleryImage): string {
+  if (image.alt)
+    return image.alt
+
+  return image.altKey ? t(image.altKey) : ''
+}
 </script>
 
 <template>
@@ -28,7 +37,7 @@ defineProps<{
         <img
           :src="image.src"
           :srcset="image.srcset"
-          :alt="$t(image.altKey)"
+          :alt="imageAlt(image)"
           class="max-h-[500px] w-full object-contain object-bottom"
           width="960"
           height="1450"
@@ -59,7 +68,7 @@ defineProps<{
         <img
           :src="image.thumb"
           :srcset="image.thumbSrcset"
-          :alt="$t(image.altKey)"
+          :alt="imageAlt(image)"
           class="max-h-[29px] max-w-[30px] object-contain"
           width="87"
           height="131"
