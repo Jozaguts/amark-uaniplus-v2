@@ -492,44 +492,6 @@
         "favorite": "Agregar a favoritos",
         "quickView": "Vista rápida"
       },
-      "sidebar": {
-        "category": {
-          "title": "Categoría",
-          "allSaleItems": "Todos los artículos en rebaja",
-          "lastChance": "Última oportunidad",
-          "finalSale": "Venta final"
-        },
-        "shopYourSize": {
-          "title": "Compra tu talla",
-          "apparel": "Ropa",
-          "denim": "Denim",
-          "shoes": "Calzado"
-        },
-        "shopByCategory": {
-          "title": "Comprar por categoría",
-          "accessories": "Accesorios",
-          "athleticWear": "Ropa deportiva",
-          "bags": "Bolsas",
-          "beauty": "Belleza",
-          "denim": "Denim",
-          "home": "Hogar",
-          "jacketsCoats": "Chamarras y abrigos",
-          "jewelry": "Joyería",
-          "lounge": "Ropa cómoda",
-          "pants": "Pantalones",
-          "polos": "Polos",
-          "shirts": "Camisas",
-          "shoes": "Calzado",
-          "shorts": "Shorts",
-          "suits": "Trajes",
-          "sweatersKnits": "Suéteres y tejidos",
-          "sweatshirtsHoodies": "Sudaderas",
-          "swim": "Trajes de baño",
-          "tShirts": "Playeras",
-          "tops": "Tops",
-          "underwear": "Ropa interior"
-        }
-      },
       "products": {
         "tuckerOxford": { "name": "Tucker Oxford Dress Shoe", "brand": "Rag & Bone", "salePrice": "3,577.20 MXN", "retailPrice": "7,909.74 MXN", "alt": "Zapato Tucker Oxford Dress Shoe de Rag & Bone" },
         "saninoPolo": { "name": "Sanino Polo", "brand": "SAMSOE SAMSOE", "salePrice": "3,418.36 MXN", "retailPrice": "4,869.13 MXN", "alt": "Sanino Polo de SAMSOE SAMSOE" },
@@ -583,6 +545,7 @@
         "findSize": "¿No encuentras tu talla?",
         "inventory": "¡Solo queda 1!",
         "colorLabel": "Color:",
+        "colorOption": "Seleccionar color {color}",
         "colorValue": "Dark Espresso",
         "addToBag": "Agregar a bolsa",
         "buyNow": "Comprar ahora",

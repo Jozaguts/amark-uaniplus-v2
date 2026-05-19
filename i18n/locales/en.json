@@ -492,44 +492,6 @@
         "favorite": "Add to favorites",
         "quickView": "Quick View"
       },
-      "sidebar": {
-        "category": {
-          "title": "Category",
-          "allSaleItems": "All Sale Items",
-          "lastChance": "Last Chance",
-          "finalSale": "Final Sale"
-        },
-        "shopYourSize": {
-          "title": "Shop Your Size",
-          "apparel": "Apparel",
-          "denim": "Denim",
-          "shoes": "Shoes"
-        },
-        "shopByCategory": {
-          "title": "Shop By Category",
-          "accessories": "Accessories",
-          "athleticWear": "Athletic Wear",
-          "bags": "Bags",
-          "beauty": "Beauty",
-          "denim": "Denim",
-          "home": "Home",
-          "jacketsCoats": "Jackets & Coats",
-          "jewelry": "Jewelry",
-          "lounge": "Lounge",
-          "pants": "Pants",
-          "polos": "Polos",
-          "shirts": "Shirts",
-          "shoes": "Shoes",
-          "shorts": "Shorts",
-          "suits": "Suits",
-          "sweatersKnits": "Sweaters & Knits",
-          "sweatshirtsHoodies": "Sweatshirts & Hoodies",
-          "swim": "Swim",
-          "tShirts": "T-Shirts",
-          "tops": "Tops",
-          "underwear": "Underwear"
-        }
-      },
       "products": {
         "tuckerOxford": { "name": "Tucker Oxford Dress Shoe", "brand": "Rag & Bone", "salePrice": "3,577.20 MXN", "retailPrice": "7,909.74 MXN", "alt": "Tucker Oxford Dress Shoe by Rag & Bone" },
         "saninoPolo": { "name": "Sanino Polo", "brand": "SAMSOE SAMSOE", "salePrice": "3,418.36 MXN", "retailPrice": "4,869.13 MXN", "alt": "Sanino Polo by SAMSOE SAMSOE" },
@@ -583,6 +545,7 @@
         "findSize": "Can't Find Your Size?",
         "inventory": "Only 1 left!",
         "colorLabel": "Color:",
+        "colorOption": "Select {color} color",
         "colorValue": "Dark Espresso",
         "addToBag": "Add To Bag",
         "buyNow": "Buy Now",
