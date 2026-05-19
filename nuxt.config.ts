@@ -5,8 +5,8 @@ const { resolve } = createResolver(import.meta.url)
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/i18n', '@nuxt/fonts', '@nuxt/icon', 'nuxt-swiper', 'nuxt-vue3-google-signin'],
-  css: ['~/assets/sass/main.sass', '~/assets/css/tailwind.css'],
+  modules: ['@nuxtjs/i18n', '@nuxt/fonts', '@nuxt/icon', '@vueuse/nuxt', '@element-plus/nuxt', 'nuxt-swiper', 'nuxt-vue3-google-signin'],
+  css: ['~/assets/sass/main.sass', '~/assets/css/tailwind.css', '~/assets/css/design-editor.css'],
   i18n: {
     locales: [
       { code: 'en', language: 'en-US', file: 'en.json' },
@@ -44,6 +44,9 @@ export default defineNuxtConfig({
   },
   googleSignIn: {
     clientId: process.env.GOOGLE_CLIENT_ID,
+  },
+  elementPlus: {
+    defaultLocale: 'en',
   },
   devServer: {
     host: '127.0.0.1',
