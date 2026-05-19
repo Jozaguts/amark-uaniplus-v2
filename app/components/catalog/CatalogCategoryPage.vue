@@ -113,32 +113,42 @@ const topCategory = computed(() => navigationBreadcrumbItems.value[0] ?? props.c
 
 const selectedCategory = computed(() => props.category.slug)
 
-const sidebarGroups = computed<CatalogSidebarGroup[]>(() => [
-  {
-    titleKey: 'catalog.category.sidebar.category.title',
-    items: (parentCategory.value?.children?.length ? parentCategory.value.children : [props.category]).map(item => ({
-      label: item.name,
-      to: linkTarget(item.url),
-      active: item.path === props.category.path,
-    })),
-  },
-  {
-    titleKey: 'catalog.category.sidebar.shopYourSize.title',
-    items: [
-      { labelKey: 'catalog.category.sidebar.shopYourSize.apparel' },
-      { labelKey: 'catalog.category.sidebar.shopYourSize.denim' },
-      { labelKey: 'catalog.category.sidebar.shopYourSize.shoes' },
-    ],
-  },
-  {
-    titleKey: 'catalog.category.sidebar.shopByCategory.title',
-    items: (topCategory.value.children ?? []).map(item => ({
-      label: item.name,
-      to: linkTarget(item.url),
-      active: props.category.path === item.path || props.category.path.startsWith(`${item.path}/`),
-    })),
-  },
-])
+function categoryItems(items: CatalogNavigationItem[]): CatalogSidebarGroup['items'] {
+  return items.map(item => ({
+    label: item.name,
+    to: linkTarget(item.url),
+    active: props.category.path === item.path || props.category.path.startsWith(`${item.path}/`),
+  }))
+}
+
+const sidebarGroups = computed<CatalogSidebarGroup[]>(() => {
+  const groups: CatalogSidebarGroup[] = []
+  const siblingItems = parentCategory.value?.children?.length
+    ? parentCategory.value.children
+    : [props.category]
+
+  if (parentCategory.value || siblingItems.length) {
+    groups.push({
+      title: parentCategory.value?.name ?? props.category.name,
+      items: siblingItems.map(item => ({
+        label: item.name,
+        to: linkTarget(item.url),
+        active: item.path === props.category.path,
+      })),
+    })
+  }
+
+  const topItems = topCategory.value.children ?? []
+
+  if (topItems.length && topCategory.value.path !== parentCategory.value?.path) {
+    groups.push({
+      title: topCategory.value.name,
+      items: categoryItems(topItems),
+    })
+  }
+
+  return groups.filter(group => group.items.length)
+})
 
 const categoryTitle = computed(() => payload.value?.category.name ?? props.category.name)
 
@@ -156,6 +166,10 @@ const paginationPages = computed(() => {
 })
 
 function productToCatalogProduct(product: CatalogProductsItem): CatalogProduct {
+  const designTo = product.is_designable === true && product.design_url
+    ? linkTarget(product.design_url)
+    : undefined
+
   return {
     id: String(product.id),
     name: product.name,
@@ -166,7 +180,7 @@ function productToCatalogProduct(product: CatalogProductsItem): CatalogProduct {
     image: product.image.src,
     srcset: product.image.srcset ?? undefined,
     to: linkTarget(product.url),
-    designTo: product.design_url ? linkTarget(product.design_url) : localePath(`/design/product/${product.slug}`),
+    designTo,
     isDesignable: product.is_designable === true,
   }
 }
