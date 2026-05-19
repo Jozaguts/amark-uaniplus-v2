@@ -50,10 +50,10 @@ const backTo = computed<RouteLocationRaw>(() => {
 })
 
 const designTo = computed<RouteLocationRaw | undefined>(() => {
-  if (!product.value?.is_designable)
+  if (!product.value?.is_designable || !product.value.design_url)
     return undefined
 
-  return linkTarget(product.value.design_url || `/design/product/${product.value.slug}`)
+  return linkTarget(product.value.design_url)
 })
 
 function galleryItemToImage(image: ProductGalleryItem): ProductGalleryImage {

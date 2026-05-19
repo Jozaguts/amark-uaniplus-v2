@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { ProductGalleryImage } from '~/types/catalog'
 
-defineProps<{
+const props = defineProps<{
   images: ProductGalleryImage[]
 }>()
 
 const { t } = useI18n()
+
+const thumbnailImages = computed(() => props.images.slice(0, 4))
 
 function imageAlt(image: ProductGalleryImage): string {
   if (image.alt)
@@ -58,7 +60,7 @@ function imageAlt(image: ProductGalleryImage): string {
 
     <div class="mt-[36px] flex justify-center gap-[10px]">
       <button
-        v-for="(image, index) in images"
+        v-for="(image, index) in thumbnailImages"
         :key="image.thumb"
         type="button"
         class="grid size-[39px] place-items-center rounded-full border bg-white"

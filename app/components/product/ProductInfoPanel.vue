@@ -8,10 +8,20 @@ const props = defineProps<{
 }>()
 
 const selectedColor = computed(() => {
-  return props.product.options?.colors?.find(color => color.is_selected) ?? props.product.options?.colors?.[0] ?? null
+  return availableColors.value.find(color => color.is_selected) ?? availableColors.value[0] ?? null
+})
+
+const availableColors = computed(() => {
+  return props.product.options?.colors?.filter(color => color.is_available !== false) ?? []
 })
 
 const sizes = computed(() => props.product.options?.sizes ?? [])
+
+function colorSwatchStyle(color: ProductOption): Record<string, string> {
+  return {
+    backgroundColor: color.hex || '#f4f4f4',
+  }
+}
 
 function sizeClass(size: ProductOption): string {
   if (size.is_available === false)
@@ -66,6 +76,36 @@ function sizeClass(size: ProductOption): string {
       </span>
     </p>
 
+    <section v-if="selectedColor || availableColors.length" class="mt-[22px]">
+      <p
+        v-if="selectedColor"
+        class="text-[17px] leading-none"
+      >
+        <span class="font-semibold">{{ $t('catalog.product.detail.colorLabel') }}</span>
+        <span class="ml-[8px]">{{ selectedColor.label }}</span>
+      </p>
+
+      <div
+        v-if="availableColors.length"
+        class="mt-[16px] flex flex-wrap gap-[9px]"
+      >
+        <button
+          v-for="color in availableColors"
+          :key="color.value"
+          type="button"
+          class="grid size-[31px] place-items-center rounded-full border"
+          :class="color.is_selected ? 'border-black' : 'border-transparent'"
+          :aria-label="$t('catalog.product.detail.colorOption', { color: color.label })"
+        >
+          <span
+            class="block size-[28px] rounded-full border border-[#e3e3e3]"
+            :style="colorSwatchStyle(color)"
+            aria-hidden="true"
+          />
+        </button>
+      </div>
+    </section>
+
     <section
       v-if="sizes.length"
       class="mt-[20px]"
@@ -114,15 +154,7 @@ function sizeClass(size: ProductOption): string {
       {{ product.inventory.label }}
     </p>
 
-    <p
-      v-if="selectedColor"
-      class="mt-[22px] text-[17px] leading-none"
-    >
-      <span class="font-semibold">{{ $t('catalog.product.detail.colorLabel') }}</span>
-      <span class="ml-[8px]">{{ selectedColor.label }}</span>
-    </p>
-
-    <div class="mt-[21px] grid grid-cols-2 gap-[16px]">
+    <div class="mt-[21px] grid gap-[24px]">
       <button
         type="button"
         class="h-[64px] bg-black text-[15px] font-semibold uppercase tracking-[0.18em] text-white disabled:bg-[#8b8b8b]"
