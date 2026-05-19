@@ -6,5 +6,74 @@
 
 @theme {
     --font-display: "Monserrat", sans-serif;
-    --tracking-1: 0.3px
+    --font-new-grotesk: "NewGrotesk", sans-serif;
+    --font-new-grotesk-mono: "NewGroteskMono", monospace;
+    --tracking-1: 0.3px;
+    --color-primary: #111314;
+    --color-secondary: #0e0e11;
+    --color-regular: #ffffff;
+    --color-cotton-grey-1: #f7f7f4;
+    --color-cotton-grey-2: #e5e5e3;
+    --color-line-grey: #dbdbd9;
+    --color-borderSecondary: #dbdbd9;
+    --color-muted: #75787b;
+}
+
+@font-face {
+    font-display: swap;
+    font-family: NewGrotesk;
+    font-style: normal;
+    font-weight: 400;
+    src: url('/NewGrotesk-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: NewGrotesk;
+    font-style: italic;
+    font-weight: 400;
+    src: url('/NewGrotesk-RegularItalic.woff2') format('woff2');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: NewGrotesk;
+    font-style: normal;
+    font-weight: 500;
+    src: url('/NewGrotesk-Medium.woff2') format('woff2');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: NewGrotesk;
+    font-style: normal;
+    font-weight: 600;
+    src: url('/NewGrotesk-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: NewGroteskMono;
+    font-style: normal;
+    font-weight: 400;
+    src: url('/NewGrotesk-RegularMono.woff2') format('woff2');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: NewGroteskMono;
+    font-style: normal;
+    font-weight: 500;
+    src: url('/NewGrotesk-MediumMono.woff2') format('woff2');
+}
+
+@layer components {
+    .scroll-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .scroll-hide::-webkit-scrollbar {
+        display: none;
+    }
 }
