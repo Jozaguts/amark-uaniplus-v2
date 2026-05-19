@@ -10,6 +10,7 @@ import type {
   DesignCartResponse,
 } from '~~/types/design-cart'
 import type { StorefrontFetchError } from '~~/types/storefront'
+import {useStorefront} from "~/composables/useStorefront";
 
 const DESIGN_CART_STORAGE_KEY = 'tapstitch-design-cart'
 const DESIGN_CART_STORAGE_MODE_KEY = 'tapstitch-design-cart-mode'
@@ -59,6 +60,10 @@ const getCartItemQuantity = (item: Pick<DesignCartItem, 'sizes' | 'quantity'>) =
 const createCartIdentityKey = (item: Pick<DesignCartItem, 'source' | 'designId' | 'productHandle' | 'colorId'>) => {
   if (item.source === 'design' && item.designId) {
     return `design:${item.designId}`
+  }
+
+  if (item.source === 'product') {
+    return `product:${item.productHandle}:${item.colorId}`
   }
 
   return `blank:${item.productHandle}:${item.colorId}`

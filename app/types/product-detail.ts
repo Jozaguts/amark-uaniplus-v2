@@ -8,6 +8,8 @@ export interface ProductDetail {
   name: string
   brand?: string | null
   sku?: string | null
+  product_type?: ProductCatalogType | string | null
+  catalog_type?: ProductCatalogType | string | null
   is_available: boolean
   is_designable: boolean
   url: string
@@ -21,6 +23,8 @@ export interface ProductDetail {
   shipping?: ProductShipping | null
   seo?: ProductSeo | null
 }
+
+export type ProductCatalogType = 'fashion' | 'accessories' | 'digital-products'
 
 export interface ProductBreadcrumb {
   label: string
