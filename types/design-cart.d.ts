@@ -7,7 +7,7 @@ export type DesignCartSummary = {
   totalPriceLabel: string
 }
 
-export type DesignCartSource = 'design' | 'blank'
+export type DesignCartSource = 'design' | 'blank' | 'product'
 
 export type DesignCartSizeAllocation = {
   id: string
@@ -51,9 +51,12 @@ export type DesignCartItemCreatePayload = {
   design_id?: string | null
   product_handle: string
   product_type?: string | null
-  color_id: string
+  color_id?: string | null
+  color_name?: string | null
   technique_id?: string | null
+  technique_name?: string | null
   sizes: DesignCartItemMutationSizePayload[]
+  quantity_total?: number
 }
 
 export type DesignCartItemUpdatePayload = {

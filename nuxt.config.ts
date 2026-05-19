@@ -40,6 +40,10 @@ export default defineNuxtConfig({
         // if you want to include all the icons in nested directories:
         // recursive: true,
       },
+      {
+        prefix: 'ruuul',
+        dir: resolve('./app/assets/ruuul-icons'),
+      },
     ],
   },
   googleSignIn: {
