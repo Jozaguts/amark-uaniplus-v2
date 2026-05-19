@@ -188,7 +188,7 @@ watch(
         @mouseleave="closeMegaMenu"
       >
         <div
-            class="xs:hidden px-72 overflow-x-auto scrollbar-thin">
+            class="xs:hidden overflow-x-auto mx-auto scrollbar-thin max-w-325">
           <nav class="flex h-[41px] min-w-max items-center justify-center gap-[34px] text-[15px] font-bold uppercase leading-none tracking-[0.16em]">
             <div
               v-for="item in subNavigationItems"
