@@ -10,8 +10,6 @@ import type {
   DesignCartResponse,
 } from '~~/types/design-cart'
 import type { StorefrontFetchError } from '~~/types/storefront'
-import {useStorefront} from "~/composables/useStorefront";
-
 const DESIGN_CART_STORAGE_KEY = 'tapstitch-design-cart'
 const DESIGN_CART_STORAGE_MODE_KEY = 'tapstitch-design-cart-mode'
 
@@ -93,7 +91,7 @@ const normalizeCartItems = (items: unknown): DesignCartItem[] => {
 
     return [{
       ...(item as DesignCartItem),
-      source: 'source' in item && (item.source === 'design' || item.source === 'blank') ? item.source : 'design',
+      source: 'source' in item && (item.source === 'design' || item.source === 'blank' || item.source === 'product') ? item.source : 'design',
       sizes,
       quantity: getCartItemQuantity({
         sizes,
@@ -122,14 +120,18 @@ const mapCartItemToMutationSizes = (item: DesignCartItem): DesignCartItemMutatio
 }
 
 const mapCartItemToCreatePayload = (item: DesignCartItem): DesignCartItemCreatePayload => {
+  const sizes = mapCartItemToMutationSizes(item)
+
   return {
     source: item.source,
     ...(item.source === 'design' && item.designId ? { design_id: item.designId } : {}),
     product_handle: item.productHandle,
     product_type: item.productType ?? null,
-    color_id: item.colorId,
+    ...(item.colorId ? { color_id: item.colorId } : {}),
+    ...(item.colorName ? { color_name: item.colorName } : {}),
     ...(item.source === 'design' && item.techniqueId ? { technique_id: item.techniqueId } : {}),
-    sizes: mapCartItemToMutationSizes(item),
+    ...(item.source === 'design' && item.techniqueName ? { technique_name: item.techniqueName } : {}),
+    ...(sizes.length ? { sizes } : { quantity_total: Math.max(1, item.quantity) }),
   }
 }
 
@@ -154,15 +156,15 @@ const mapRemoteCartItemToLocal = (item: DesignCartApiItem): DesignCartItem => {
     productName: item.product_name,
     productSku: item.product_sku,
     designName: item.product_name,
-    colorId: item.color.id ?? '',
-    colorName: item.color.name ?? null,
+    colorId: item.color?.id ?? '',
+    colorName: item.color?.name ?? null,
     techniqueId: item.technique?.id ?? null,
     techniqueName: item.technique?.name ?? null,
     previewImage: item.preview_image ?? null,
     placementLabels: item.placements ?? [],
     artworkCount: item.placements?.length ?? 0,
     sizes: normalizeCartSizes(
-      item.sizes.map(size => ({
+      (item.sizes ?? []).map(size => ({
         id: size.size_id,
         label: size.label ?? size.size_id,
         quantity: size.quantity,

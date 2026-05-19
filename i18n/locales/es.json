@@ -632,6 +632,41 @@
     }
   },
   "account": {
+    "cart": {
+      "seo": {
+        "title": "Carrito | UANDI PLUS",
+        "description": "Revisa los artículos de tu carrito antes de pagar."
+      },
+      "title": "Carrito({count})",
+      "fulfillment": "Fulfillment desde USA",
+      "empty": {
+        "title": "Agrega tu primer artículo hoy",
+        "cta": "Ir a comprar"
+      },
+      "actions": {
+        "all": "Todo",
+        "remove": "Eliminar",
+        "selectItem": "Seleccionar {name}",
+        "decreaseSize": "Disminuir {size}",
+        "increaseSize": "Aumentar {size}",
+        "checkout": "Checkout",
+        "clear": "Vaciar carrito"
+      },
+      "item": {
+        "colorMissing": "Color no seleccionado",
+        "blank": "Sin diseño",
+        "design": "Diseñar",
+        "branding": "Branding"
+      },
+      "summary": {
+        "title": "Resumen de orden",
+        "productCost": "Costo de producto",
+        "customization": "Personalización",
+        "shipping": "Envío",
+        "tbd": "Por definir",
+        "total": "Total"
+      }
+    },
     "orders": {
       "seo": {
         "title": "Órdenes de cuenta | UANDI PLUS",

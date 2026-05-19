@@ -62,6 +62,7 @@ function isUnauthorizedError(error: unknown) {
 export function useProductCart() {
   const storefront = useStorefront()
   const { hydrateAuth, isAuthenticated, syncProfile } = useStorefrontAuth()
+  const { syncCart } = useDesignCart()
 
   function buildProductCartPayload(
     product: ProductDetail,
@@ -125,10 +126,14 @@ export function useProductCart() {
   }
 
   async function submitProductCartPayload(payload: ProductCartPayload) {
-    return storefront('/cart/items', {
+    const response = await storefront('/cart/items', {
       method: 'POST',
       body: payload,
     })
+
+    await syncCart().catch(() => 'guest')
+
+    return response
   }
 
   async function ensureAuthenticated() {

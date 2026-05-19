@@ -55,7 +55,7 @@ export type DesignCartItemCreatePayload = {
   color_name?: string | null
   technique_id?: string | null
   technique_name?: string | null
-  sizes: DesignCartItemMutationSizePayload[]
+  sizes?: DesignCartItemMutationSizePayload[]
   quantity_total?: number
 }
 
@@ -89,10 +89,10 @@ export type DesignCartApiItem = {
   product_name: string
   product_sku: string
   preview_image?: string | null
-  color: DesignCartApiReference
+  color?: DesignCartApiReference | null
   technique?: DesignCartApiReference | null
   placements?: string[]
-  sizes: DesignCartItemMutationSizePayload[]
+  sizes?: DesignCartItemMutationSizePayload[]
   quantity_total: number
   pricing: DesignCartApiPricing
   created_at: string

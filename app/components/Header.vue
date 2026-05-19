@@ -195,7 +195,7 @@ onMounted(() => {
         </NuxtLink>
 
         <div class="flex items-center justify-end gap-[21px] pt-[-1px] text-[16px] font-bold leading-none">
-          <button type="button" :aria-label="$t('header.actions.cart')" class="relative pt-px">
+          <NuxtLink :to="localePath('/account/cart')" :aria-label="$t('header.actions.cart')" class="relative pt-px">
             <Icon name="icon:shoping-cart" class="size-[25px]" />
             <span
               v-if="itemCount"
@@ -203,7 +203,7 @@ onMounted(() => {
             >
               {{ itemCount }}
             </span>
-          </button>
+          </NuxtLink>
 
           <NuxtLink :to="nextLocalePath" :aria-label="$t('header.actions.language')" class="flex items-center gap-[6px]">
             <Icon name="icon:globe-light" class="size-[26px]" />
@@ -327,7 +327,7 @@ onMounted(() => {
           </div>
 
           <div class="flex items-center gap-[15px]">
-            <button type="button" :aria-label="$t('header.actions.cart')" class="relative">
+            <NuxtLink :to="localePath('/account/cart')" :aria-label="$t('header.actions.cart')" class="relative">
               <Icon name="icon:shoping-cart" class="size-[25px]" />
               <span
                 v-if="itemCount"
@@ -335,7 +335,7 @@ onMounted(() => {
               >
                 {{ itemCount }}
               </span>
-            </button>
+            </NuxtLink>
 
             <NuxtLink :to="nextLocalePath" :aria-label="$t('header.actions.language')" class="flex items-center gap-[4px] text-[13px] font-bold">
               <Icon name="icon:globe-light" class="size-[24px]" />
