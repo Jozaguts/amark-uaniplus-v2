@@ -1,5 +1,51 @@
 {
   "welcome": "Bienvenido",
+  "auth": {
+    "brand": "UANDI PLUS",
+    "or": "O",
+    "coverAlt": "Imagen de acceso a la cuenta",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "form": {
+      "emailPlaceholder": "Ingresa tu correo",
+      "passwordPlaceholder": "Ingresa tu contraseña"
+    },
+    "legal": {
+      "before": "Al continuar, aceptas los",
+      "terms": "Términos de servicio",
+      "between": "y la",
+      "privacy": "Política de privacidad"
+    },
+    "validation": {
+      "emailRequired": "Ingresa tu correo",
+      "emailInvalid": "Ingresa un correo válido",
+      "passwordRequired": "Ingresa tu contraseña",
+      "passwordMinLength": "La contraseña no puede tener menos de 6 caracteres",
+      "requestFailed": "No pudimos completar tu solicitud.",
+      "googleFailed": "La autenticación con Google falló."
+    },
+    "login": {
+      "title": "Bienvenido de vuelta",
+      "promptText": "¿No tienes cuenta?",
+      "promptLinkLabel": "Regístrate",
+      "googleLabel": "Iniciar sesión con Google",
+      "submitLabel": "Iniciar sesión",
+      "seo": {
+        "title": "Login | UANDI PLUS",
+        "description": "Inicia sesión en tu cuenta de UANDI PLUS."
+      }
+    },
+    "register": {
+      "title": "Crea tu cuenta",
+      "promptText": "¿Ya tienes cuenta?",
+      "promptLinkLabel": "Inicia sesión",
+      "googleLabel": "Registrarse con Google",
+      "submitLabel": "Registrarse",
+      "seo": {
+        "title": "Registro | UANDI PLUS",
+        "description": "Crea tu cuenta de UANDI PLUS."
+      }
+    }
+  },
   "women": {
     "home": {
       "title": "Página principal de mujer",
@@ -548,6 +594,9 @@
         "colorOption": "Seleccionar color {color}",
         "colorValue": "Dark Espresso",
         "addToBag": "Agregar a bolsa",
+        "addToBagPending": "Agregando...",
+        "addedToBag": "Agregado a la bolsa.",
+        "addToBagError": "No pudimos agregar este producto a tu bolsa.",
         "buyNow": "Comprar ahora",
         "addToLists": "+ Agregar a mis listas",
         "delivery": "Entrega estimada: mayo 13 - mayo 15",

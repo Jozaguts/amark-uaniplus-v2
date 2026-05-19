@@ -1,5 +1,51 @@
 {
   "welcome": "Welcome",
+  "auth": {
+    "brand": "UANDI PLUS",
+    "or": "Or",
+    "coverAlt": "Authentication cover",
+    "forgotPassword": "Forgot password?",
+    "form": {
+      "emailPlaceholder": "Enter your email",
+      "passwordPlaceholder": "Enter password"
+    },
+    "legal": {
+      "before": "By continuing, you agree to UANDI PLUS’s",
+      "terms": "Terms of Service",
+      "between": "and",
+      "privacy": "Privacy Policy"
+    },
+    "validation": {
+      "emailRequired": "Please input email address",
+      "emailInvalid": "Please input correct email address",
+      "passwordRequired": "Please input the password",
+      "passwordMinLength": "The password can not be less than 6 characters",
+      "requestFailed": "We could not complete your request.",
+      "googleFailed": "Google authentication failed."
+    },
+    "login": {
+      "title": "Welcome back",
+      "promptText": "Don’t have an account?",
+      "promptLinkLabel": "Sign up",
+      "googleLabel": "Sign in with Google",
+      "submitLabel": "Sign in",
+      "seo": {
+        "title": "Login | UANDI PLUS",
+        "description": "Sign in to your UANDI PLUS account."
+      }
+    },
+    "register": {
+      "title": "Create your account",
+      "promptText": "Already have an account?",
+      "promptLinkLabel": "Sign in",
+      "googleLabel": "Sign up with Google",
+      "submitLabel": "Sign up",
+      "seo": {
+        "title": "Register | UANDI PLUS",
+        "description": "Create your UANDI PLUS account."
+      }
+    }
+  },
   "women": {
     "home": {
       "title": "Womens Homepage",
@@ -548,6 +594,9 @@
         "colorOption": "Select {color} color",
         "colorValue": "Dark Espresso",
         "addToBag": "Add To Bag",
+        "addToBagPending": "Adding...",
+        "addedToBag": "Added to bag.",
+        "addToBagError": "Could not add this product to your bag.",
         "buyNow": "Buy Now",
         "addToLists": "+ Add to My Lists",
         "delivery": "Estimated Delivery : May 13 - May 15",
