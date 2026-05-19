@@ -7,8 +7,20 @@ const props = defineProps<{
   designTo?: RouteLocationRaw
 }>()
 
+const route = useRoute()
+const { t } = useI18n()
+const { addProductToCart } = useProductCart()
+const addToBagPending = shallowRef(false)
+const addToBagMessage = shallowRef('')
+const addToBagError = shallowRef('')
+const selectedColorValue = shallowRef('')
+const selectedSizeValue = shallowRef('')
+
 const selectedColor = computed(() => {
-  return availableColors.value.find(color => color.is_selected) ?? availableColors.value[0] ?? null
+  return availableColors.value.find(color => color.value === selectedColorValue.value)
+    ?? availableColors.value.find(color => color.is_selected)
+    ?? availableColors.value[0]
+    ?? null
 })
 
 const availableColors = computed(() => {
@@ -16,6 +28,28 @@ const availableColors = computed(() => {
 })
 
 const sizes = computed(() => props.product.options?.sizes ?? [])
+
+const selectedSize = computed(() => {
+  return sizes.value.find(size => size.value === selectedSizeValue.value && size.is_available !== false)
+    ?? sizes.value.find(size => size.is_selected && size.is_available !== false)
+    ?? sizes.value.find(size => size.is_available !== false)
+    ?? null
+})
+
+watch(
+  () => props.product.slug,
+  () => {
+    selectedColorValue.value = availableColors.value.find(color => color.is_selected)?.value
+      ?? availableColors.value[0]?.value
+      ?? ''
+    selectedSizeValue.value = sizes.value.find(size => size.is_selected && size.is_available !== false)?.value
+      ?? sizes.value.find(size => size.is_available !== false)?.value
+      ?? ''
+    addToBagMessage.value = ''
+    addToBagError.value = ''
+  },
+  { immediate: true },
+)
 
 function colorSwatchStyle(color: ProductOption): Record<string, string> {
   return {
@@ -27,9 +61,49 @@ function sizeClass(size: ProductOption): string {
   if (size.is_available === false)
     return 'border-[#7c7c7c] bg-[#f7f7f7] text-[#8b8b8b]'
 
-  return size.is_selected
+  return size.value === selectedSize.value?.value
     ? 'border-black bg-white text-black'
     : 'border-[#7c7c7c] bg-[#f7f7f7] text-[#6d6d6d]'
+}
+
+function selectColor(color: ProductOption) {
+  selectedColorValue.value = color.value
+  addToBagMessage.value = ''
+  addToBagError.value = ''
+}
+
+function selectSize(size: ProductOption) {
+  if (size.is_available === false)
+    return
+
+  selectedSizeValue.value = size.value
+  addToBagMessage.value = ''
+  addToBagError.value = ''
+}
+
+async function handleAddToBag() {
+  if (!props.product.is_available || addToBagPending.value)
+    return
+
+  addToBagMessage.value = ''
+  addToBagError.value = ''
+  addToBagPending.value = true
+
+  try {
+    const result = await addProductToCart(props.product, {
+      colorValue: selectedColor.value?.value,
+      sizeValue: selectedSize.value?.value,
+      returnTo: route.fullPath,
+    })
+
+    if (result.status === 'added')
+      addToBagMessage.value = t('catalog.product.detail.addedToBag')
+  } catch (error) {
+    const storefrontError = error as { data?: { message?: string } }
+    addToBagError.value = storefrontError?.data?.message ?? t('catalog.product.detail.addToBagError')
+  } finally {
+    addToBagPending.value = false
+  }
 }
 </script>
 
@@ -94,8 +168,9 @@ function sizeClass(size: ProductOption): string {
           :key="color.value"
           type="button"
           class="grid size-[31px] place-items-center rounded-full border"
-          :class="color.is_selected ? 'border-black' : 'border-transparent'"
+          :class="color.value === selectedColor?.value ? 'border-black' : 'border-transparent'"
           :aria-label="$t('catalog.product.detail.colorOption', { color: color.label })"
+          @click="selectColor(color)"
         >
           <span
             class="block size-[28px] rounded-full border border-[#e3e3e3]"
@@ -133,9 +208,10 @@ function sizeClass(size: ProductOption): string {
           v-for="size in sizes"
           :key="size.value"
           type="button"
-          class="relative h-[34px] min-w-[64px] rounded-[4px] border px-3 text-[15px] leading-none"
+          class="relative h-[34px] min-w-[64px] rounded-[4px] border px-3 text-[15px] leading-none enabled:cursor-pointer disabled:cursor-not-allowed"
           :class="sizeClass(size)"
           :disabled="size.is_available === false"
+          @click="selectSize(size)"
         >
           <span>{{ size.label }}</span>
           <span
@@ -157,10 +233,11 @@ function sizeClass(size: ProductOption): string {
     <div class="mt-[21px] grid gap-[24px]">
       <button
         type="button"
-        class="h-[64px] bg-black text-[15px] font-semibold uppercase tracking-[0.18em] text-white disabled:bg-[#8b8b8b]"
-        :disabled="!product.is_available"
+        class="h-[64px] cursor-pointer bg-black text-[15px] font-semibold uppercase tracking-[0.18em] text-white disabled:cursor-not-allowed disabled:bg-[#8b8b8b]"
+        :disabled="!product.is_available || addToBagPending"
+        @click="handleAddToBag"
       >
-        {{ $t('catalog.product.detail.addToBag') }}
+        {{ addToBagPending ? $t('catalog.product.detail.addToBagPending') : $t('catalog.product.detail.addToBag') }}
       </button>
       <button
         type="button"
@@ -170,6 +247,20 @@ function sizeClass(size: ProductOption): string {
         {{ $t('catalog.product.detail.buyNow') }}
       </button>
     </div>
+
+    <p
+      v-if="addToBagMessage"
+      class="mt-[12px] text-[13px] font-semibold text-[#1f7a1f]"
+    >
+      {{ addToBagMessage }}
+    </p>
+
+    <p
+      v-if="addToBagError"
+      class="mt-[12px] text-[13px] font-semibold text-[#b00000]"
+    >
+      {{ addToBagError }}
+    </p>
 
     <NuxtLink
       v-if="product.is_designable && designTo"
