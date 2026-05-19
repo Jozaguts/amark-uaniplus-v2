@@ -355,6 +355,12 @@
       "currency": "USD",
       "login": "Login"
     },
+    "user": {
+      "account": "Account",
+      "orders": "Orders",
+      "logout": "Logout",
+      "loggingOut": "Logging out..."
+    },
     "mega": {
       "common": {
         "viewAll": "View All",
@@ -622,6 +628,101 @@
       },
       "aboutBrand": {
         "copy": "Rag & Bone is rooted in a dedication to craftsmanship, innovation and timeless style. Each collection is designed in New York and developed through time-honored manufacturing techniques from around the world."
+      }
+    }
+  },
+  "account": {
+    "orders": {
+      "seo": {
+        "title": "Account Orders | UANDI PLUS",
+        "description": "Review your UANDI PLUS orders and production status."
+      },
+      "title": "Orders",
+      "manage": "Manage Orders",
+      "loading": "Loading orders...",
+      "empty": "No order record",
+      "tabs": {
+        "all": "All",
+        "inReview": "In Review",
+        "inProduction": "In Production",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "canceled": "Canceled"
+      },
+      "columns": {
+        "product": "Product",
+        "orderId": "Order ID",
+        "dateCustomer": "Date & Customer",
+        "status": "Status",
+        "action": "Action"
+      },
+      "labels": {
+        "pending": "Pending",
+        "customer": "Customer",
+        "itemOrder": "{count} item order",
+        "units": "{count} units"
+      },
+      "actions": {
+        "selectAll": "Select all orders",
+        "selectOrder": "Select order {number}",
+        "retry": "Retry",
+        "view": "View"
+      },
+      "errors": {
+        "load": "Unable to load orders."
+      }
+    },
+    "orderDetail": {
+      "seo": {
+        "title": "{number} | UANDI PLUS",
+        "description": "Review order details and shipment status."
+      },
+      "fallbackOrder": "Order",
+      "back": "Back to orders",
+      "eyebrow": "Order details",
+      "refresh": "Refresh",
+      "refreshing": "Refreshing...",
+      "loading": "Loading order...",
+      "fields": {
+        "status": "Status",
+        "payment": "Payment",
+        "created": "Created"
+      },
+      "products": {
+        "title": "Products",
+        "count": "{count} items",
+        "empty": "No product details available for this order.",
+        "itemFallback": "Order item",
+        "quantity": "Qty {count}"
+      },
+      "timeline": {
+        "title": "Timeline"
+      },
+      "shipping": {
+        "title": "Shipping",
+        "empty": "No shipment details available yet.",
+        "carrierPending": "Carrier pending",
+        "shipment": "shipment",
+        "track": "Track {number}",
+        "tracking": "Tracking: {number}"
+      },
+      "summary": {
+        "title": "Summary",
+        "subtotal": "Subtotal",
+        "shipping": "Shipping",
+        "discount": "Discount",
+        "total": "Total"
+      },
+      "customer": {
+        "title": "Customer"
+      },
+      "address": {
+        "title": "Address",
+        "empty": "No address details available."
+      },
+      "errors": {
+        "missingNumber": "Order number is missing.",
+        "load": "Unable to load order."
       }
     }
   },

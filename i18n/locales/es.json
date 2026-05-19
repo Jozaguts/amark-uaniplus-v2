@@ -355,6 +355,12 @@
       "currency": "USD",
       "login": "Iniciar sesión"
     },
+    "user": {
+      "account": "Cuenta",
+      "orders": "Órdenes",
+      "logout": "Cerrar sesión",
+      "loggingOut": "Cerrando sesión..."
+    },
     "mega": {
       "common": {
         "viewAll": "Ver todo",
@@ -622,6 +628,101 @@
       },
       "aboutBrand": {
         "copy": "Rag & Bone se basa en la dedicación a la artesanía, la innovación y el estilo atemporal. Cada colección se diseña en Nueva York y se desarrolla con técnicas de manufactura tradicionales de todo el mundo."
+      }
+    }
+  },
+  "account": {
+    "orders": {
+      "seo": {
+        "title": "Órdenes de cuenta | UANDI PLUS",
+        "description": "Revisa tus órdenes de UANDI PLUS y su estado de producción."
+      },
+      "title": "Órdenes",
+      "manage": "Gestionar órdenes",
+      "loading": "Cargando órdenes...",
+      "empty": "No hay órdenes registradas",
+      "tabs": {
+        "all": "Todas",
+        "inReview": "En revisión",
+        "inProduction": "En producción",
+        "shipped": "Enviadas",
+        "delivered": "Entregadas",
+        "canceled": "Canceladas"
+      },
+      "columns": {
+        "product": "Producto",
+        "orderId": "Orden",
+        "dateCustomer": "Fecha y cliente",
+        "status": "Estado",
+        "action": "Acción"
+      },
+      "labels": {
+        "pending": "Pendiente",
+        "customer": "Cliente",
+        "itemOrder": "Orden de {count} artículo",
+        "units": "{count} unidades"
+      },
+      "actions": {
+        "selectAll": "Seleccionar todas las órdenes",
+        "selectOrder": "Seleccionar orden {number}",
+        "retry": "Reintentar",
+        "view": "Ver"
+      },
+      "errors": {
+        "load": "No pudimos cargar las órdenes."
+      }
+    },
+    "orderDetail": {
+      "seo": {
+        "title": "{number} | UANDI PLUS",
+        "description": "Revisa el detalle de la orden y el estado del envío."
+      },
+      "fallbackOrder": "Orden",
+      "back": "Volver a órdenes",
+      "eyebrow": "Detalle de orden",
+      "refresh": "Actualizar",
+      "refreshing": "Actualizando...",
+      "loading": "Cargando orden...",
+      "fields": {
+        "status": "Estado",
+        "payment": "Pago",
+        "created": "Creada"
+      },
+      "products": {
+        "title": "Productos",
+        "count": "{count} artículos",
+        "empty": "No hay detalles de productos para esta orden.",
+        "itemFallback": "Artículo de la orden",
+        "quantity": "Cant. {count}"
+      },
+      "timeline": {
+        "title": "Historial"
+      },
+      "shipping": {
+        "title": "Envío",
+        "empty": "Aún no hay detalles de envío.",
+        "carrierPending": "Paquetería pendiente",
+        "shipment": "envío",
+        "track": "Rastrear {number}",
+        "tracking": "Rastreo: {number}"
+      },
+      "summary": {
+        "title": "Resumen",
+        "subtotal": "Subtotal",
+        "shipping": "Envío",
+        "discount": "Descuento",
+        "total": "Total"
+      },
+      "customer": {
+        "title": "Cliente"
+      },
+      "address": {
+        "title": "Dirección",
+        "empty": "No hay detalles de dirección."
+      },
+      "errors": {
+        "missingNumber": "Falta el número de orden.",
+        "load": "No pudimos cargar la orden."
       }
     }
   },
