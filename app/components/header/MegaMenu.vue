@@ -65,7 +65,7 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
 <template>
   <div class="fixed flex justify-center items-center inset-x-0 top-26 border-b border-[#f4f4f4] bg-white text-left normal-case tracking-normal">
     <div class="mx-72 overflow-x-auto scrollbar-thin h-100">
-      <div class="grid grid-cols-12 gap-4 h-full">
+      <div class="grid grid-cols-12 gap-4 h-full min-w-[1320px]">
         <div
           class="col-span-12"
           :class="textSpanClass"
