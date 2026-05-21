@@ -604,6 +604,7 @@
         "addedToBag": "Added to bag.",
         "addToBagError": "Could not add this product to your bag.",
         "buyNow": "Buy Now",
+        "buyNowPending": "Processing...",
         "addToLists": "+ Add to My Lists",
         "delivery": "Estimated Delivery : May 13 - May 15",
         "shipping": "Free Shipping on orders of 2,000 MXN or more"
@@ -759,6 +760,156 @@
         "missingNumber": "Order number is missing.",
         "load": "Unable to load order."
       }
+    }
+  },
+  "checkout": {
+    "seo": {
+      "title": "Checkout | UANDI PLUS",
+      "description": "Complete your shipping details and review your order before payment."
+    },
+    "title": "Checkout",
+    "empty": {
+      "title": "Your checkout is empty",
+      "backToCart": "Back to cart"
+    },
+    "steps": {
+      "address": "Address",
+      "shipping": "Shipping",
+      "payment": "Payment",
+      "products": "Products"
+    },
+    "address": {
+      "title": "Address",
+      "change": "Change address",
+      "contactInformation": "Contact information",
+      "default": "Set as my default address",
+      "saveAddress": "Save address",
+      "save": "Save",
+      "saving": "Saving...",
+      "defaultBadge": "Default",
+      "edit": "Edit",
+      "placeholders": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "phoneNumber": "Phone number",
+        "email": "Email",
+        "search": "Search your address",
+        "streetAddress": "Street Address*",
+        "addressLine2": "Apartment, Suite, Unit etc. (optional)",
+        "state": "State*",
+        "city": "City*",
+        "district": "District",
+        "county": "County",
+        "postalCode": "ZIP/Postal Code*",
+        "formattedAddress": "Formatted address"
+      }
+    },
+    "shipping": {
+      "title": "Shipping",
+      "saveAddressPrompt": "Save an address to load shipping options.",
+      "options": "Shipping options",
+      "loading": "Loading shipping options...",
+      "estimatedDays": "Estimated {count} business days",
+      "rateAvailable": "Shipping rate available",
+      "carrier": "Carrier",
+      "service": "Service",
+      "shippingTime": "Shipping time",
+      "days": "{count} days",
+      "calculatedAtCarrier": "Calculated at carrier",
+      "quoteExpires": "Quote expires",
+      "pending": "Pending",
+      "emptyRates": "No shipping rates available for the selected address."
+    },
+    "payment": {
+      "title": "Payment",
+      "payNow": "Pay now",
+      "processing": "Processing payment...",
+      "preparing": "Preparing payment...",
+      "selectShippingPrompt": "Select a shipping option to prepare secure payment.",
+      "preparingStripe": "Preparing secure Stripe checkout...",
+      "waitingIntent": "Payment form is waiting for a valid payment intent.",
+      "retrySetup": "Retry payment setup"
+    },
+    "summary": {
+      "title": "Order summary",
+      "promoCode": "Promo code",
+      "apply": "Apply",
+      "productionCost": "Production cost",
+      "shipping": "Shipping",
+      "tax": "Tax",
+      "discount": "Discount",
+      "total": "Total",
+      "units": "{count} units",
+      "terms": "By clicking the \"Pay now\" button, you confirm that you have read, understand, and accept our Terms of Service, Privacy Policy and FAQ."
+    },
+    "validation": {
+      "firstName": "Enter first name",
+      "lastName": "Enter last name",
+      "phone": "Enter phone number",
+      "email": "Enter email",
+      "streetAddress": "Enter street address",
+      "addressLookup": "Search and select an address",
+      "city": "Enter city",
+      "postalCode": "Enter ZIP / postal code"
+    },
+    "errors": {
+      "preparePayment": "Unable to prepare payment.",
+      "missingOrderNumberAfterPayment": "Payment was submitted, but the order number is missing.",
+      "applyShippingRate": "Unable to apply shipping rate.",
+      "invalidAddress": "Address is invalid for shipping.",
+      "loadShippingRates": "Unable to load shipping rates.",
+      "loadSavedAddresses": "Unable to load saved addresses.",
+      "saveAddress": "Unable to save address.",
+      "googleMapsKeyMissing": "Google Maps API key is missing.",
+      "loadAddressLookup": "Unable to load Google address lookup.",
+      "loadAddressDetails": "Unable to load full address details.",
+      "shippingQuoteExpired": "Shipping quote expired. Please refresh the shipping rate."
+    }
+  },
+  "checkoutResult": {
+    "seo": {
+      "title": "Payment Status | UANDI PLUS",
+      "description": "Review the current status of your payment."
+    },
+    "status": {
+      "missingOrder": "Missing order",
+      "checking": "Checking payment",
+      "paymentStatus": "Payment status",
+      "confirmed": "Payment confirmed",
+      "failed": "Payment failed",
+      "cancelled": "Order cancelled",
+      "processing": "Payment processing"
+    },
+    "description": {
+      "missingOrder": "The order number is missing from this payment result URL.",
+      "confirmed": "Your order is paid. We are preparing the next steps.",
+      "failed": "The payment did not complete. You can return to checkout and try again.",
+      "processing": "We are waiting for the backend to confirm the final payment status from Stripe."
+    },
+    "fields": {
+      "order": "Order",
+      "paymentStatus": "Payment status",
+      "orderStatus": "Order status"
+    },
+    "actions": {
+      "redirecting": "Redirecting...",
+      "checking": "Checking...",
+      "refresh": "Refresh status",
+      "viewOrders": "View orders"
+    },
+    "errors": {
+      "checkStatus": "Unable to check payment status."
+    }
+  },
+  "checkoutStripe": {
+    "title": "Payment method",
+    "description": "Secure checkout powered by Stripe.",
+    "loading": "Loading secure payment form...",
+    "errors": {
+      "missingKey": "Stripe publishable key is missing.",
+      "initialize": "Unable to initialize Stripe.",
+      "loadForm": "Unable to load payment form.",
+      "confirmPayment": "Unable to confirm payment."
     }
   },
   "footer": {

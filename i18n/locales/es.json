@@ -604,6 +604,7 @@
         "addedToBag": "Agregado a la bolsa.",
         "addToBagError": "No pudimos agregar este producto a tu bolsa.",
         "buyNow": "Comprar ahora",
+        "buyNowPending": "Procesando...",
         "addToLists": "+ Agregar a mis listas",
         "delivery": "Entrega estimada: mayo 13 - mayo 15",
         "shipping": "Envío gratis en órdenes de 2,000 MXN o más"
@@ -759,6 +760,156 @@
         "missingNumber": "Falta el número de orden.",
         "load": "No pudimos cargar la orden."
       }
+    }
+  },
+  "checkout": {
+    "seo": {
+      "title": "Checkout | UANDI PLUS",
+      "description": "Completa tus datos de envío y revisa tu orden antes del pago."
+    },
+    "title": "Checkout",
+    "empty": {
+      "title": "Tu checkout está vacío",
+      "backToCart": "Volver al carrito"
+    },
+    "steps": {
+      "address": "Dirección",
+      "shipping": "Envío",
+      "payment": "Pago",
+      "products": "Productos"
+    },
+    "address": {
+      "title": "Dirección",
+      "change": "Cambiar dirección",
+      "contactInformation": "Información de contacto",
+      "default": "Usar como mi dirección predeterminada",
+      "saveAddress": "Guardar dirección",
+      "save": "Guardar",
+      "saving": "Guardando...",
+      "defaultBadge": "Predeterminada",
+      "edit": "Editar",
+      "placeholders": {
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "phoneNumber": "Teléfono",
+        "email": "Correo electrónico",
+        "search": "Busca tu dirección",
+        "streetAddress": "Dirección*",
+        "addressLine2": "Departamento, suite, unidad, etc. (opcional)",
+        "state": "Estado*",
+        "city": "Ciudad*",
+        "district": "Distrito",
+        "county": "Condado",
+        "postalCode": "Código postal*",
+        "formattedAddress": "Dirección formateada"
+      }
+    },
+    "shipping": {
+      "title": "Envío",
+      "saveAddressPrompt": "Guarda una dirección para cargar opciones de envío.",
+      "options": "Opciones de envío",
+      "loading": "Cargando opciones de envío...",
+      "estimatedDays": "Estimado de {count} días hábiles",
+      "rateAvailable": "Tarifa de envío disponible",
+      "carrier": "Paquetería",
+      "service": "Servicio",
+      "shippingTime": "Tiempo de envío",
+      "days": "{count} días",
+      "calculatedAtCarrier": "Calculado por la paquetería",
+      "quoteExpires": "Cotización expira",
+      "pending": "Pendiente",
+      "emptyRates": "No hay tarifas de envío disponibles para la dirección seleccionada."
+    },
+    "payment": {
+      "title": "Pago",
+      "payNow": "Pagar ahora",
+      "processing": "Procesando pago...",
+      "preparing": "Preparando pago...",
+      "selectShippingPrompt": "Selecciona una opción de envío para preparar el pago seguro.",
+      "preparingStripe": "Preparando checkout seguro con Stripe...",
+      "waitingIntent": "El formulario de pago está esperando un intento de pago válido.",
+      "retrySetup": "Reintentar configuración de pago"
+    },
+    "summary": {
+      "title": "Resumen de orden",
+      "promoCode": "Código promocional",
+      "apply": "Aplicar",
+      "productionCost": "Costo de producción",
+      "shipping": "Envío",
+      "tax": "Impuesto",
+      "discount": "Descuento",
+      "total": "Total",
+      "units": "{count} unidades",
+      "terms": "Al hacer clic en el botón \"Pagar ahora\", confirmas que leíste, entiendes y aceptas nuestros Términos de servicio, Política de privacidad y Preguntas frecuentes."
+    },
+    "validation": {
+      "firstName": "Ingresa el nombre",
+      "lastName": "Ingresa el apellido",
+      "phone": "Ingresa el teléfono",
+      "email": "Ingresa el correo electrónico",
+      "streetAddress": "Ingresa la dirección",
+      "addressLookup": "Busca y selecciona una dirección",
+      "city": "Ingresa la ciudad",
+      "postalCode": "Ingresa el código postal"
+    },
+    "errors": {
+      "preparePayment": "No pudimos preparar el pago.",
+      "missingOrderNumberAfterPayment": "El pago fue enviado, pero falta el número de orden.",
+      "applyShippingRate": "No pudimos aplicar la tarifa de envío.",
+      "invalidAddress": "La dirección no es válida para envío.",
+      "loadShippingRates": "No pudimos cargar las tarifas de envío.",
+      "loadSavedAddresses": "No pudimos cargar las direcciones guardadas.",
+      "saveAddress": "No pudimos guardar la dirección.",
+      "googleMapsKeyMissing": "Falta la llave de Google Maps API.",
+      "loadAddressLookup": "No pudimos cargar la búsqueda de direcciones de Google.",
+      "loadAddressDetails": "No pudimos cargar los detalles completos de la dirección.",
+      "shippingQuoteExpired": "La cotización de envío expiró. Actualiza la tarifa de envío."
+    }
+  },
+  "checkoutResult": {
+    "seo": {
+      "title": "Estado de pago | UANDI PLUS",
+      "description": "Revisa el estado actual de tu pago."
+    },
+    "status": {
+      "missingOrder": "Falta la orden",
+      "checking": "Revisando pago",
+      "paymentStatus": "Estado de pago",
+      "confirmed": "Pago confirmado",
+      "failed": "Pago fallido",
+      "cancelled": "Orden cancelada",
+      "processing": "Pago en proceso"
+    },
+    "description": {
+      "missingOrder": "Falta el número de orden en esta URL de resultado de pago.",
+      "confirmed": "Tu orden está pagada. Estamos preparando los siguientes pasos.",
+      "failed": "El pago no se completó. Puedes volver al checkout e intentarlo de nuevo.",
+      "processing": "Estamos esperando que el backend confirme el estado final del pago desde Stripe."
+    },
+    "fields": {
+      "order": "Orden",
+      "paymentStatus": "Estado de pago",
+      "orderStatus": "Estado de orden"
+    },
+    "actions": {
+      "redirecting": "Redirigiendo...",
+      "checking": "Revisando...",
+      "refresh": "Actualizar estado",
+      "viewOrders": "Ver órdenes"
+    },
+    "errors": {
+      "checkStatus": "No pudimos revisar el estado del pago."
+    }
+  },
+  "checkoutStripe": {
+    "title": "Método de pago",
+    "description": "Checkout seguro con Stripe.",
+    "loading": "Cargando formulario de pago seguro...",
+    "errors": {
+      "missingKey": "Falta la llave pública de Stripe.",
+      "initialize": "No pudimos inicializar Stripe.",
+      "loadForm": "No pudimos cargar el formulario de pago.",
+      "confirmPayment": "No pudimos confirmar el pago."
     }
   },
   "footer": {
