@@ -9,8 +9,9 @@ const props = defineProps<{
 
 const route = useRoute()
 const { t } = useI18n()
-const { addProductToCart } = useProductCart()
+const { addProductToCart, buyProductNow } = useProductCart()
 const addToBagPending = shallowRef(false)
+const buyNowPending = shallowRef(false)
 const addToBagMessage = shallowRef('')
 const addToBagError = shallowRef('')
 const selectedColorValue = shallowRef('')
@@ -103,6 +104,27 @@ async function handleAddToBag() {
     addToBagError.value = storefrontError?.data?.message ?? t('catalog.product.detail.addToBagError')
   } finally {
     addToBagPending.value = false
+  }
+}
+
+async function handleBuyNow() {
+  if (!props.product.is_available || buyNowPending.value)
+    return
+
+  addToBagMessage.value = ''
+  addToBagError.value = ''
+  buyNowPending.value = true
+
+  try {
+    await buyProductNow(props.product, {
+      colorValue: selectedColor.value?.value,
+      sizeValue: selectedSize.value?.value,
+    })
+  } catch (error) {
+    const storefrontError = error as { data?: { message?: string } }
+    addToBagError.value = storefrontError?.data?.message ?? t('catalog.product.detail.addToBagError')
+  } finally {
+    buyNowPending.value = false
   }
 }
 </script>
@@ -241,10 +263,11 @@ async function handleAddToBag() {
       </button>
       <button
         type="button"
-        class="h-[64px] border-2 border-black bg-white text-[15px] font-semibold uppercase tracking-[0.18em] disabled:border-[#8b8b8b] disabled:text-[#8b8b8b]"
-        :disabled="!product.is_available"
+        class="h-[64px] cursor-pointer border-2 border-black bg-white text-[15px] font-semibold uppercase tracking-[0.18em] disabled:cursor-not-allowed disabled:border-[#8b8b8b] disabled:text-[#8b8b8b]"
+        :disabled="!product.is_available || buyNowPending"
+        @click="handleBuyNow"
       >
-        {{ $t('catalog.product.detail.buyNow') }}
+        {{ buyNowPending ? $t('catalog.product.detail.buyNowPending') : $t('catalog.product.detail.buyNow') }}
       </button>
     </div>
 
@@ -270,12 +293,14 @@ async function handleAddToBag() {
       {{ $t('catalog.category.design.cta') }}
     </NuxtLink>
 
+    <!-- TODO v2: Add to My Lists feature
     <button
       type="button"
       class="mt-[25px] text-[18px] font-semibold leading-none"
     >
       {{ $t('catalog.product.detail.addToLists') }}
     </button>
+    -->
 
     <div class="mt-[26px] space-y-[15px] text-[13px] leading-none">
       <p v-if="product.shipping?.delivery_label">

@@ -81,23 +81,23 @@ const handleUploadChange: UploadProps['onChange'] = (uploadFile) => {
         >
           <ElScrollbar height="100%">
             <div class="space-y-6 pr-1 pt-2">
-              <div class="space-y-3">
-                <p class="text-sm font-medium text-primary">
-                  Folders
-                </p>
-                <button
-                  type="button"
-                  class="flex items-center gap-3 rounded-lg border border-dashed border-borderSecondary px-3 py-3 text-sm text-primary transition hover:border-primary"
-                >
-                  <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-cotton-grey-1">
-                    <Icon
-                      name="ph:folder-plus"
-                      size="18px"
-                    />
-                  </span>
-                  <span>Create folder</span>
-                </button>
-              </div>
+<!--              <div class="space-y-3">-->
+<!--                <p class="text-sm font-medium text-primary">-->
+<!--                  Folders-->
+<!--                </p>-->
+<!--                <button-->
+<!--                  type="button"-->
+<!--                  class="flex items-center gap-3 rounded-lg border border-dashed border-borderSecondary px-3 py-3 text-sm text-primary transition hover:border-primary"-->
+<!--                >-->
+<!--                  <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-cotton-grey-1">-->
+<!--                    <Icon-->
+<!--                      name="ph:folder-plus"-->
+<!--                      size="18px"-->
+<!--                    />-->
+<!--                  </span>-->
+<!--                  <span>Create folder</span>-->
+<!--                </button>-->
+<!--              </div>-->
 
               <div class="space-y-4">
                 <div class="flex items-center justify-between gap-3">
