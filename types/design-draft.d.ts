@@ -45,11 +45,44 @@ export type DesignDraftMockupSnapshot = {
 
 export type DesignDraftPrintAreaSnapshot = {
   id: string
+  placement?: string | null
+  printfile_id?: string | number | null
   x: number
   y: number
   width: number
   height: number
   rotation: number
+  production_width?: number | null
+  production_height?: number | null
+  dpi?: number | null
+}
+
+export type DesignDraftProductionFilePosition = {
+  area_width: number
+  area_height: number
+  width: number
+  height: number
+  top: number
+  left: number
+  limit_to_print_area: boolean
+}
+
+export type DesignDraftProductionFile = {
+  view_id: string
+  placement: string
+  url: string
+  mime_type: string
+  width: number
+  height: number
+  dpi: number | null
+  position: DesignDraftProductionFilePosition
+}
+
+export type DesignDraftPreviewFile = {
+  url: string
+  width: number
+  height: number
+  mime_type?: string | null
 }
 
 export type DesignDraftEditorObjectPayload = {
@@ -94,6 +127,8 @@ export type DesignDraftEditorPayload = {
   color: DesignDraftColorPayload
   technique: DesignDraftTechniquePayload
   views: DesignDraftEditorViewPayload[]
+  production_files?: DesignDraftProductionFile[]
+  preview_file?: DesignDraftPreviewFile | null
 }
 
 export type DesignDraftUpsertPayload = {

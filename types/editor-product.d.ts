@@ -24,6 +24,16 @@ export type EditorProductMockup = {
 export type EditorProductPrintArea = {
   id: string
   label: string
+  placement?: string | null
+  placementId?: string | null
+  printfileId?: string | number | null
+  printfile?: {
+    width: number
+    height: number
+    dpi?: number | null
+    fillMode?: 'fit' | 'cover' | string | null
+    canRotate?: boolean | null
+  } | null
   price: string
   priceValue: number
   x: number
@@ -75,11 +85,14 @@ export type EditorProductConfig = {
   word_art: EditorWordArt
 }
 
+export type EditorProductProvider = 'printful' | 'apliiq' | 'cj' | 'manual' | 'digital' | string
+
 export type EditorProduct = {
   id: string
   slug: string
   name: string
   sku: string
+  provider: EditorProductProvider
   editor: EditorProductConfig
 }
 

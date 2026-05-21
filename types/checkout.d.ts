@@ -21,13 +21,13 @@ export type CheckoutQuoteAddressPayload = {
 
 export type CheckoutQuoteItemPayload = {
   cart_item_id: string
-  source: 'design' | 'blank'
+  source: 'design' | 'blank' | 'product'
   design_id?: string | null
   product_id?: number
   variant_id?: number | null
   product_handle: string
   product_type?: string | null
-  color_id: string
+  color_id?: string | null
   technique_id?: string | null
   quantity_total: number
   sizes: DesignCartItemMutationSizePayload[]
