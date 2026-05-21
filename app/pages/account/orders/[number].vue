@@ -9,6 +9,7 @@ import type {
 import type { StorefrontFetchError } from '~~/types/storefront'
 
 definePageMeta({
+  layout: 'blank',
   middleware: 'auth',
 })
 

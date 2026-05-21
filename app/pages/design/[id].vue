@@ -9,6 +9,7 @@ import DesignTextPanel from '~/components/design/panels/TextPanel.vue'
 import DesignUploadPanel from '~/components/design/panels/UploadPanel.vue'
 import { useDesignCart } from '~/composables/useDesignCart'
 import {
+  attachDesignProductionFiles,
   buildDesignDraftUpsertPayload,
   hydrateDesignObjectsByView,
   useDesignDrafts,
@@ -21,8 +22,16 @@ import type {
   DesignEditorWordArtOption,
 } from '~/data/design-editor'
 import type { DesignCartItem } from '~~/types/design-cart'
-import type { DesignDraftCanvasObject } from '~~/types/design-draft'
-import type { EditorProductMockup, EditorWordArtOption as ApiEditorWordArtOption } from '~~/types/editor-product'
+import type {
+  DesignDraftCanvasObject,
+  DesignDraftPreviewFile,
+  DesignDraftProductionFile,
+} from '~~/types/design-draft'
+import type {
+  EditorProductMockup,
+  EditorProductView,
+  EditorWordArtOption as ApiEditorWordArtOption,
+} from '~~/types/editor-product'
 import type { ProductDetail, ProductType } from '~~/types/product'
 import type { StorefrontFetchError } from '~~/types/storefront'
 import type {
@@ -86,6 +95,7 @@ const {
   createDesignDraft,
   getDesignDraft,
   updateDesignDraft,
+  uploadDesignProductionFile,
 } = useDesignDrafts()
 const { addCartItem } = useDesignCart()
 
@@ -113,16 +123,32 @@ const isEditorLoading = computed(() => productStatus.value === 'idle' || product
 const isEditorUnavailable = computed(() => !isEditorLoading.value && !isEditorReady.value)
 
 const priceSummary = computed(() => {
-  const activeArea = activePrintArea.value
-  const activeViewLabel = activeView.value?.label ?? 'Selected view'
-  const price = activeArea?.price ?? '$0.00'
+  const decorated = availableViews.value.filter(
+    view => (designObjectsByView.value[view.id] ?? []).length > 0,
+  )
+
+  // No artwork yet — show the base price from the first available view
+  if (!decorated.length) {
+    const basePrice = availableViews.value[0]?.printArea.price ?? '$0.00'
+    return {
+      totalLabel: 'Total Price:',
+      totalPrice: basePrice,
+      lineItems: [] as { label: string, value: string }[],
+      footnote: '*Excluding shipping and taxes',
+    }
+  }
+
+  // priceValue is in cents; first placement is included in the product price,
+  // subsequent placements are cumulative extra charges.
+  const totalCents = decorated.reduce((sum, view) => sum + (view.printArea.priceValue ?? 0), 0)
 
   return {
     totalLabel: 'Total Price:',
-    totalPrice: price,
-    lineItems: activeArea
-      ? [{ label: `${activeViewLabel} print area`, value: price }]
-      : [],
+    totalPrice: currencyFormatter.format(totalCents / 100),
+    lineItems: decorated.map((view, index) => ({
+      label: view.label,
+      value: index === 0 ? view.printArea.price : `+${view.printArea.price}`,
+    })),
     footnote: '*Excluding shipping and taxes',
   }
 })
@@ -400,7 +426,12 @@ const hasDesignContent = computed(() => {
   return Object.values(designObjectsByView.value).some(objects => objects.length > 0)
 })
 const designDraftPayload = computed(() => {
-  if (!product.value || !selectedColorId.value || !selectedTechniqueId.value) {
+  if (!product.value || !selectedColorId.value) {
+    return null
+  }
+
+  // Only require a technique when the product actually defines selectable techniques
+  if (editor.value?.techniques.length && !selectedTechniqueId.value) {
     return null
   }
 
@@ -515,6 +546,251 @@ const exportDesignPreviewImage = () => {
   }
 }
 
+const dataUrlToBlob = async (dataUrl: string) => {
+  const response = await fetch(dataUrl)
+  return response.blob()
+}
+
+const canvasToBlob = (canvas: HTMLCanvasElement, mimeType = 'image/png', quality?: number) => {
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) {
+        resolve(blob)
+        return
+      }
+
+      reject(new Error('Could not export the production file.'))
+    }, mimeType, quality)
+  })
+}
+
+const loadCanvasImage = (src: string) => {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image()
+
+    image.crossOrigin = 'anonymous'
+    image.onload = () => resolve(image)
+    image.onerror = () => reject(new Error('Could not load artwork for production export.'))
+    image.src = src
+  })
+}
+
+const getProductionPlacement = (view: EditorProductView) => {
+  const printArea = view.printArea as EditorProductView['printArea'] & {
+    placement_id?: string | null
+  }
+
+  return printArea.placement ?? printArea.placementId ?? printArea.placement_id ?? ''
+}
+
+const getProductionPrintfile = (view: EditorProductView) => {
+  const printArea = view.printArea as EditorProductView['printArea'] & {
+    printfile?: {
+      width?: number
+      height?: number
+      dpi?: number | null
+    } | null
+    printfile_width?: number | null
+    printfile_height?: number | null
+    dpi?: number | null
+  }
+  const printfile = printArea.printfile
+  const width = printfile?.width ?? printArea.printfile_width
+  const height = printfile?.height ?? printArea.printfile_height
+
+  if (!width || !height) {
+    return null
+  }
+
+  return {
+    width: Math.round(width),
+    height: Math.round(height),
+    dpi: printfile?.dpi ?? printArea.dpi ?? null,
+  }
+}
+
+const renderTextObjectToProductionCanvas = (
+  context: CanvasRenderingContext2D,
+  object: DesignDraftCanvasObject,
+  scaleX: number,
+  scaleY: number,
+) => {
+  const fontSize = Math.max(1, Math.round((object.fontSize ?? 28) * scaleY))
+  const fontStyle = object.fontStyle ?? 'normal'
+  const fontFamily = object.fontFamily ?? 'Arial'
+  const text = object.text ?? ''
+  const x = object.x * scaleX
+  const y = object.y * scaleY
+  const width = object.width * scaleX
+  const height = object.height * scaleY
+
+  context.save()
+  context.translate(x, y)
+  context.rotate((object.rotation * Math.PI) / 180)
+  context.fillStyle = object.fill ?? '#111314'
+  context.font = `${fontStyle} ${fontSize}px ${fontFamily}`
+  context.textBaseline = 'middle'
+  context.textAlign = 'center'
+  context.fillText(text, width / 2, height / 2, width)
+  context.restore()
+}
+
+const renderImageObjectToProductionCanvas = async (
+  context: CanvasRenderingContext2D,
+  object: DesignDraftCanvasObject,
+  scaleX: number,
+  scaleY: number,
+) => {
+  if (!object.src) {
+    return
+  }
+
+  const image = await loadCanvasImage(object.src)
+  const x = object.x * scaleX
+  const y = object.y * scaleY
+  const width = object.width * scaleX
+  const height = object.height * scaleY
+
+  context.save()
+  context.translate(x + width / 2, y + height / 2)
+  context.rotate((object.rotation * Math.PI) / 180)
+  context.drawImage(image, -width / 2, -height / 2, width, height)
+  context.restore()
+}
+
+const renderProductionCanvasForView = async (view: EditorProductView) => {
+  const objects = designObjectsByView.value[view.id] ?? []
+  const printfile = getProductionPrintfile(view)
+  const area = view.printArea
+
+  if (!objects.length || !printfile) {
+    return null
+  }
+
+  const canvas = document.createElement('canvas')
+  const context = canvas.getContext('2d')
+
+  if (!context) {
+    throw new Error('Could not prepare the production canvas.')
+  }
+
+  canvas.width = printfile.width
+  canvas.height = printfile.height
+
+  const scaleX = printfile.width / area.width
+  const scaleY = printfile.height / area.height
+  const normalizedObjects = objects.map(object => ({
+    ...object,
+    x: object.x - area.x,
+    y: object.y - area.y,
+  }))
+
+  for (const object of normalizedObjects) {
+    if (object.type === 'image') {
+      await renderImageObjectToProductionCanvas(context, object, scaleX, scaleY)
+      continue
+    }
+
+    renderTextObjectToProductionCanvas(context, object, scaleX, scaleY)
+  }
+
+  return canvas
+}
+
+const buildProductionFilePosition = (width: number, height: number) => ({
+  area_width: width,
+  area_height: height,
+  width,
+  height,
+  top: 0,
+  left: 0,
+  limit_to_print_area: true,
+})
+
+const uploadPreviewFile = async (basePayload = designDraftPayload.value): Promise<DesignDraftPreviewFile | null> => {
+  if (!product.value || !basePayload) {
+    return null
+  }
+
+  const previewDataUrl = exportDesignPreviewImage()
+
+  if (!previewDataUrl?.startsWith('data:')) {
+    return null
+  }
+
+  const blob = await dataUrlToBlob(previewDataUrl)
+  const response = await uploadDesignProductionFile({
+    file: blob,
+    filename: `${product.value.slug}-preview.jpg`,
+    kind: 'preview',
+    productHandle: basePayload.product_handle,
+    designId: activeDesignDraftId.value,
+  })
+
+  return {
+    url: response.data.url,
+    mime_type: response.data.mime_type,
+    width: response.data.width,
+    height: response.data.height,
+  }
+}
+
+const uploadProductionFiles = async (basePayload = designDraftPayload.value): Promise<DesignDraftProductionFile[]> => {
+  if (!import.meta.client || !product.value || !basePayload) {
+    return []
+  }
+
+  // Use the payload's view list as the source of truth — it already reflects
+  // exactly which views have artwork at the moment the draft was built.
+  const payloadViewIds = new Set(basePayload.editor_payload.views.map(v => v.view_id))
+  const decoratedViews = availableViews.value.filter(view => payloadViewIds.has(view.id))
+
+  const files: DesignDraftProductionFile[] = []
+
+  for (const view of decoratedViews) {
+    const placement = getProductionPlacement(view)
+    const printfile = getProductionPrintfile(view)
+
+    if (!placement) {
+      throw new Error(`Missing Printful placement for view "${view.label}".`)
+    }
+
+    if (!printfile) {
+      throw new Error(`Missing printfile dimensions for view "${view.label}". Check that the product editor returns printfile width/height for this placement.`)
+    }
+
+    const canvas = await renderProductionCanvasForView(view)
+
+    if (!canvas) {
+      throw new Error(`Could not render production canvas for view "${view.label}".`)
+    }
+
+    const blob = await canvasToBlob(canvas)
+    const response = await uploadDesignProductionFile({
+      file: blob,
+      filename: `${product.value.slug}-${placement}.png`,
+      kind: 'production',
+      productHandle: basePayload.product_handle,
+      viewId: view.id,
+      placement,
+      designId: activeDesignDraftId.value,
+    })
+
+    files.push({
+      view_id: view.id,
+      placement,
+      url: response.data.url,
+      mime_type: response.data.mime_type,
+      width: response.data.width || printfile.width,
+      height: response.data.height || printfile.height,
+      dpi: printfile.dpi,
+      position: buildProductionFilePosition(printfile.width, printfile.height),
+    })
+  }
+
+  return files
+}
+
 const fetchProductDetailForCartType = async (type: ProductType) => {
   const query = lookupBy.value === 'sku' ? { by: 'sku' as const } : {}
   const response = await $storefront<{ data: ProductDetail }>(`/products/${type}/${productIdentifier.value}`, {
@@ -588,9 +864,12 @@ const buildDesignCartItem = (): DesignCartItem | null => {
     return null
   }
 
-  const viewPrices = decoratedViews.map(view => parsePriceLabel(view.printArea.price))
-  const productPrice = viewPrices[0] ?? 0
-  const customizationPrice = viewPrices.slice(1).reduce((total, value) => total + value, 0)
+  // priceValue is in cents; convert to dollars for all calculations.
+  // First placement = product base price (included); rest = cumulative extra charges.
+  const productPrice = (decoratedViews[0]?.printArea.priceValue ?? 0) / 100
+  const customizationPrice = decoratedViews
+    .slice(1)
+    .reduce((total, view) => total + (view.printArea.priceValue ?? 0) / 100, 0)
   const totalPrice = productPrice + customizationPrice
   const now = new Date().toISOString()
 
@@ -1508,9 +1787,16 @@ const saveDesignDraft = async () => {
   designSaveSuccessMessage.value = null
 
   try {
+    const productionFiles = await uploadProductionFiles(designDraftPayload.value)
+    const previewFile = await uploadPreviewFile(designDraftPayload.value)
+    const payload = attachDesignProductionFiles(designDraftPayload.value, {
+      productionFiles,
+      previewFile,
+    })
+
     const response = activeDesignDraftId.value
-      ? await updateDesignDraft(activeDesignDraftId.value, designDraftPayload.value)
-      : await createDesignDraft(designDraftPayload.value)
+      ? await updateDesignDraft(activeDesignDraftId.value, payload)
+      : await createDesignDraft(payload)
 
     activeDesignDraftId.value = String(response.data.id)
     latestSavedDesignPreviewImage.value = response.data.preview_image ?? exportDesignPreviewImage()
@@ -1519,7 +1805,9 @@ const saveDesignDraft = async () => {
     showSaveSuccessFeedback()
   } catch (error) {
     const storefrontError = error as StorefrontFetchError
-    designSaveErrorMessage.value = storefrontError?.data?.message || 'Could not save the design.'
+    designSaveErrorMessage.value = storefrontError?.data?.message
+      || (error instanceof Error ? error.message : null)
+      || 'Could not save the design.'
   } finally {
     designSavePending.value = false
   }
@@ -2177,7 +2465,7 @@ useHead(() => ({
                     @transformend="handleDesignTransform(designObject.id)"
                   />
                   <v-rect
-                    v-if="printAreaConfig"
+                    v-if="printAreaConfig && product?.provider !== 'printful'"
                     :config="printAreaConfig"
                   />
                   <v-transformer

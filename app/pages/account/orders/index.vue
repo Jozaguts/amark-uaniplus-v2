@@ -3,6 +3,7 @@ import type { CheckoutOrderListItem } from '~~/types/checkout'
 import type { StorefrontFetchError } from '~~/types/storefront'
 
 definePageMeta({
+  layout: 'blank',
   middleware: 'auth',
 })
 

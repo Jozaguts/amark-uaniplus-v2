@@ -2,6 +2,10 @@
 import CartPageSkeleton from '~/components/skeletons/CartPageSkeleton.vue'
 import type { DesignCartItem, DesignCartSizeAllocation } from '~~/types/design-cart'
 
+definePageMeta({
+  layout: 'blank',
+})
+
 const {
   cartItems,
   cartReady,
@@ -179,7 +183,7 @@ onMounted(() => {
                 {{ $t('account.cart.empty.title') }}
               </p>
               <NuxtLink
-                :to="localePath('/fashion/all?pageNum=1')"
+                :to="localePath('/')"
                 class="mt-8 inline-flex min-w-[208px] items-center justify-center rounded-xl bg-primary px-6 py-3 text-base font-semibold text-white transition hover:opacity-90"
               >
                 {{ $t('account.cart.empty.cta') }}
