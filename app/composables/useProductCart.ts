@@ -210,8 +210,41 @@ export function useProductCart() {
     return { status: 'added' as const }
   }
 
+  async function buyProductNow(
+    product: ProductDetail,
+    options: {
+      colorValue?: string
+      sizeValue?: string
+    } = {},
+  ) {
+    const checkoutPath = '/order/checkout'
+    const payload = buildProductCartPayload(product, options)
+    const isLoggedIn = await ensureAuthenticated()
+
+    if (!isLoggedIn) {
+      persistPendingProductCartAction({ payload, returnTo: checkoutPath })
+      await navigateTo({ path: '/login', query: { redirect: checkoutPath } })
+      return { status: 'redirected' as const }
+    }
+
+    try {
+      await submitProductCartPayload(payload)
+    } catch (error) {
+      if (!isUnauthorizedError(error))
+        throw error
+
+      persistPendingProductCartAction({ payload, returnTo: checkoutPath })
+      await navigateTo({ path: '/login', query: { redirect: checkoutPath } })
+      return { status: 'redirected' as const }
+    }
+
+    await navigateTo(checkoutPath)
+    return { status: 'checkout' as const }
+  }
+
   return {
     addProductToCart,
+    buyProductNow,
     buildProductCartPayload,
     clearPendingProductCartAction,
     persistPendingProductCartAction,

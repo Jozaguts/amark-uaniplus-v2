@@ -3,14 +3,37 @@ import type {
   DesignDraftCanvasObject,
   DesignDraftDeleteResponse,
   DesignDraftEditorPayload,
+  DesignDraftPreviewFile,
+  DesignDraftProductionFile,
   DesignDraftListQuery,
   DesignDraftListResponse,
   DesignDraftResponse,
   DesignDraftUpsertPayload,
 } from '~~/types/design-draft'
-import {useStorefront} from "~/composables/useStorefront";
+import { useStorefront } from '~/composables/useStorefront'
 
-const DESIGN_DRAFT_SCHEMA_VERSION = 1
+const DESIGN_DRAFT_SCHEMA_VERSION = 2
+
+export type DesignProductionFileUploadKind = 'production' | 'preview'
+
+export type DesignProductionFileUploadOptions = {
+  file: Blob
+  filename: string
+  kind: DesignProductionFileUploadKind
+  productHandle: string
+  viewId?: string | null
+  placement?: string | null
+  designId?: string | null
+}
+
+export type DesignProductionFileUploadResponse = {
+  data: {
+    url: string
+    mime_type: string
+    width: number
+    height: number
+  }
+}
 
 export const buildDesignDraftEditorPayload = (options: {
   product: EditorProduct
@@ -42,11 +65,16 @@ export const buildDesignDraftEditorPayload = (options: {
         },
         print_area: {
           id: view.printArea.id,
+          placement: view.printArea.placement ?? view.printArea.placementId ?? (view.printArea as any).placement_id ?? view.id,
+          printfile_id: view.printArea.printfileId ?? (view.printArea as any).printfile_id ?? null,
           x: view.printArea.x,
           y: view.printArea.y,
           width: view.printArea.width,
           height: view.printArea.height,
           rotation: view.printArea.rotation,
+          production_width: view.printArea.printfile?.width ?? (view.printArea as any).printfile?.width ?? null,
+          production_height: view.printArea.printfile?.height ?? (view.printArea as any).printfile?.height ?? null,
+          dpi: view.printArea.printfile?.dpi ?? (view.printArea as any).printfile?.dpi ?? null,
         },
       },
       objects: objects.map((object, index) => ({
@@ -106,6 +134,23 @@ export const buildDesignDraftUpsertPayload = (options: {
   }
 }
 
+export const attachDesignProductionFiles = (
+  payload: DesignDraftUpsertPayload,
+  options: {
+    productionFiles: DesignDraftProductionFile[]
+    previewFile?: DesignDraftPreviewFile | null
+  },
+): DesignDraftUpsertPayload => {
+  return {
+    ...payload,
+    editor_payload: {
+      ...payload.editor_payload,
+      production_files: options.productionFiles,
+      preview_file: options.previewFile ?? null,
+    },
+  }
+}
+
 export const hydrateDesignObjectsByView = (
   editorPayload: DesignDraftEditorPayload,
 ) => {
@@ -150,6 +195,27 @@ export const useDesignDrafts = () => {
       return storefront<DesignDraftResponse>('/designs', {
         method: 'POST',
         body: payload,
+      })
+    },
+    uploadDesignProductionFile(options: DesignProductionFileUploadOptions) {
+      const formData = new FormData()
+
+      formData.append('file', options.file, options.filename)
+      formData.append('kind', options.kind)
+      formData.append('product_handle', options.productHandle)
+
+      if (options.viewId)
+        formData.append('view_id', options.viewId)
+
+      if (options.placement)
+        formData.append('placement', options.placement)
+
+      if (options.designId)
+        formData.append('design_id', options.designId)
+
+      return storefront<DesignProductionFileUploadResponse>('/designs/production-files', {
+        method: 'POST',
+        body: formData,
       })
     },
     updateDesignDraft(designId: string, payload: DesignDraftUpsertPayload) {
