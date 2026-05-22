@@ -16,6 +16,19 @@ const addToBagMessage = shallowRef('')
 const addToBagError = shallowRef('')
 const selectedColorValue = shallowRef('')
 const selectedSizeValue = shallowRef('')
+const selectedTechniqueId = shallowRef('')
+
+const availableTechniques = computed(() => props.product.techniques ?? [])
+
+const selectedTechnique = computed(() => {
+  return availableTechniques.value.find(t => t.id === selectedTechniqueId.value)
+    ?? availableTechniques.value[0]
+    ?? null
+})
+
+const displayPrice = computed(() => {
+  return selectedTechnique.value?.price ?? props.product.price.formatted
+})
 
 const selectedColor = computed(() => {
   return availableColors.value.find(color => color.value === selectedColorValue.value)
@@ -46,11 +59,36 @@ watch(
     selectedSizeValue.value = sizes.value.find(size => size.is_selected && size.is_available !== false)?.value
       ?? sizes.value.find(size => size.is_available !== false)?.value
       ?? ''
+    selectedTechniqueId.value = availableTechniques.value[0]?.id ?? ''
     addToBagMessage.value = ''
     addToBagError.value = ''
   },
-  { immediate: true },
-)
+  { immediate: true },)
+
+function selectTechnique(id: string) {
+  selectedTechniqueId.value = id
+  addToBagMessage.value = ''
+  addToBagError.value = ''
+}
+
+const resolvedDesignTo = computed<RouteLocationRaw | undefined>(() => {
+  if (!props.designTo)
+    return undefined
+
+  const href = typeof props.designTo === 'string' ? props.designTo : null
+  const techniqueId = selectedTechnique.value?.id
+
+  if (!href || !techniqueId)
+    return props.designTo
+
+  try {
+    const url = new URL(href, 'http://x')
+    url.searchParams.set('technique', techniqueId)
+    return `${url.pathname}${url.search}`
+  } catch {
+    return props.designTo
+  }
+})
 
 function colorSwatchStyle(color: ProductOption): Record<string, string> {
   return {
@@ -94,6 +132,7 @@ async function handleAddToBag() {
     const result = await addProductToCart(props.product, {
       colorValue: selectedColor.value?.value,
       sizeValue: selectedSize.value?.value,
+      techniqueId: selectedTechnique.value?.id,
       returnTo: route.fullPath,
     })
 
@@ -119,6 +158,7 @@ async function handleBuyNow() {
     await buyProductNow(props.product, {
       colorValue: selectedColor.value?.value,
       sizeValue: selectedSize.value?.value,
+      techniqueId: selectedTechnique.value?.id,
     })
   } catch (error) {
     const storefrontError = error as { data?: { message?: string } }
@@ -157,7 +197,7 @@ async function handleBuyNow() {
     </div>
 
     <p class="mt-[15px] flex flex-wrap items-center gap-x-[11px] gap-y-1 text-[16px] leading-none">
-      <span class="font-semibold text-[#b00000]">{{ product.price.formatted }}</span>
+      <span class="font-semibold text-[#b00000]">{{ displayPrice }}</span>
       <s
         v-if="product.price.compare_at_formatted"
         class="font-semibold text-[#6f7780]"
@@ -204,6 +244,30 @@ async function handleBuyNow() {
     </section>
 
     <section
+      v-if="availableTechniques.length"
+      class="mt-[22px]"
+    >
+      <h2 class="text-[16px] font-semibold leading-none">
+        {{ $t('catalog.product.detail.techniqueLabel') }}
+      </h2>
+      <div class="mt-[14px] flex flex-wrap gap-[8px]">
+        <button
+          v-for="technique in availableTechniques"
+          :key="technique.id"
+          type="button"
+          class="flex h-[46px] flex-col items-center justify-center rounded-[4px] border px-4 text-left leading-none cursor-pointer"
+          :class="technique.id === selectedTechnique?.id
+            ? 'border-black bg-white text-black'
+            : 'border-[#7c7c7c] bg-[#f7f7f7] text-[#6d6d6d]'"
+          @click="selectTechnique(technique.id)"
+        >
+          <span class="text-[13px] font-semibold">{{ technique.label }}</span>
+          <span class="mt-[3px] text-[12px]">{{ technique.price }}</span>
+        </button>
+      </div>
+    </section>
+
+    <section
       v-if="sizes.length"
       class="mt-[20px]"
     >
@@ -211,18 +275,6 @@ async function handleBuyNow() {
         <h2 class="text-[16px] font-semibold leading-none">
           {{ $t('catalog.product.detail.sizeLabel') }}
         </h2>
-        <button
-          type="button"
-          class="text-[11px] underline"
-        >
-          {{ $t('catalog.product.detail.sizeGuide') }}
-        </button>
-        <button
-          type="button"
-          class="text-[11px] underline"
-        >
-          {{ $t('catalog.product.detail.findSize') }}
-        </button>
       </div>
 
       <div class="mt-[18px] flex flex-wrap gap-[8px]">
@@ -286,8 +338,8 @@ async function handleBuyNow() {
     </p>
 
     <NuxtLink
-      v-if="product.is_designable && designTo"
-      :to="designTo"
+      v-if="product.is_designable && resolvedDesignTo"
+      :to="resolvedDesignTo"
       class="mt-[16px] flex h-[54px] items-center justify-center border-2 border-black bg-white text-[14px] font-semibold uppercase tracking-[0.18em] text-black"
     >
       {{ $t('catalog.category.design.cta') }}
