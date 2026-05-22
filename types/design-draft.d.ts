@@ -46,6 +46,8 @@ export type DesignDraftMockupSnapshot = {
 export type DesignDraftPrintAreaSnapshot = {
   id: string
   placement?: string | null
+  placementId?: string | null
+  printfileId?: string | number | null
   printfile_id?: string | number | null
   x: number
   y: number
@@ -70,6 +72,7 @@ export type DesignDraftProductionFilePosition = {
 export type DesignDraftProductionFile = {
   view_id: string
   placement: string
+  technique: string
   url: string
   mime_type: string
   width: number
@@ -123,6 +126,7 @@ export type DesignDraftEditorViewPayload = {
 
 export type DesignDraftEditorPayload = {
   schema_version: number
+  provider: string
   coordinate_space: EditorCoordinateSpace
   color: DesignDraftColorPayload
   technique: DesignDraftTechniquePayload

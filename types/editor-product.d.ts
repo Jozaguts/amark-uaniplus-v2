@@ -11,6 +11,8 @@ export type EditorProductColor = {
 export type EditorProductTechnique = {
   id: string
   label: string
+  price?: string
+  priceValue?: number
 }
 
 export type EditorProductMockup = {
@@ -93,6 +95,9 @@ export type EditorProduct = {
   name: string
   sku: string
   provider: EditorProductProvider
+  price: string                          // formatted, e.g. "$13.75" (default technique)
+  priceValue: number                     // dollars, default technique
+  techniquePrices: Record<string, number> // dollars per technique key, e.g. { dtg: 13.75, embroidery: 15.25 }
   editor: EditorProductConfig
 }
 
