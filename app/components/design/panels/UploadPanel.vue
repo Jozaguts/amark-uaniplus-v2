@@ -120,7 +120,7 @@ const handleUploadChange: UploadProps['onChange'] = (uploadFile) => {
                 >
                   <span class="min-w-[42px]">{{ uploadingAsset.speedLabel }}</span>
                   <ElProgress
-                    :percentage="uploadingAsset.progress"
+                    :percentage="uploadingAsset.progress"cc
                     :show-text="false"
                     :stroke-width="4"
                     color="#111314"
