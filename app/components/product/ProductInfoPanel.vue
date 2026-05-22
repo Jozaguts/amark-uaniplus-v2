@@ -89,13 +89,21 @@ const resolvedDesignTo = computed<RouteLocationRaw | undefined>(() => {
 
   const href = typeof props.designTo === 'string' ? props.designTo : null
   const techniqueId = selectedTechnique.value?.id
+  const colorId = selectedColor.value?.value
+  const sizeId = selectedSize.value?.value
 
-  if (!href || !techniqueId)
+  if (!href)
     return props.designTo
 
   try {
     const url = new URL(href, 'http://x')
-    url.searchParams.set('technique', techniqueId)
+    if (techniqueId)
+      url.searchParams.set('technique', techniqueId)
+    if (colorId)
+      url.searchParams.set('color', colorId)
+    if (sizeId)
+      url.searchParams.set('size', sizeId)
+
     return `${url.pathname}${url.search}`
   } catch {
     return props.designTo

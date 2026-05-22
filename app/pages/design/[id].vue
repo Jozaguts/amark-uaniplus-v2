@@ -32,7 +32,7 @@ import type {
   EditorProductView,
   EditorWordArtOption as ApiEditorWordArtOption,
 } from '~~/types/editor-product'
-import type { ProductDetail, ProductType } from '~~/types/product'
+import type { ProductDetail, ProductDetailSelectableOption, ProductType } from '~~/types/product'
 import type { StorefrontFetchError } from '~~/types/storefront'
 import type {
   StorefrontUploadArtwork,
@@ -92,6 +92,14 @@ const draftDesignId = computed(() => {
 const queryTechniqueId = computed(() => {
   const t = Array.isArray(route.query.technique) ? route.query.technique[0] : route.query.technique
   return typeof t === 'string' ? t : undefined
+})
+const queryColorId = computed(() => {
+  const color = Array.isArray(route.query.color) ? route.query.color[0] : route.query.color
+  return typeof color === 'string' ? color : undefined
+})
+const querySizeId = computed(() => {
+  const size = Array.isArray(route.query.size) ? route.query.size[0] : route.query.size
+  return typeof size === 'string' ? size : undefined
 })
 const { $storefront } = useNuxtApp()
 const runtimeConfig = useRuntimeConfig()
@@ -239,7 +247,9 @@ const initializeEditorSelections = () => {
   }
 
   activeViewId.value = currentEditor.defaultViewId ?? currentEditor.views[0]?.id ?? ''
-  selectedColorId.value = currentEditor.selectedColorId ?? currentEditor.colors[0]?.id ?? ''
+  selectedColorId.value = currentEditor.colors.some(color => color.id === queryColorId.value)
+    ? queryColorId.value ?? ''
+    : currentEditor.selectedColorId ?? currentEditor.colors[0]?.id ?? ''
   selectedTechniqueId.value = queryTechniqueId.value
     ?? currentEditor.selectedTechniqueId
     ?? currentEditor.techniques[0]?.id
@@ -844,7 +854,23 @@ const ensureCartProductDetail = async () => {
 }
 
 const buildCartSizeAllocations = () => {
-  const sizes = cartProductDetail.value?.sizes ?? []
+  const sizes = (cartProductDetail.value?.options?.sizes ?? [])
+    .filter(size => size.is_available !== false)
+    .map<ProductDetailSelectableOption>(size => ({
+      id: size.value,
+      label: size.label,
+      selected: size.is_selected,
+    }))
+
+  if (!sizes.length && cartProductDetail.value?.sizes?.length) {
+    sizes.push(
+      ...cartProductDetail.value.sizes.map(size => ({
+        id: size.id,
+        label: size.label,
+        selected: size.selected,
+      })),
+    )
+  }
 
   if (!sizes.length) {
     return [{
@@ -854,7 +880,9 @@ const buildCartSizeAllocations = () => {
     }]
   }
 
-  const selectedSizeId = sizes.find(size => size.selected)?.id ?? sizes[0]?.id
+  const selectedSizeId = sizes.find(size => size.id === querySizeId.value)?.id
+    ?? sizes.find(size => size.selected)?.id
+    ?? sizes[0]?.id
 
   return sizes.map(size => ({
     id: size.id,

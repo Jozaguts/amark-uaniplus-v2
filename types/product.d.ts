@@ -81,6 +81,20 @@ export type ProductDetailSelectableOption = {
     selected?: boolean,
 }
 
+export type ProductDetailOption = {
+    value: string,
+    label: string,
+    color?: string,
+    hex?: string | null,
+    is_available?: boolean,
+    is_selected?: boolean,
+}
+
+export type ProductDetailOptions = {
+    colors?: ProductDetailOption[],
+    sizes?: ProductDetailOption[],
+}
+
 export type ProductDetailPriceTier = {
     id: string,
     label: string,
@@ -285,6 +299,7 @@ export type ProductDetail = Product & {
     sectionTwo: ProductSectionTwo,
     variants: ProductVariant[],
     design: ProductDesign | null,
+    options?: ProductDetailOptions | null,
 }
 
 export type ProductListQuery = {
