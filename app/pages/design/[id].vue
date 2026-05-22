@@ -89,6 +89,10 @@ const draftDesignId = computed(() => {
 
   return typeof candidate === 'string' ? candidate : undefined
 })
+const queryTechniqueId = computed(() => {
+  const t = Array.isArray(route.query.technique) ? route.query.technique[0] : route.query.technique
+  return typeof t === 'string' ? t : undefined
+})
 const { $storefront } = useNuxtApp()
 const runtimeConfig = useRuntimeConfig()
 const {
@@ -123,31 +127,36 @@ const isEditorLoading = computed(() => productStatus.value === 'idle' || product
 const isEditorUnavailable = computed(() => !isEditorLoading.value && !isEditorReady.value)
 
 const priceSummary = computed(() => {
+  const baseAmount = product.value?.techniquePrices?.[selectedTechniqueId.value]
+    ?? product.value?.priceValue
+    ?? 0
+  const baseFormatted = currencyFormatter.format(baseAmount)
+
   const decorated = availableViews.value.filter(
     view => (designObjectsByView.value[view.id] ?? []).length > 0,
   )
 
-  // No artwork yet — show the base price from the first available view
   if (!decorated.length) {
-    const basePrice = availableViews.value[0]?.printArea.price ?? '$0.00'
     return {
       totalLabel: 'Total Price:',
-      totalPrice: basePrice,
+      totalPrice: baseFormatted,
       lineItems: [] as { label: string, value: string }[],
       footnote: '*Excluding shipping and taxes',
     }
   }
 
-  // priceValue is in cents; first placement is included in the product price,
-  // subsequent placements are cumulative extra charges.
-  const totalCents = decorated.reduce((sum, view) => sum + (view.printArea.priceValue ?? 0), 0)
+  // priceValue per view is the EXTRA cost in dollars (0 = included, >0 = charged on top)
+  const extra = decorated.reduce((sum, view) => sum + (view.printArea.priceValue ?? 0), 0)
+  const total = baseAmount + extra
 
   return {
     totalLabel: 'Total Price:',
-    totalPrice: currencyFormatter.format(totalCents / 100),
-    lineItems: decorated.map((view, index) => ({
+    totalPrice: currencyFormatter.format(total),
+    lineItems: decorated.map(view => ({
       label: view.label,
-      value: index === 0 ? view.printArea.price : `+${view.printArea.price}`,
+      value: view.printArea.priceValue === 0
+        ? 'Included'
+        : `+${view.printArea.price}`,
     })),
     footnote: '*Excluding shipping and taxes',
   }
@@ -231,7 +240,10 @@ const initializeEditorSelections = () => {
 
   activeViewId.value = currentEditor.defaultViewId ?? currentEditor.views[0]?.id ?? ''
   selectedColorId.value = currentEditor.selectedColorId ?? currentEditor.colors[0]?.id ?? ''
-  selectedTechniqueId.value = currentEditor.selectedTechniqueId ?? currentEditor.techniques[0]?.id ?? ''
+  selectedTechniqueId.value = queryTechniqueId.value
+    ?? currentEditor.selectedTechniqueId
+    ?? currentEditor.techniques[0]?.id
+    ?? ''
 }
 
 watch(() => product.value?.id, initializeEditorSelections, { immediate: true })
@@ -667,6 +679,13 @@ const renderProductionCanvasForView = async (view: EditorProductView) => {
     return null
   }
 
+  const scaleX = printfile.width / area.width
+  const scaleY = printfile.height / area.height
+  const normalizedObjects = objects.map(object => ({
+    ...object,
+    x: object.x - area.x,
+    y: object.y - area.y,
+  }))
   const canvas = document.createElement('canvas')
   const context = canvas.getContext('2d')
 
@@ -676,14 +695,6 @@ const renderProductionCanvasForView = async (view: EditorProductView) => {
 
   canvas.width = printfile.width
   canvas.height = printfile.height
-
-  const scaleX = printfile.width / area.width
-  const scaleY = printfile.height / area.height
-  const normalizedObjects = objects.map(object => ({
-    ...object,
-    x: object.x - area.x,
-    y: object.y - area.y,
-  }))
 
   for (const object of normalizedObjects) {
     if (object.type === 'image') {
@@ -779,6 +790,7 @@ const uploadProductionFiles = async (basePayload = designDraftPayload.value): Pr
     files.push({
       view_id: view.id,
       placement,
+      technique: selectedTechniqueId.value,
       url: response.data.url,
       mime_type: response.data.mime_type,
       width: response.data.width || printfile.width,
@@ -864,12 +876,12 @@ const buildDesignCartItem = (): DesignCartItem | null => {
     return null
   }
 
-  // priceValue is in cents; convert to dollars for all calculations.
-  // First placement = product base price (included); rest = cumulative extra charges.
-  const productPrice = (decoratedViews[0]?.printArea.priceValue ?? 0) / 100
+  // productPrice = base for selected technique (dollars). Falls back to product default.
+  // customizationPrice = sum of extra placement costs in dollars (0 = included).
+  const productPrice = product.value.techniquePrices?.[selectedTechniqueId.value]
+    ?? product.value.priceValue
   const customizationPrice = decoratedViews
-    .slice(1)
-    .reduce((total, view) => total + (view.printArea.priceValue ?? 0) / 100, 0)
+    .reduce((sum, view) => sum + (view.printArea.priceValue ?? 0), 0)
   const totalPrice = productPrice + customizationPrice
   const now = new Date().toISOString()
 
@@ -2465,7 +2477,7 @@ useHead(() => ({
                     @transformend="handleDesignTransform(designObject.id)"
                   />
                   <v-rect
-                    v-if="printAreaConfig && product?.provider !== 'printful'"
+                    v-if="printAreaConfig"
                     :config="printAreaConfig"
                   />
                   <v-transformer
