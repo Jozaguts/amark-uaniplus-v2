@@ -12,7 +12,7 @@ import type {
 } from '~~/types/design-draft'
 import { useStorefront } from '~/composables/useStorefront'
 
-const DESIGN_DRAFT_SCHEMA_VERSION = 2
+const DESIGN_DRAFT_SCHEMA_VERSION = 1
 
 export type DesignProductionFileUploadKind = 'production' | 'preview'
 
@@ -55,7 +55,7 @@ export const buildDesignDraftEditorPayload = (options: {
     return [{
       view_id: view.id,
       view_label: view.label,
-      placement_id: view.id,
+      placement_id: view.printArea.placement ?? view.printArea.placementId ?? (view.printArea as any).placement_id ?? view.id,
       print_area_id: view.printArea.id,
       snapshot: {
         mockup: {
@@ -66,6 +66,8 @@ export const buildDesignDraftEditorPayload = (options: {
         print_area: {
           id: view.printArea.id,
           placement: view.printArea.placement ?? view.printArea.placementId ?? (view.printArea as any).placement_id ?? view.id,
+          placementId: view.printArea.placementId ?? view.printArea.placement ?? (view.printArea as any).placement_id ?? view.id,
+          printfileId: view.printArea.printfileId ?? (view.printArea as any).printfile_id ?? null,
           printfile_id: view.printArea.printfileId ?? (view.printArea as any).printfile_id ?? null,
           x: view.printArea.x,
           y: view.printArea.y,
@@ -105,6 +107,7 @@ export const buildDesignDraftEditorPayload = (options: {
 
   return {
     schema_version: DESIGN_DRAFT_SCHEMA_VERSION,
+    provider: product.provider,
     coordinate_space: editor.coordinateSpace,
     color: {
       id: selectedColorId,

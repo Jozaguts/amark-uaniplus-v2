@@ -5,6 +5,8 @@ type ProductCartPayload = {
   source: 'product'
   product_handle: string
   product_type?: string
+  technique_id?: string
+  technique_name?: string
   color_id?: string
   color_name?: string
   sizes?: {
@@ -69,6 +71,7 @@ export function useProductCart() {
     options: {
       colorValue?: string
       sizeValue?: string
+      techniqueId?: string
     } = {},
   ): ProductCartPayload {
     const selectedColor = selectedOption(product.options?.colors, options.colorValue)
@@ -78,6 +81,13 @@ export function useProductCart() {
       source: 'product',
       product_handle: product.slug,
       ...(productType ? { product_type: productType } : {}),
+    }
+
+    if (options.techniqueId) {
+      const technique = product.techniques?.find(t => t.id === options.techniqueId)
+      payload.technique_id = options.techniqueId
+      if (technique)
+        payload.technique_name = technique.label
     }
 
     if (selectedColor) {
@@ -164,6 +174,7 @@ export function useProductCart() {
     options: {
       colorValue?: string
       sizeValue?: string
+      techniqueId?: string
       returnTo: string
     },
   ) {
@@ -215,6 +226,7 @@ export function useProductCart() {
     options: {
       colorValue?: string
       sizeValue?: string
+      techniqueId?: string
     } = {},
   ) {
     const checkoutPath = '/order/checkout'
