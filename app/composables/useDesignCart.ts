@@ -113,7 +113,7 @@ const isNotFoundError = (error: unknown) => {
 
 const mapCartItemToMutationSizes = (item: DesignCartItem): DesignCartItemMutationSizePayload[] => {
   return item.sizes.map(size => ({
-    size_id: size.id,
+    id: size.id,
     label: size.label,
     quantity: Math.max(0, Math.round(size.quantity)),
   }))
@@ -127,11 +127,24 @@ const mapCartItemToCreatePayload = (item: DesignCartItem): DesignCartItemCreateP
     ...(item.source === 'design' && item.designId ? { design_id: item.designId } : {}),
     product_handle: item.productHandle,
     product_type: item.productType ?? null,
-    ...(item.colorId ? { color_id: item.colorId } : {}),
-    ...(item.colorName ? { color_name: item.colorName } : {}),
-    ...(item.source === 'design' && item.techniqueId ? { technique_id: item.techniqueId } : {}),
-    ...(item.source === 'design' && item.techniqueName ? { technique_name: item.techniqueName } : {}),
-    ...(sizes.length ? { sizes } : { quantity_total: Math.max(1, item.quantity) }),
+    variant: {
+      color: item.colorId
+        ? {
+            id: item.colorId,
+            name: item.colorName ?? null,
+          }
+        : null,
+      sizes,
+    },
+    customization: {
+      technique: item.techniqueId
+        ? {
+            id: item.techniqueId,
+            name: item.techniqueName ?? null,
+          }
+        : null,
+      provider_options: {},
+    },
   }
 }
 
@@ -165,8 +178,8 @@ const mapRemoteCartItemToLocal = (item: DesignCartApiItem): DesignCartItem => {
     artworkCount: item.placements?.length ?? 0,
     sizes: normalizeCartSizes(
       (item.sizes ?? []).map(size => ({
-        id: size.size_id,
-        label: size.label ?? size.size_id,
+        id: size.id ?? size.size_id ?? '',
+        label: size.label ?? size.id ?? size.size_id ?? '',
         quantity: size.quantity,
       })),
       item.quantity_total,
@@ -486,11 +499,13 @@ export const useDesignCart = () => {
     if (cartMode.value === 'auth') {
       try {
         const payload: DesignCartItemUpdatePayload = {
-          sizes: nextSizes.map(size => ({
-            size_id: size.id,
-            label: size.label,
-            quantity: size.quantity,
-          })),
+          variant: {
+            sizes: nextSizes.map(size => ({
+              id: size.id,
+              label: size.label,
+              quantity: size.quantity,
+            })),
+          },
         }
 
         await storefront(`/cart/items/${itemId}`, {

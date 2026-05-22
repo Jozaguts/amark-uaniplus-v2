@@ -51,12 +51,11 @@ export const buildCheckoutQuotePayload = (options: {
     coupon_code: options.couponCode ?? null,
     items: options.items.map((item) => {
       const sizes = item.sizes.map(size => ({
-        size_id: size.id,
+        id: size.id,
         label: size.label,
         quantity: size.quantity,
       }))
 
-      const quantityTotal = sizes.reduce((total, size) => total + Math.max(0, Number(size.quantity ?? 0)), 0)
       const productId = toOptionalInteger(item.productId)
       const variantId = toOptionalInteger(item.variantId)
 
@@ -66,10 +65,24 @@ export const buildCheckoutQuotePayload = (options: {
         design_id: item.designId ?? null,
         product_handle: item.productHandle,
         product_type: item.productType ?? null,
-        ...(item.colorId ? { color_id: item.colorId } : {}),
-        technique_id: item.techniqueId ?? null,
-        quantity_total: quantityTotal,
-        sizes,
+        variant: {
+          color: item.colorId
+            ? {
+                id: item.colorId,
+                name: item.colorName ?? null,
+              }
+            : null,
+          sizes,
+        },
+        customization: {
+          technique: item.techniqueId
+            ? {
+                id: item.techniqueId,
+                name: item.techniqueName ?? null,
+              }
+            : null,
+          provider_options: {},
+        },
         ...(productId != null ? { product_id: productId } : {}),
         ...(variantId != null ? { variant_id: variantId } : {}),
       }

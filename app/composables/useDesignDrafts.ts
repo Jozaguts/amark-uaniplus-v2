@@ -115,7 +115,7 @@ export const buildDesignDraftEditorPayload = (options: {
     },
     technique: {
       id: selectedTechniqueId,
-      name: selectedTechnique?.label ?? null,
+      name: selectedTechnique?.name ?? selectedTechnique?.label ?? null,
     },
     views,
   }

@@ -1,4 +1,8 @@
-import type { DesignCartItemMutationSizePayload } from '~~/types/design-cart'
+import type {
+  DesignCartCustomizationPayload,
+  DesignCartItemMutationSizePayload,
+  DesignCartVariantPayload,
+} from '~~/types/design-cart'
 
 export type CheckoutQuoteAddressPayload = {
   country_code: 'US'
@@ -27,10 +31,8 @@ export type CheckoutQuoteItemPayload = {
   variant_id?: number | null
   product_handle: string
   product_type?: string | null
-  color_id?: string | null
-  technique_id?: string | null
-  quantity_total: number
-  sizes: DesignCartItemMutationSizePayload[]
+  variant: DesignCartVariantPayload
+  customization: DesignCartCustomizationPayload
 }
 
 export type CheckoutQuotePayload = {

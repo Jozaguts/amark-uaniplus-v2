@@ -41,9 +41,25 @@ export type DesignCartItem = {
 }
 
 export type DesignCartItemMutationSizePayload = {
-  size_id: string
+  id: string
   label?: string
   quantity: number
+}
+
+export type DesignCartVariantPayload = {
+  color: {
+    id: string
+    name?: string | null
+  } | null
+  sizes: DesignCartItemMutationSizePayload[]
+}
+
+export type DesignCartCustomizationPayload = {
+  technique: {
+    id: string
+    name?: string | null
+  } | null
+  provider_options: Record<string, unknown>
 }
 
 export type DesignCartItemCreatePayload = {
@@ -51,16 +67,14 @@ export type DesignCartItemCreatePayload = {
   design_id?: string | null
   product_handle: string
   product_type?: string | null
-  color_id?: string | null
-  color_name?: string | null
-  technique_id?: string | null
-  technique_name?: string | null
-  sizes?: DesignCartItemMutationSizePayload[]
-  quantity_total?: number
+  variant: DesignCartVariantPayload
+  customization: DesignCartCustomizationPayload
 }
 
 export type DesignCartItemUpdatePayload = {
-  sizes: DesignCartItemMutationSizePayload[]
+  variant: {
+    sizes: DesignCartItemMutationSizePayload[]
+  }
 }
 
 export type DesignCartMergePayload = {
@@ -92,7 +106,7 @@ export type DesignCartApiItem = {
   color?: DesignCartApiReference | null
   technique?: DesignCartApiReference | null
   placements?: string[]
-  sizes?: DesignCartItemMutationSizePayload[]
+  sizes?: Array<DesignCartItemMutationSizePayload & { size_id?: string | null }>
   quantity_total: number
   pricing: DesignCartApiPricing
   created_at: string

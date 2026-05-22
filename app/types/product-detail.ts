@@ -4,8 +4,9 @@ export interface ProductDetailResponse {
 
 export interface ProductTechnique {
   id: string
-  label: string
-  price: string      // formatted, e.g. "$13.75"
+  label?: string
+  name?: string
+  price?: string      // formatted, e.g. "$13.75"
   priceValue: number // dollars
 }
 

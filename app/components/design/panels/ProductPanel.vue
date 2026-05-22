@@ -12,6 +12,9 @@ const editor = computed(() => props.product.editor)
 const selectedTechnique = computed(() => {
   return editor.value.techniques.find(option => option.id === props.selectedTechniqueId) ?? editor.value.techniques[0] ?? null
 })
+const selectedTechniqueLabel = computed(() => {
+  return selectedTechnique.value?.name ?? selectedTechnique.value?.label ?? selectedTechnique.value?.id ?? 'N/A'
+})
 const activeView = computed(() => {
   return editor.value.views.find(view => view.id === props.activeViewId) ?? editor.value.views[0] ?? null
 })
@@ -88,7 +91,7 @@ const printAreas = computed(() => {
               </p>
             </div>
             <p class="text-sm font-medium text-primary">
-              {{ selectedTechnique?.label ?? 'N/A' }}
+              {{ selectedTechniqueLabel }}
             </p>
           </div>
         </div>

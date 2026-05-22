@@ -10,7 +10,8 @@ export type EditorProductColor = {
 
 export type EditorProductTechnique = {
   id: string
-  label: string
+  label?: string
+  name?: string
   price?: string
   priceValue?: number
 }

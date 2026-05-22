@@ -5,16 +5,24 @@ type ProductCartPayload = {
   source: 'product'
   product_handle: string
   product_type?: string
-  technique_id?: string
-  technique_name?: string
-  color_id?: string
-  color_name?: string
-  sizes?: {
-    size_id: string
-    label: string
-    quantity: number
-  }[]
-  quantity_total?: number
+  variant: {
+    color: {
+      id: string
+      name?: string | null
+    } | null
+    sizes: {
+      id: string
+      label: string
+      quantity: number
+    }[]
+  }
+  customization: {
+    technique: {
+      id: string
+      name?: string | null
+    } | null
+    provider_options: Record<string, unknown>
+  }
 }
 
 type PendingProductCartAction = {
@@ -81,28 +89,33 @@ export function useProductCart() {
       source: 'product',
       product_handle: product.slug,
       ...(productType ? { product_type: productType } : {}),
+      variant: {
+        color: selectedColor
+          ? {
+              id: selectedColor.value,
+              name: selectedColor.label,
+            }
+          : null,
+        sizes: selectedSize
+          ? [{
+              id: selectedSize.value,
+              label: selectedSize.label,
+              quantity: 1,
+            }]
+          : [],
+      },
+      customization: {
+        technique: null,
+        provider_options: {},
+      },
     }
 
     if (options.techniqueId) {
       const technique = product.techniques?.find(t => t.id === options.techniqueId)
-      payload.technique_id = options.techniqueId
-      if (technique)
-        payload.technique_name = technique.label
-    }
-
-    if (selectedColor) {
-      payload.color_id = selectedColor.value
-      payload.color_name = selectedColor.label
-    }
-
-    if (selectedSize) {
-      payload.sizes = [{
-        size_id: selectedSize.value,
-        label: selectedSize.label,
-        quantity: 1,
-      }]
-    } else {
-      payload.quantity_total = 1
+      payload.customization.technique = {
+        id: options.techniqueId,
+        name: technique?.name ?? technique?.label ?? null,
+      }
     }
 
     return payload

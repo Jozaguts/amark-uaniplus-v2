@@ -899,7 +899,7 @@ const buildDesignCartItem = (): DesignCartItem | null => {
     colorId: selectedColorId.value,
     colorName: selectedColor.value?.label ?? null,
     techniqueId: selectedTechniqueId.value,
-    techniqueName: selectedTechnique.value?.label ?? null,
+    techniqueName: selectedTechnique.value?.name ?? selectedTechnique.value?.label ?? null,
     previewImage: latestSavedDesignPreviewImage.value ?? exportDesignPreviewImage(),
     placementLabels: decoratedViews.map(view => view.label),
     artworkCount: Object.values(designObjectsByView.value).reduce((total, objects) => total + objects.length, 0),

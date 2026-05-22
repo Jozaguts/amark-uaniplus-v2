@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router'
-import type { ProductDetail, ProductOption } from '~/types/product-detail'
+import type { ProductDetail, ProductOption, ProductTechnique } from '~/types/product-detail'
 
 const props = defineProps<{
   product: ProductDetail
@@ -27,7 +27,15 @@ const selectedTechnique = computed(() => {
 })
 
 const displayPrice = computed(() => {
-  return selectedTechnique.value?.price ?? props.product.price.formatted
+  const priceValue = selectedTechnique.value?.priceValue
+
+  if (selectedTechnique.value?.price)
+    return selectedTechnique.value.price
+
+  if (typeof priceValue === 'number')
+    return new Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' }).format(priceValue)
+
+  return props.product.price.formatted
 })
 
 const selectedColor = computed(() => {
@@ -69,6 +77,10 @@ function selectTechnique(id: string) {
   selectedTechniqueId.value = id
   addToBagMessage.value = ''
   addToBagError.value = ''
+}
+
+function getTechniqueLabel(technique: ProductTechnique): string {
+  return technique.name ?? technique.label ?? technique.id
 }
 
 const resolvedDesignTo = computed<RouteLocationRaw | undefined>(() => {
@@ -261,7 +273,7 @@ async function handleBuyNow() {
             : 'border-[#7c7c7c] bg-[#f7f7f7] text-[#6d6d6d]'"
           @click="selectTechnique(technique.id)"
         >
-          <span class="text-[13px] font-semibold">{{ technique.label }}</span>
+          <span class="text-[13px] font-semibold">{{ getTechniqueLabel(technique) }}</span>
           <span class="mt-[3px] text-[12px]">{{ technique.price }}</span>
         </button>
       </div>
