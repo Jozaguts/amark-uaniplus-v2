@@ -728,6 +728,10 @@ const buildProductionFilePosition = (width: number, height: number) => ({
   limit_to_print_area: true,
 })
 
+const getProductionTechnique = (view: EditorProductView): string => {
+  return view.supportedTechniques?.[0] ?? selectedTechniqueId.value
+}
+
 const uploadPreviewFile = async (basePayload = designDraftPayload.value): Promise<DesignDraftPreviewFile | null> => {
   if (!product.value || !basePayload) {
     return null
@@ -800,7 +804,7 @@ const uploadProductionFiles = async (basePayload = designDraftPayload.value): Pr
     files.push({
       view_id: view.id,
       placement,
-      technique: selectedTechniqueId.value,
+      technique: getProductionTechnique(view),
       url: response.data.url,
       mime_type: response.data.mime_type,
       width: response.data.width || printfile.width,

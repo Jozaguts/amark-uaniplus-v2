@@ -49,6 +49,8 @@ export type EditorProductPrintArea = {
 export type EditorProductView = {
   id: string
   label: string
+  placement?: string | null
+  supportedTechniques?: string[]
   mockup: EditorProductMockup
   printArea: EditorProductPrintArea
 }
