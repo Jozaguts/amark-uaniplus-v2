@@ -2,6 +2,13 @@ export interface ProductDetailResponse {
   data?: ProductDetail | null
 }
 
+export interface ProductTechnique {
+  id: string
+  label: string
+  price: string      // formatted, e.g. "$13.75"
+  priceValue: number // dollars
+}
+
 export interface ProductDetail {
   id: number | string
   slug: string
@@ -10,12 +17,15 @@ export interface ProductDetail {
   sku?: string | null
   product_type?: ProductCatalogType | string | null
   catalog_type?: ProductCatalogType | string | null
+  provider?: string | null
   is_available: boolean
   is_designable: boolean
   url: string
   design_url?: string | null
   breadcrumbs?: ProductBreadcrumb[]
   price: ProductPrice
+  techniques?: ProductTechnique[] | null
+  techniquePrices?: Record<string, number> | null
   gallery: ProductGalleryItem[]
   options?: ProductOptions | null
   inventory?: ProductInventory | null
