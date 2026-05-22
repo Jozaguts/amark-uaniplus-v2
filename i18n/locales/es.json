@@ -592,6 +592,7 @@
         "retailPrice": "7,909.74 MXN",
         "duties": "Impuestos incluidos",
         "favorite": "Agregar a favoritos",
+        "techniqueLabel": "Técnica de impresión:",
         "sizeLabel": "Talla (EU):",
         "sizeGuide": "Guía de tallas",
         "findSize": "¿No encuentras tu talla?",
