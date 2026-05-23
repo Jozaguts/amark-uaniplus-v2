@@ -178,7 +178,7 @@ onMounted(() => {
 
           <div v-if="!cartItems.length" class="mt-6">
             <div class="flex min-h-[calc(100vh-180px)] flex-col items-center justify-center rounded-[22px] bg-white px-6 text-center shadow-[0_20px_60px_rgba(17,19,20,0.04)]">
-              <Icon name="ph:shopping-cart-simple-thin" class="size-[72px] text-primary" />
+              <Icon name="icon:shopping-cart-simple" class="size-[72px] text-primary" />
               <p class="mt-4 text-xl font-medium text-[#8a8f98]">
                 {{ $t('account.cart.empty.title') }}
               </p>
@@ -264,7 +264,7 @@ onMounted(() => {
                           v-else
                           class="flex h-full w-full items-center justify-center text-[#9aa0a8]"
                         >
-                          <Icon name="ph:t-shirt-light" class="size-[34px]" />
+                          <Icon name="icon:t-shirt-light" class="size-[34px]" />
                         </div>
                       </div>
 
@@ -324,7 +324,7 @@ onMounted(() => {
                               :aria-label="$t('account.cart.actions.decreaseSize', { size: size.label })"
                               @click="updateCartItemSizeQuantity(item.id, size.id, size.quantity - 1)"
                             >
-                              <Icon name="ph:minus" class="size-[14px]" />
+                              <Icon name="icon:minus" class="size-[14px]" />
                             </button>
                             <div class="flex h-8 min-w-[44px] items-center justify-center rounded-lg border border-borderSecondary bg-white px-2 text-sm font-medium text-primary">
                               {{ size.quantity }}
@@ -335,7 +335,7 @@ onMounted(() => {
                               :aria-label="$t('account.cart.actions.increaseSize', { size: size.label })"
                               @click="updateCartItemSizeQuantity(item.id, size.id, size.quantity + 1)"
                             >
-                              <Icon name="ph:plus" class="size-[14px]" />
+                              <Icon name="icon:plus" class="size-[14px]" />
                             </button>
                           </div>
                         </div>
@@ -346,7 +346,7 @@ onMounted(() => {
                       <p class="text-[1.8rem] font-semibold leading-none text-primary">
                         {{ formatCurrency(item.summary.totalPrice * item.quantity) }}
                       </p>
-                      <Icon name="ph:caret-down" class="size-[16px] text-[#686f72]" />
+                      <Icon name="icon:caret-down" class="size-[16px] text-[#686f72]" />
                     </div>
                   </div>
                 </article>
@@ -370,7 +370,7 @@ onMounted(() => {
                         v-else
                         class="flex h-full w-full items-center justify-center text-[#9aa0a8]"
                       >
-                        <Icon name="ph:t-shirt-light" class="size-[26px]" />
+                        <Icon name="icon:t-shirt-light" class="size-[26px]" />
                       </div>
                       <span class="absolute right-1 top-0 flex min-h-[20px] min-w-[20px] items-center justify-center rounded-full border border-white bg-white px-1 text-[11px] font-semibold text-primary shadow-[0_10px_24px_rgba(17,19,20,0.08)]">
                         {{ summaryPreviewItem.quantity }}

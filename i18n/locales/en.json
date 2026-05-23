@@ -845,7 +845,10 @@
       "discount": "Discount",
       "total": "Total",
       "units": "{count} units",
-      "terms": "By clicking the \"Pay now\" button, you confirm that you have read, understand, and accept our Terms of Service, Privacy Policy and FAQ."
+      "terms": "By clicking the \"Pay now\" button, you confirm that you have read, understand, and accept our Terms of Service, Privacy Policy and FAQ.",
+      "removeItem": "Remove item",
+      "increaseQty": "Increase quantity",
+      "decreaseQty": "Decrease quantity"
     },
     "validation": {
       "firstName": "Enter first name",

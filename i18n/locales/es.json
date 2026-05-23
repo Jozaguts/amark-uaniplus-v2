@@ -845,7 +845,10 @@
       "discount": "Descuento",
       "total": "Total",
       "units": "{count} unidades",
-      "terms": "Al hacer clic en el botón \"Pagar ahora\", confirmas que leíste, entiendes y aceptas nuestros Términos de servicio, Política de privacidad y Preguntas frecuentes."
+      "terms": "Al hacer clic en el botón \"Pagar ahora\", confirmas que leíste, entiendes y aceptas nuestros Términos de servicio, Política de privacidad y Preguntas frecuentes.",
+      "removeItem": "Eliminar producto",
+      "increaseQty": "Aumentar cantidad",
+      "decreaseQty": "Disminuir cantidad"
     },
     "validation": {
       "firstName": "Ingresa el nombre",

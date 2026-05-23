@@ -2421,19 +2421,19 @@ useHead(() => ({
 <!--                  type="button"-->
 <!--                  class="rounded-md p-2 text-primary transition hover:bg-cotton-grey-1"-->
 <!--                >-->
-<!--                  <Icon name="ph:arrow-counter-clockwise" size="20px" />-->
+<!--                  <Icon name="icon:arrow-counter-clockwise" size="20px" />-->
 <!--                </button>-->
 <!--                <button-->
 <!--                  type="button"-->
 <!--                  class="rounded-md p-2 text-[#b9bdbf]"-->
 <!--                >-->
-<!--                  <Icon name="ph:arrow-clockwise" size="20px" />-->
+<!--                  <Icon name="icon:arrow-clockwise" size="20px" />-->
 <!--                </button>-->
 <!--                <button-->
 <!--                  type="button"-->
 <!--                  class="rounded-md p-2 text-primary transition hover:bg-cotton-grey-1"-->
 <!--                >-->
-<!--                  <Icon name="ph:grid-four" size="20px" />-->
+<!--                  <Icon name="icon:grid-four" size="20px" />-->
 <!--                </button>-->
                 <button
                   type="button"
@@ -2442,7 +2442,7 @@ useHead(() => ({
                   aria-label="Zoom to max"
                   @click="zoomCanvasToMax"
                 >
-                  <Icon name="ph:corners-out" size="20px" />
+                  <Icon name="icon:corners-out" size="20px" />
                 </button>
                 <button
                   type="button"
@@ -2451,7 +2451,7 @@ useHead(() => ({
                   aria-label="Zoom out"
                   @click="zoomCanvasOut"
                 >
-                  <Icon name="ph:magnifying-glass-minus" size="20px" />
+                  <Icon name="icon:magnifying-glass-minus" size="20px" />
                 </button>
                 <button
                   type="button"
@@ -2460,7 +2460,7 @@ useHead(() => ({
                   aria-label="Zoom in"
                   @click="zoomCanvasIn"
                 >
-                  <Icon name="ph:magnifying-glass-plus" size="20px" />
+                  <Icon name="icon:magnifying-glass-plus" size="20px" />
                 </button>
                 <div class="ml-1 hidden min-w-[52px] items-center justify-center rounded-md bg-cotton-grey-1 px-2 py-1 text-xs font-semibold text-primary sm:flex">
                   {{ zoomPercentage }}%
@@ -2577,7 +2577,7 @@ useHead(() => ({
                         type="button"
                         class="hidden rounded p-1 text-[#8b8f94] transition hover:bg-cotton-grey-1 lg:flex"
                       >
-                        <Icon name="ph:link-simple" size="16px" />
+                        <Icon name="icon:link-simple" size="16px" />
                       </button>
                     </div>
                     <div class="flex h-10 items-center justify-between rounded-lg border border-borderSecondary bg-white px-3 text-sm text-[#b4b7ba]">

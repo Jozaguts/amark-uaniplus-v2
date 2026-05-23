@@ -241,7 +241,7 @@ onMounted(() => {
                 role="menuitem"
                 @click="isUserMenuOpen = false"
               >
-                <Icon name="ph:package" class="size-[16px]" />
+                <Icon name="icon:package" class="size-[16px]" />
                 <span>{{ $t('header.user.orders') }}</span>
               </NuxtLink>
               <button
@@ -251,7 +251,7 @@ onMounted(() => {
                 role="menuitem"
                 @click="handleLogout"
               >
-                <Icon name="ph:sign-out" class="size-[16px]" />
+                <Icon name="icon:sign-out" class="size-[16px]" />
                 <span>{{ logoutPending ? $t('header.user.loggingOut') : $t('header.user.logout') }}</span>
               </button>
             </div>
@@ -373,7 +373,7 @@ onMounted(() => {
                   role="menuitem"
                   @click="isUserMenuOpen = false"
                 >
-                  <Icon name="ph:package" class="size-[15px]" />
+                  <Icon name="icon:package" class="size-[15px]" />
                   <span>{{ $t('header.user.orders') }}</span>
                 </NuxtLink>
                 <button
@@ -383,7 +383,7 @@ onMounted(() => {
                   role="menuitem"
                   @click="handleLogout"
                 >
-                  <Icon name="ph:sign-out" class="size-[15px]" />
+                  <Icon name="icon:sign-out" class="size-[15px]" />
                   <span>{{ logoutPending ? $t('header.user.loggingOut') : $t('header.user.logout') }}</span>
                 </button>
               </div>

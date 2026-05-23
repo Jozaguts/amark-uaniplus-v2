@@ -24,7 +24,7 @@ const closeDialog = () => {
       <div class="design-save-dialog-panel w-full max-w-[420px] rounded-[22px] bg-white px-5 py-5 text-primary shadow-[0_28px_90px_rgba(17,19,20,0.18)]">
         <div class="flex items-start justify-between">
           <span class="flex h-12 w-12 items-center justify-center rounded-full bg-[#f7f7f5] text-primary">
-            <Icon name="ph:hanger-light" size="30px" />
+            <Icon name="icon:hanger-light" size="30px" />
           </span>
 
           <button
@@ -33,7 +33,7 @@ const closeDialog = () => {
             aria-label="Close success dialog"
             @click="closeDialog"
           >
-            <Icon name="ph:x" size="18px" />
+            <Icon name="icon:x" size="18px" />
           </button>
         </div>
 
@@ -51,11 +51,11 @@ const closeDialog = () => {
             @click="emit('add-to-cart')"
           >
             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f7f7f5] text-primary">
-              <Icon name="ph:shopping-cart-simple" size="20px" />
+              <Icon name="icon:shopping-cart-simple" size="20px" />
             </span>
             <span class="flex flex-1 items-center justify-between gap-3 pl-4">
               <span class="text-sm font-semibold">Add to cart</span>
-              <Icon name="ph:arrow-right" size="18px" class="text-[#4d545b]" />
+              <Icon name="icon:arrow-right" size="18px" class="text-[#4d545b]" />
             </span>
           </button>
 
@@ -65,11 +65,11 @@ const closeDialog = () => {
             @click="emit('create-another')"
           >
             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f7f7f5] text-primary">
-              <Icon name="ph:paint-brush-broad" size="20px" />
+              <Icon name="icon:paint-brush-broad" size="20px" />
             </span>
             <span class="flex flex-1 items-center justify-between gap-3 pl-4">
               <span class="text-sm font-semibold">Create another design</span>
-              <Icon name="ph:arrow-right" size="18px" class="text-[#4d545b]" />
+              <Icon name="icon:arrow-right" size="18px" class="text-[#4d545b]" />
             </span>
           </button>
         </div>

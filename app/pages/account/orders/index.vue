@@ -121,7 +121,7 @@ onMounted(() => {
           :to="localePath('/account/orders')"
           class="flex h-11 items-center gap-3 rounded-lg bg-white px-4 text-sm font-semibold text-primary shadow-[0_8px_20px_rgba(17,19,20,0.03)]"
         >
-          <Icon name="ph:package" class="size-[18px]" />
+          <Icon name="icon:package" class="size-[18px]" />
           <span>{{ $t('account.orders.title') }}</span>
         </NuxtLink>
       </aside>
@@ -138,7 +138,7 @@ onMounted(() => {
               class="inline-flex h-10 items-center gap-2 rounded-full border border-borderSecondary px-5 text-sm font-semibold text-primary transition hover:border-primary"
             >
               <span>{{ $t('account.orders.manage') }}</span>
-              <Icon name="ph:caret-down" class="size-[16px]" />
+              <Icon name="icon:caret-down" class="size-[16px]" />
             </button>
           </div>
 
@@ -180,7 +180,7 @@ onMounted(() => {
               v-else-if="ordersError"
               class="flex min-h-[360px] flex-col items-center justify-center text-center"
             >
-              <Icon name="ph:warning-circle" class="size-[48px] text-[#f04438]" />
+              <Icon name="icon:warning-circle" class="size-[48px] text-[#f04438]" />
               <p class="mt-4 text-sm text-[#f04438]">
                 {{ ordersError }}
               </p>
@@ -198,7 +198,7 @@ onMounted(() => {
               class="flex min-h-[360px] flex-col items-center justify-center text-center"
             >
               <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#f3f4f6] text-[#b8bdc5]">
-                <Icon name="ph:clipboard-text" class="size-[36px]" />
+                <Icon name="icon:clipboard-text" class="size-[36px]" />
               </div>
               <p class="mt-4 text-sm text-[#8a8f98]">
                 {{ $t('account.orders.empty') }}
@@ -232,7 +232,7 @@ onMounted(() => {
                       v-else
                       class="flex h-full w-full items-center justify-center text-[#9aa0a8]"
                     >
-                      <Icon name="ph:package" class="size-[22px]" />
+                      <Icon name="icon:package" class="size-[22px]" />
                     </div>
                   </div>
                   <div class="min-w-0">

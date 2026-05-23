@@ -121,7 +121,7 @@ watch(() => props.refreshKey, () => {
     <div v-if="draftsPending" class="flex flex-1 items-center justify-center p-6">
       <div class="flex max-w-[220px] flex-col items-center text-center">
         <span class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-cotton-grey-1 text-primary">
-          <Icon name="ph:spinner-gap" size="26px" class="animate-spin" />
+          <Icon name="icon:spinner-gap" size="26px" class="animate-spin" />
         </span>
         <p class="text-[15px] font-medium leading-6 text-primary">
           Loading saved designs
@@ -135,7 +135,7 @@ watch(() => props.refreshKey, () => {
     >
       <div class="flex max-w-[240px] flex-col items-center text-center">
         <span class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-cotton-grey-1 text-primary">
-          <Icon name="ph:warning-circle" size="26px" />
+          <Icon name="icon:warning-circle" size="26px" />
         </span>
         <p class="text-[15px] font-medium leading-6 text-primary">
           {{ draftsErrorMessage }}
@@ -190,7 +190,7 @@ watch(() => props.refreshKey, () => {
               v-else
               class="flex h-full w-full items-center justify-center text-[#8a8f98]"
             >
-              <Icon name="ph:image-square" size="26px" />
+              <Icon name="icon:image-square" size="26px" />
             </div>
           </div>
 

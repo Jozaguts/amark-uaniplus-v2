@@ -177,7 +177,50 @@ const {
   cartItems,
   cartReady,
   syncCart,
+  removeCartItem,
+  updateCartItemSizeQuantity,
 } = useDesignCart()
+
+const mutatingItems = shallowRef(new Set<string>())
+
+const isItemMutating = (itemId: string) => mutatingItems.value.has(itemId)
+
+const handleRemoveItem = async (itemId: string) => {
+  if (isItemMutating(itemId))
+    return
+
+  mutatingItems.value = new Set([...mutatingItems.value, itemId])
+
+  try {
+    await removeCartItem(itemId)
+  }
+  finally {
+    const next = new Set(mutatingItems.value)
+    next.delete(itemId)
+    mutatingItems.value = next
+  }
+}
+
+const handleSizeQuantityChange = async (itemId: string, sizeId: string, currentQty: number, delta: number) => {
+  if (isItemMutating(itemId))
+    return
+
+  const nextQty = currentQty + delta
+
+  if (nextQty < 1)
+    return
+
+  mutatingItems.value = new Set([...mutatingItems.value, itemId])
+
+  try {
+    await updateCartItemSizeQuantity(itemId, sizeId, nextQty)
+  }
+  finally {
+    const next = new Set(mutatingItems.value)
+    next.delete(itemId)
+    mutatingItems.value = next
+  }
+}
 const {
   account,
   authReady,
@@ -1161,7 +1204,7 @@ onMounted(async () => {
           v-else-if="!checkoutItems.length"
           class="mx-auto flex min-h-[calc(100vh-180px)] max-w-[1240px] flex-col items-center justify-center rounded-[24px] bg-white px-6 text-center shadow-[0_20px_60px_rgba(17,19,20,0.04)]"
         >
-          <Icon name="ph:shopping-cart-simple-thin" size="72" class="text-primary" />
+          <Icon name="icon:shopping-cart-simple" size="72" class="text-primary" />
           <p class="mt-4 text-xl font-medium text-[#8a8f98]">
             {{ t('checkout.empty.title') }}
           </p>
@@ -1207,7 +1250,7 @@ onMounted(async () => {
                     @click="startAddressEdit"
                   >
                     <span>{{ t('checkout.address.change') }}</span>
-                    <Icon name="ph:caret-right" size="16px" />
+                    <Icon name="icon:caret-right" size="16px" />
                   </button>
                 </div>
               </div>
@@ -1487,7 +1530,7 @@ onMounted(async () => {
                         class="inline-flex items-center gap-1 text-sm font-medium text-primary transition hover:opacity-70"
                         @click="startAddressEdit"
                       >
-                        <Icon name="ph:pencil-simple-line" size="16px" />
+                        <Icon name="icon:pencil-simple-line" size="16px" />
                         <span>{{ t('checkout.address.edit') }}</span>
                       </button>
                     </div>
@@ -1684,27 +1727,83 @@ onMounted(async () => {
                 {{ t('checkout.summary.title') }}
               </h2>
 
-              <div class="mt-5 flex flex-wrap gap-3">
+              <div class="mt-5 space-y-4">
                 <div
                   v-for="item in checkoutItems"
                   :key="item.id"
-                  class="relative h-[72px] w-[72px] overflow-hidden rounded-2xl border border-borderSecondary bg-[#f3f3f1]"
+                  class="rounded-2xl border border-borderSecondary bg-[#f9f9f8] p-3"
+                  :class="isItemMutating(item.id) ? 'opacity-60' : ''"
                 >
-                  <img
-                    v-if="item.previewImage"
-                    :src="item.previewImage"
-                    :alt="item.productName"
-                    class="h-full w-full object-cover"
-                  >
-                  <div
-                    v-else
-                    class="flex h-full w-full items-center justify-center text-[#9aa0a8]"
-                  >
-                    <Icon name="ph:t-shirt-light" size="24px" />
+                  <div class="flex items-start gap-3">
+                    <div class="h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-borderSecondary bg-[#f3f3f1]">
+                      <img
+                        v-if="item.previewImage"
+                        :src="item.previewImage"
+                        :alt="item.productName"
+                        class="h-full w-full object-cover"
+                      >
+                      <div
+                        v-else
+                        class="flex h-full w-full items-center justify-center text-[#9aa0a8]"
+                      >
+                        <Icon name="icon:t-shirt-light" size="20px" />
+                      </div>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <p class="truncate text-xs font-semibold text-primary">
+                        {{ item.productName }}
+                      </p>
+                      <p
+                        v-if="item.colorName"
+                        class="mt-0.5 truncate text-[11px] text-[#8a8f98]"
+                      >
+                        {{ item.colorName }}
+                      </p>
+                    </div>
                   </div>
-                  <span class="absolute right-1 top-1 flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full border border-white bg-white px-1 text-[11px] font-semibold text-primary shadow-[0_10px_24px_rgba(17,19,20,0.08)]">
-                    {{ item.quantity }}
-                  </span>
+
+                  <div class="mt-3 space-y-2">
+                    <div
+                      v-for="size in item.sizes"
+                      :key="size.id"
+                      class="flex items-center justify-between gap-2"
+                    >
+                      <span class="text-xs font-medium text-[#667085]">{{ size.label }}</span>
+                      <div class="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          :disabled="isItemMutating(item.id) || size.quantity <= 1"
+                          :aria-label="t('checkout.summary.decreaseQty')"
+                          class="flex h-6 w-6 items-center justify-center rounded-lg border border-borderSecondary bg-white text-primary transition hover:border-primary disabled:cursor-not-allowed disabled:opacity-40"
+                          @click="handleSizeQuantityChange(item.id, size.id, size.quantity, -1)"
+                        >
+                          <Icon name="icon:minus" size="12px" />
+                        </button>
+                        <span class="w-5 text-center text-xs font-semibold text-primary tabular-nums">{{ size.quantity }}</span>
+                        <button
+                          type="button"
+                          :disabled="isItemMutating(item.id)"
+                          :aria-label="t('checkout.summary.increaseQty')"
+                          class="flex h-6 w-6 items-center justify-center rounded-lg border border-borderSecondary bg-white text-primary transition hover:border-primary disabled:cursor-not-allowed disabled:opacity-40"
+                          @click="handleSizeQuantityChange(item.id, size.id, size.quantity, 1)"
+                        >
+                          <Icon name="icon:plus" size="12px" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-3 border-t border-borderSecondary pt-3">
+                    <button
+                      type="button"
+                      :disabled="isItemMutating(item.id)"
+                      class="flex w-full items-center justify-center gap-1.5 text-xs font-semibold text-[#f04438] transition hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-40"
+                      @click="handleRemoveItem(item.id)"
+                    >
+                      <Icon name="icon:x-circle" size="14px" />
+                      <span>{{ isItemMutating(item.id) ? '…' : t('checkout.summary.removeItem') }}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 

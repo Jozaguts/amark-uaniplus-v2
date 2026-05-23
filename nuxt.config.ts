@@ -33,6 +33,8 @@ export default defineNuxtConfig({
     },
   },
   icon: {
+    provider: 'server',
+    localApiEndpoint: '/_nuxt_icon',
     customCollections: [
       {
         prefix: 'icon',

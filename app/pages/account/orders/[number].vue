@@ -196,7 +196,7 @@ onMounted(() => {
           :to="localePath('/account/orders')"
           class="flex h-11 items-center gap-3 rounded-lg bg-white px-4 text-sm font-semibold text-primary shadow-[0_8px_20px_rgba(17,19,20,0.03)]"
         >
-          <Icon name="ph:package" class="size-[18px]" />
+          <Icon name="icon:package" class="size-[18px]" />
           <span>{{ $t('account.orders.title') }}</span>
         </NuxtLink>
       </aside>
@@ -207,7 +207,7 @@ onMounted(() => {
             :to="localePath('/account/orders')"
             class="inline-flex items-center gap-2 text-sm font-semibold text-[#667085] transition hover:text-primary"
           >
-            <Icon name="ph:arrow-left" class="size-[16px]" />
+            <Icon name="icon:arrow-left" class="size-[16px]" />
             <span>{{ $t('account.orderDetail.back') }}</span>
           </NuxtLink>
 
@@ -227,7 +227,7 @@ onMounted(() => {
               :disabled="orderLoading"
               @click="fetchOrder"
             >
-              <Icon name="ph:arrow-clockwise" class="size-[16px]" />
+              <Icon name="icon:arrow-clockwise" class="size-[16px]" />
               <span>{{ orderLoading ? $t('account.orderDetail.refreshing') : $t('account.orderDetail.refresh') }}</span>
             </button>
           </div>
@@ -243,7 +243,7 @@ onMounted(() => {
             v-else-if="orderError"
             class="mt-10 flex min-h-[360px] flex-col items-center justify-center rounded-3xl border border-borderSecondary text-center"
           >
-            <Icon name="ph:warning-circle" class="size-[48px] text-[#f04438]" />
+            <Icon name="icon:warning-circle" class="size-[48px] text-[#f04438]" />
             <p class="mt-4 text-sm text-[#f04438]">
               {{ orderError }}
             </p>
@@ -327,7 +327,7 @@ onMounted(() => {
                         v-else
                         class="flex h-full w-full items-center justify-center text-[#9aa0a8]"
                       >
-                        <Icon name="ph:package" class="size-[24px]" />
+                        <Icon name="icon:package" class="size-[24px]" />
                       </div>
                     </div>
 
