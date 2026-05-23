@@ -61,6 +61,8 @@ export type CheckoutShippingRate = {
   id: string
   carrier: string
   service: string
+  service_code: string
+  provider: string
   amount: string
   currency: string
   estimated_days: number | null
@@ -84,6 +86,8 @@ export type CheckoutSelectedRate = {
   id: string
   carrier: string
   service: string
+  service_code: string
+  provider: string
   amount: string
   currency: string
 }
