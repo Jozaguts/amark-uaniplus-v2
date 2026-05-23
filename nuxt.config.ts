@@ -19,6 +19,9 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    build: {
+      sourcemap: false,
+    },
     server: {
       host: '127.0.0.1',
       port: 5173,
@@ -65,7 +68,28 @@ export default defineNuxtConfig({
       stripePublishableKey: process.env.NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? process.env.STRIPE_PUBLISHABLE_KEY ?? '',
     },
   },
-  ssr: process.env.NUXT_PUBLIC_SSR,
+  ssr: process.env.NUXT_PUBLIC_SSR !== 'false',
+
+  routeRules: {
+    // Auth-protected pages → client-only shell (no SSR prerender)
+    '/account/**': { ssr: false },
+    '/es/account/**': { ssr: false },
+    // Checkout & order flow → client-only shell
+    '/order/**': { ssr: false },
+    '/es/order/**': { ssr: false },
+    '/checkout/**': { ssr: false },
+    '/es/checkout/**': { ssr: false },
+    // Design editor (Konva canvas) → client-only shell
+    '/design/**': { ssr: false },
+    '/es/design/**': { ssr: false },
+    // Dynamic product & category routes → client-only shell
+    '/products/**': { ssr: false },
+    '/es/products/**': { ssr: false },
+    '/categories/**': { ssr: false },
+    '/es/categories/**': { ssr: false },
+    '/:section/product': { ssr: false },
+    '/es/:section/product': { ssr: false },
+  },
 
   nitro: {
     preset: process.env.NUXT_PUBLIC_PRESET,
