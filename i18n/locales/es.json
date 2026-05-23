@@ -703,10 +703,14 @@
         "selectAll": "Seleccionar todas las órdenes",
         "selectOrder": "Seleccionar orden {number}",
         "retry": "Reintentar",
-        "view": "Ver"
+        "view": "Ver",
+        "cancel": "Cancelar",
+        "cancelConfirm": "¿Estás seguro de que deseas cancelar la orden {number}?",
+        "cancelSuccess": "La orden {number} ha sido cancelada."
       },
       "errors": {
-        "load": "No pudimos cargar las órdenes."
+        "load": "No pudimos cargar las órdenes.",
+        "cancel": "No se pudo cancelar la orden. Por favor, inténtalo de nuevo."
       }
     },
     "orderDetail": {

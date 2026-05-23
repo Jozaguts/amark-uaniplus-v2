@@ -37,5 +37,10 @@ export const useStripeCheckout = () => {
         },
       })
     },
+    cancelOrder(orderNumber: string) {
+      return storefront(`/orders/${encodeURIComponent(orderNumber)}/cancel`, {
+        method: 'POST',
+      })
+    },
   }
 }

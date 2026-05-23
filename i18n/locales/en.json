@@ -703,10 +703,14 @@
         "selectAll": "Select all orders",
         "selectOrder": "Select order {number}",
         "retry": "Retry",
-        "view": "View"
+        "view": "View",
+        "cancel": "Cancel",
+        "cancelConfirm": "Are you sure you want to cancel order {number}?",
+        "cancelSuccess": "Order {number} has been cancelled."
       },
       "errors": {
-        "load": "Unable to load orders."
+        "load": "Unable to load orders.",
+        "cancel": "Could not cancel the order. Please try again."
       }
     },
     "orderDetail": {

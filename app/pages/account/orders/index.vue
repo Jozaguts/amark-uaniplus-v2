@@ -9,12 +9,18 @@ definePageMeta({
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
-const { listOrders } = useStripeCheckout()
+const { listOrders, cancelOrder } = useStripeCheckout()
 
 const orders = shallowRef<CheckoutOrderListItem[]>([])
 const ordersLoading = shallowRef(false)
 const ordersError = shallowRef('')
 const activeStatus = shallowRef('all')
+const cancellingOrder = shallowRef<string | null>(null)
+
+const CANCELLABLE_STATUSES: (CheckoutOrderListItem['status'])[] = ['draft', 'awaiting_payment', 'payment_failed']
+
+const isCancellable = (order: CheckoutOrderListItem) =>
+  CANCELLABLE_STATUSES.includes(order.status)
 
 useSeoMeta({
   title: () => t('account.orders.seo.title'),
@@ -80,6 +86,25 @@ const fetchOrders = async () => {
     ordersError.value = storefrontError?.data?.message ?? t('account.orders.errors.load')
   } finally {
     ordersLoading.value = false
+  }
+}
+
+const handleCancelOrder = async (order: CheckoutOrderListItem) => {
+  if (!window.confirm(t('account.orders.actions.cancelConfirm', { number: order.number })))
+    return
+
+  cancellingOrder.value = order.number
+
+  try {
+    await cancelOrder(order.number)
+    ElMessage.success(t('account.orders.actions.cancelSuccess', { number: order.number }))
+    await fetchOrders()
+  }
+  catch {
+    ElMessage.error(t('account.orders.errors.cancel'))
+  }
+  finally {
+    cancellingOrder.value = null
   }
 }
 
@@ -239,12 +264,22 @@ onMounted(() => {
                   <span class="font-semibold text-primary">
                     {{ formatMoney(order.total, order.currency) }}
                   </span>
-                  <NuxtLink
-                    :to="localePath(`/account/orders/${order.number}`)"
-                    class="text-sm font-semibold text-primary underline decoration-black/20 underline-offset-4"
-                  >
-                    {{ $t('account.orders.actions.view') }}
-                  </NuxtLink>
+                  <div class="flex items-center gap-2">
+                    <NuxtLink
+                      :to="localePath(`/account/orders/${order.number}`)"
+                      class="text-sm font-semibold text-primary underline decoration-black/20 underline-offset-4"
+                    >
+                      {{ $t('account.orders.actions.view') }}
+                    </NuxtLink>
+                    <button
+                      type="button"
+                      :disabled="!isCancellable(order) || cancellingOrder === order.number"
+                      class="text-sm font-semibold text-[#f04438] underline decoration-[#f04438]/30 underline-offset-4 transition disabled:cursor-not-allowed disabled:opacity-35"
+                      @click="handleCancelOrder(order)"
+                    >
+                      {{ cancellingOrder === order.number ? '…' : $t('account.orders.actions.cancel') }}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -258,14 +293,14 @@ onMounted(() => {
 <style scoped>
 .orders-table-grid {
   display: grid;
-  grid-template-columns: 28px minmax(220px, 1.2fr) 180px 190px 140px 120px;
+  grid-template-columns: 28px minmax(220px, 1.2fr) 180px 190px 140px 160px;
   column-gap: 1.25rem;
 }
 
 @media (max-width: 1023px) {
   .orders-table-grid {
-    grid-template-columns: 28px minmax(220px, 1fr) 160px 160px 120px 100px;
-    min-width: 900px;
+    grid-template-columns: 28px minmax(220px, 1fr) 160px 160px 120px 140px;
+    min-width: 960px;
   }
 }
 </style>
