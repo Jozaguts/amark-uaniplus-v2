@@ -65,9 +65,9 @@ export default defineNuxtConfig({
       stripePublishableKey: process.env.NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? process.env.STRIPE_PUBLISHABLE_KEY ?? '',
     },
   },
-  // ssr: false,
-  //
-  // nitro: {
-  //   preset: 'static',
-  // },
+  ssr: process.env.NUXT_PUBLIC_SSR,
+
+  nitro: {
+    preset: process.env.NUXT_PUBLIC_PRESET,
+  },
 })
