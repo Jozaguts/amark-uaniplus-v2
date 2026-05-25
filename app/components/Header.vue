@@ -46,8 +46,8 @@ function subNavigationItemClass(item: CatalogNavigationItem): string {
   const isActive = activeMegaMenuKey.value === itemKey(item) || isActiveNavigationItem(item)
 
   return isActive
-    ? 'border-black text-black'
-    : 'border-transparent text-black'
+    ? 'border-white md:border-black text-white md:text-black'
+    : 'border-transparent text-white md:text-black'
 }
 
 function hasChildren(item: CatalogNavigationItem): boolean {
@@ -180,7 +180,8 @@ onMounted(() => {
             :key="itemKey(item)"
             :to="linkTarget(item.url)"
             class="capitalize text-[#6d6d6d]"
-            :class="activeMainItem && itemKey(activeMainItem) === itemKey(item) && 'border-b border-black pb-[3px] text-black'"
+            :class="activeMainItem && itemKey(activeMainItem) === itemKey(item) &&
+            'border-b border-white md:border-black pb-0.75 text-white md:text-black'"
           >
             {{ item.name }}
           </NuxtLink>
@@ -191,12 +192,12 @@ onMounted(() => {
           aria-label="uandiplus"
           class="font-serif text-[28px] font-bold leading-none tracking-[0.24em]"
         >
-         <Icon name="icon:uandi" size="40"></Icon>
+         <Icon name="icon:uandi" size="60"></Icon>
         </NuxtLink>
 
-        <div class="flex items-center justify-end gap-[21px] pt-[-1px] text-[16px] font-bold leading-none">
+        <div class="flex items-center justify-end gap-5 pt-[-1px] text-[16px] font-bold leading-none">
           <NuxtLink :to="localePath('/account/cart')" :aria-label="$t('header.actions.cart')" class="relative pt-px">
-            <Icon name="icon:shoping-cart" class="size-[25px]" />
+            <Icon name="icon:shopping-cart" class="size-6" />
             <span
               v-if="itemCount"
               class="absolute -right-2 -top-2 flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full bg-black px-1 text-[10px] font-semibold leading-none text-white"
@@ -274,17 +275,18 @@ onMounted(() => {
       >
         <div
             class="xs:hidden overflow-x-auto mx-auto scrollbar-thin max-w-325">
-          <nav class="flex h-[41px] min-w-max items-center justify-center gap-[34px] text-[15px] font-bold uppercase leading-none tracking-[0.16em]">
+          <nav
+              class="flex h-[41px] min-w-max items-center justify-center gap-[34px] text-[15px] font-bold uppercase leading-none tracking-[0.16em] mt-8">
             <div
               v-for="item in subNavigationItems"
               :key="itemKey(item)"
-              class="flex h-full items-center"
+              class="flex h-full items-center uppercase"
               @mouseenter="openMegaMenu(item)"
             >
               <button
                 v-if="hasChildren(item)"
                 type="button"
-                class="whitespace-nowrap border-b-2 pb-[8px] pt-[8px]"
+                class="whitespace-nowrap border-b-2 pb-2 pt-2 uppercase"
                 :class="subNavigationItemClass(item)"
                 @click="toggleMegaMenu(item)"
               >
@@ -294,7 +296,7 @@ onMounted(() => {
               <NuxtLink
                 v-else
                 :to="linkTarget(item.url)"
-                class="whitespace-nowrap border-b-2 pb-[8px] pt-[8px]"
+                class="whitespace-nowrap border-b-2 pb-2 pt-2 uppercase"
                 :class="subNavigationItemClass(item)"
               >
                 {{ item.name }}
@@ -400,14 +402,14 @@ onMounted(() => {
         </div>
 
         <div class="bg-black">
-          <nav class="container mx-auto flex h-[41px] items-center gap-[26px] overflow-x-auto px-[20px] text-[14px] font-bold uppercase leading-none tracking-[0.15em] text-white">
+          <nav class="container mx-auto flex h-10.25 items-center gap-6.5 overflow-x-auto px-5 text-[14px] font-bold uppercase leading-none tracking-[0.15em] text-white">
             <template
               v-for="item in subNavigationItems"
               :key="itemKey(item)"
             >
               <span
                 v-if="hasChildren(item)"
-                class="shrink-0 whitespace-nowrap border-b-2 pb-[8px] pt-[8px]"
+                class="shrink-0 whitespace-nowrap border-b-2 pb-2 pt-2"
                 :class="subNavigationItemClass(item)"
               >
                 {{ item.name }}
@@ -416,7 +418,7 @@ onMounted(() => {
               <NuxtLink
                 v-else
                 :to="linkTarget(item.url)"
-                class="shrink-0 whitespace-nowrap border-b-2 pb-[8px] pt-[8px]"
+                class="shrink-0 whitespace-nowrap border-b-2 pb-2 pt-2"
                 :class="subNavigationItemClass(item)"
               >
                 {{ item.name }}
