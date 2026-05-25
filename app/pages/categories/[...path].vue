@@ -32,6 +32,8 @@ useSeoMeta({
   ogImage: computed(() => landingPage.value?.seo?.image || ''),
 })
 
+const expandedGroupPath = shallowRef<string | null>(null)
+
 function hasChildren(item: CatalogNavigationItem): boolean {
   return Boolean(item.children?.length)
 }
@@ -41,6 +43,10 @@ function linkTarget(url: string): string {
     return url
 
   return localePath(url)
+}
+
+function toggleGroup(item: CatalogNavigationItem): void {
+  expandedGroupPath.value = expandedGroupPath === item.path ? null : item.path
 }
 </script>
 
@@ -55,17 +61,58 @@ function linkTarget(url: string): string {
     :category="category"
   />
 
-  <section
-    v-else-if="category"
-    class="mx-auto w-full max-w-[1400px] px-8 py-10"
-  >
-    <h1 class="mb-8 text-center text-[26px] font-semibold uppercase leading-tight tracking-[0.14em]">
+  <section v-else-if="category">
+    <h1 class="py-8 text-center text-[26px] font-semibold uppercase leading-tight tracking-[0.14em]">
       {{ category.name }}
     </h1>
 
+    <!-- Mobile: accordion -->
+    <div v-if="childGroups.length" class="lg:hidden divide-y divide-[#e4e4e4] border-t border-[#e4e4e4]">
+      <div v-for="item in childGroups" :key="item.path">
+        <!-- group has children → accordion toggle -->
+        <template v-if="hasChildren(item)">
+          <button
+            type="button"
+            class="flex w-full items-center justify-between px-4 py-4 text-[14px] font-semibold uppercase tracking-[0.083em] text-black"
+            @click="toggleGroup(item)"
+          >
+            <span>{{ item.name }}</span>
+            <Icon
+              name="ph:caret-down"
+              class="size-[16px] shrink-0 text-[#6e6e6e] transition-transform duration-200"
+              :class="expandedGroupPath === item.path ? 'rotate-180' : ''"
+            />
+          </button>
+          <ul
+            v-if="expandedGroupPath === item.path"
+            class="border-t border-[#e4e4e4] bg-white divide-y divide-[#efefef]"
+          >
+            <li v-for="child in item.children" :key="child.path">
+              <NuxtLink
+                :to="linkTarget(child.url)"
+                class="block px-4 py-3.5 text-[14px] text-[#222]"
+              >
+                {{ child.name }}
+              </NuxtLink>
+            </li>
+          </ul>
+        </template>
+
+        <!-- group is a direct link -->
+        <NuxtLink
+          v-else
+          :to="linkTarget(item.url)"
+          class="flex w-full items-center px-4 py-4 text-[14px] font-semibold uppercase tracking-[0.083em] text-black"
+        >
+          {{ item.name }}
+        </NuxtLink>
+      </div>
+    </div>
+
+    <!-- Desktop: grid -->
     <div
       v-if="childGroups.length"
-      class="grid gap-8 md:grid-cols-2 lg:grid-cols-4"
+      class="mx-auto hidden w-full max-w-[1400px] px-8 pb-10 lg:grid lg:gap-8 lg:grid-cols-4"
     >
       <article
         v-for="item in childGroups"
@@ -87,14 +134,8 @@ function linkTarget(url: string): string {
           {{ item.name }}
         </NuxtLink>
 
-        <ul
-          v-if="item.children?.length"
-          class="space-y-1"
-        >
-          <li
-            v-for="child in item.children"
-            :key="child.path"
-          >
+        <ul v-if="item.children?.length" class="space-y-1">
+          <li v-for="child in item.children" :key="child.path">
             <NuxtLink
               :to="linkTarget(child.url)"
               class="text-[14px] font-normal leading-[1.4] text-[#6e6e6e]"

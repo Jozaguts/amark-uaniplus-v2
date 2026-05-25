@@ -10,6 +10,8 @@ const { itemCount } = useDesignCart()
 const { authReady, displayName, hydrateAuth, isAuthenticated, logout } = useStorefrontAuth()
 const activeMegaMenuKey = shallowRef<string | null>(null)
 const isUserMenuOpen = shallowRef(false)
+const isMobileMenuOpen = shallowRef(false)
+const mobileActiveMainItem = shallowRef<CatalogNavigationItem | null>(null)
 const logoutPending = shallowRef(false)
 const userMenuRef = shallowRef<HTMLElement | null>(null)
 const { items: navItems, menuForItem } = useCatalogNavigationTree()
@@ -65,6 +67,8 @@ const activeMainItem = computed(() => {
 })
 
 const subNavigationItems = computed(() => activeMainItem.value?.children ?? [])
+
+const mobileSubNavigationItems = computed(() => mobileActiveMainItem.value?.children ?? [])
 
 const forcedMegaMenuValue = computed(() => {
   const rawValue = route.query.nav ?? route.query.menu ?? route.query.activeNav
@@ -143,6 +147,18 @@ async function handleLogout(): Promise<void> {
 
 watch(activeMainItem, () => {
   closeMegaMenu()
+})
+
+watch(isMobileMenuOpen, (open) => {
+  if (open)
+    mobileActiveMainItem.value = activeMainItem.value ?? navItems.value[0] ?? null
+
+  if (import.meta.client)
+    document.body.style.overflow = open ? 'hidden' : ''
+})
+
+watch(route, () => {
+  isMobileMenuOpen.value = false
 })
 
 watch(
@@ -315,7 +331,7 @@ onMounted(() => {
       <div class="lg:hidden">
         <div class="flex h-[58px] items-center justify-between bg-white pl-[15px] pr-[15px]">
           <div class="flex min-w-0 items-center gap-[12px]">
-            <button type="button" :aria-label="$t('header.actions.menu')" class="flex size-[21px] items-center justify-center">
+            <button type="button" :aria-label="$t('header.actions.menu')" class="flex size-[21px] items-center justify-center" @click="isMobileMenuOpen = true">
               <Icon name="icon:menu" class="size-[21px]" />
             </button>
 
@@ -431,4 +447,92 @@ onMounted(() => {
 
     <div class="h-[99px] lg:h-[104px]" aria-hidden="true" />
   </header>
+
+  <Teleport to="body">
+    <Transition name="mobile-overlay">
+      <div v-if="isMobileMenuOpen" class="fixed inset-0 z-[60] bg-black/50" @click="isMobileMenuOpen = false" />
+    </Transition>
+
+    <Transition name="mobile-drawer">
+      <div
+        v-if="isMobileMenuOpen"
+        class="fixed inset-y-0 left-0 z-[70] flex w-[85%] max-w-[360px] flex-col overflow-hidden bg-white"
+        role="dialog"
+        :aria-label="$t('header.actions.menu')"
+      >
+        <!-- Drawer header -->
+        <div class="flex shrink-0 items-center justify-between bg-black px-4 py-3.5">
+          <NuxtLink
+            v-if="!isAuthenticated"
+            :to="localePath('/login')"
+            class="text-[13px] font-semibold text-white"
+            @click="isMobileMenuOpen = false"
+          >
+            {{ $t('header.mobile.signIn') }}
+          </NuxtLink>
+          <span v-else class="max-w-[200px] truncate text-[13px] font-semibold text-white">
+            {{ displayName || $t('header.user.account') }}
+          </span>
+          <button
+            type="button"
+            :aria-label="$t('header.mobile.close')"
+            class="ml-4 shrink-0 text-white"
+            @click="isMobileMenuOpen = false"
+          >
+            <Icon name="ph:x" class="size-[18px]" />
+          </button>
+        </div>
+
+        <!-- Main nav tabs -->
+        <div class="flex shrink-0 border-b border-[#e8e8e8]">
+          <button
+            v-for="item in navItems"
+            :key="itemKey(item)"
+            type="button"
+            class="flex-1 border-b-2 py-3.5 text-[11px] font-semibold uppercase tracking-[0.1em] transition-colors"
+            :class="mobileActiveMainItem && itemKey(mobileActiveMainItem) === itemKey(item)
+              ? 'border-black text-black'
+              : 'border-transparent text-[#8c8c8c]'"
+            @click="mobileActiveMainItem = item"
+          >
+            {{ item.name }}
+          </button>
+        </div>
+
+        <!-- Sub-nav items -->
+        <ul class="flex-1 overflow-y-auto divide-y divide-[#efefef]">
+          <li v-for="subItem in mobileSubNavigationItems" :key="itemKey(subItem)">
+            <NuxtLink
+              :to="linkTarget(subItem.url)"
+              class="flex items-center justify-between px-4 py-3.5 text-[14px] text-[#222]"
+              @click="isMobileMenuOpen = false"
+            >
+              <span>{{ subItem.name }}</span>
+              <Icon v-if="hasChildren(subItem)" name="ph:caret-right" class="size-[14px] shrink-0 text-[#8c8c8c]" />
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
+
+<style scoped>
+.mobile-overlay-enter-active,
+.mobile-overlay-leave-active {
+  transition: opacity 0.25s ease;
+}
+.mobile-overlay-enter-from,
+.mobile-overlay-leave-to {
+  opacity: 0;
+}
+
+.mobile-drawer-enter-active,
+.mobile-drawer-leave-active {
+  transition: transform 0.25s ease;
+}
+.mobile-drawer-enter-from,
+.mobile-drawer-leave-to {
+  transform: translateX(-100%);
+}
+</style>

@@ -345,6 +345,10 @@
       "hotList": "Hot List",
       "sale": "Sale"
     },
+    "mobile": {
+      "signIn": "Sign in / Sign Up",
+      "close": "Close menu"
+    },
     "actions": {
       "menu": "Open menu",
       "search": "Search",
