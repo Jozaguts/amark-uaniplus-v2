@@ -199,7 +199,7 @@ function pagePath(page: number): RouteLocationRaw {
 <template>
   <main class="page mx-auto w-full max-w-[1344px] px-[20px] pb-[80px] pt-[28px] lg:px-0">
     <div class="container mx-auto grid grid-cols-12 gap-2">
-      <div class="col-span-3">
+      <div class="col-span-12 md: col-span-3">
         <nav
             class="mb-4 mt-4 text-[12px]  leading-8 text-[#303030]"
             aria-label="Breadcrumb"
@@ -222,12 +222,12 @@ function pagePath(page: number): RouteLocationRaw {
             >/</span>
           </template>
         </nav>
-        <h1 class="mt-[34px] text-[25px] font-semibold uppercase tracking-[0.16em]">
+        <h1 class="mt-8 mb-4 text-[25px] font-semibold uppercase tracking-[0.16em]">
           {{ categoryTitle }}
         </h1>
         <CatalogSidebar :groups="sidebarGroups" />
       </div>
-      <div class="col-span-9">
+      <div class="col-span-12 md:col-span-9">
         <div class="mt-[29px] flex flex-col gap-[48px] lg:flex-row">
           <section class="min-w-0 flex-1">
             <CatalogFilterBar
