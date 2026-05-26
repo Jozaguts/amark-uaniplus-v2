@@ -19,12 +19,12 @@ function productText(value?: string | null, key?: string): string {
   <article class="group relative text-center">
     <button
       type="button"
-      class="absolute right-[18px] top-[18px] z-10 grid size-[32px] place-items-center rounded-full border border-[#e4e4e4] bg-white text-black"
+      class="absolute right-4 top-4 z-10 grid size-8 place-items-center rounded-full border border-[#e4e4e4] bg-white text-black"
       :aria-label="$t('catalog.category.filters.favorite')"
     >
       <Icon
-        name="lucide:heart"
-        class="size-[18px]"
+        name="icon:heart"
+        class="size-4.5"
       />
     </button>
 
@@ -37,13 +37,12 @@ function productText(value?: string | null, key?: string): string {
           :src="product.image"
           :srcset="product.srcset"
           :alt="productText(product.alt, product.altKey)"
-          class="h-full w-full object-contain object-bottom"
+          class="h-full w-full   object-[2/3]"
           loading="lazy"
           width="576"
           height="864"
         >
-
-        <span class="absolute bottom-[105px] left-1/2 hidden h-[34px] w-[160px] -translate-x-1/2 items-center justify-center border border-[#d6d6d6] bg-white text-[13px] font-semibold uppercase tracking-[0.16em] group-hover:flex">
+        <span class="absolute bottom-26.25 left-1/2 hidden h-8.5 w-40 -translate-x-1/2 items-center justify-center border border-[#d6d6d6] bg-white text-[13px] font-semibold uppercase tracking-[0.16em] group-hover:flex">
           {{ $t('catalog.category.filters.quickView') }}
         </span>
       </div>

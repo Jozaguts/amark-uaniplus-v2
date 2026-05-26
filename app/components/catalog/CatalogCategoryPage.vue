@@ -199,7 +199,7 @@ function pagePath(page: number): RouteLocationRaw {
 <template>
   <main class="page mx-auto w-full max-w-[1344px] px-[20px] pb-[80px] pt-[28px] lg:px-0">
     <div class="container mx-auto grid grid-cols-12 gap-2">
-      <div class="col-span-12 md: col-span-3">
+      <div class="col-span-12 md:col-span-3" >
         <nav
             class="mb-4 mt-4 text-[12px]  leading-8 text-[#303030]"
             aria-label="Breadcrumb"
