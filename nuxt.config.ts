@@ -89,6 +89,12 @@ export default defineNuxtConfig({
     '/es/categories/**': { ssr: false },
     '/:section/product': { ssr: false },
     '/es/:section/product': { ssr: false },
+    '/women/**': { ssr: false },
+    '/es/women/**': { ssr: false },
+    '/men/**': { ssr: false },
+    '/es/men/**': { ssr: false },
+    '/pet/**': { ssr: false },
+    '/es/pet/**': { ssr: false },
   },
 
   nitro: {

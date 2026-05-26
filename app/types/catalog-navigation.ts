@@ -32,6 +32,7 @@ export interface CatalogNavigationMenu {
 
 export interface CatalogNavigationColumn {
   title: string
+  url?: string
   items?: CatalogNavigationMenuLink[]
   groups?: CatalogNavigationMenuLink[][]
 }

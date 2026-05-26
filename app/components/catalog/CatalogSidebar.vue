@@ -26,7 +26,8 @@ function toggleGroup(title: string): void {
         :key="group.title"
         class="mb-[24px]"
       >
-        <h2 class="border-b border-[#eaeaea] pb-[8px] text-[13px] font-semibold uppercase leading-none tracking-[0.08em]">
+        <h2
+            class="border-b border-[#eaeaea] pb-2 text-[13px] font-semibold uppercase leading-none tracking-[0.08em] mt-2">
           {{ group.title }}
         </h2>
 

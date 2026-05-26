@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MegaMenu from '~/components/header/MegaMenu.vue'
-import type { CatalogNavigationItem } from '~/types/catalog-navigation'
+import type { CatalogNavigationColumn, CatalogNavigationItem } from '~/types/catalog-navigation'
 
 const route = useRoute()
 const localePath = useLocalePath()
@@ -14,16 +14,14 @@ const isMobileMenuOpen = shallowRef(false)
 const mobileActiveMainItem = shallowRef<CatalogNavigationItem | null>(null)
 const logoutPending = shallowRef(false)
 const userMenuRef = shallowRef<HTMLElement | null>(null)
-const { items: navItems, menuForItem } = useCatalogNavigationTree()
+const { items: navItems, menuForItem, findByUrl } = useCatalogNavigationTree()
 
 function normalizePath(path: string): string {
   return path.replace(/^\/(en|es)(?=\/)/, '').replace(/\/$/, '') || '/'
 }
 
-function normalizeCategoryPath(path: string): string {
-  return normalizePath(path)
-    .replace(/^\/+/, '')
-    .replace(/^categories\//, '')
+function normalizeUrlPath(url: string): string {
+  return url.replace(/^\/+/, '').replace(/\/+$/, '')
 }
 
 function itemKey(item: CatalogNavigationItem): string {
@@ -44,16 +42,27 @@ function isActiveNavigationItem(item: CatalogNavigationItem): boolean {
   return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`)
 }
 
-function subNavigationItemClass(item: CatalogNavigationItem): string {
-  const isActive = activeMegaMenuKey.value === itemKey(item) || isActiveNavigationItem(item)
+function isActiveColumn(column: CatalogNavigationColumn): boolean {
+  if (!column.url) return false
+  const currentPath = normalizePath(route.path)
+  const colPath = normalizePath(column.url)
+  return currentPath === colPath || currentPath.startsWith(`${colPath}/`)
+}
+
+function subNavigationItemClass(column: CatalogNavigationColumn): string {
+  const isActive = activeMegaMenuKey.value === column.url || isActiveColumn(column)
 
   return isActive
     ? 'border-white md:border-black text-white md:text-black'
     : 'border-transparent text-white md:text-black'
 }
 
-function hasChildren(item: CatalogNavigationItem): boolean {
-  return Boolean(item.children?.length)
+function columnHasMenu(column: CatalogNavigationColumn): boolean {
+  if (!column.url) return false
+  const item = findByUrl(column.url)
+  if (!item) return false
+  const menu = menuForItem(item)
+  return Boolean(menu?.columns?.length || menu?.images?.length || activeMainItem.value?.menu?.images?.length)
 }
 
 const nextLocale = computed(() => locale.value === 'es' ? 'en' : 'es')
@@ -66,25 +75,23 @@ const activeMainItem = computed(() => {
   return navItems.value.find(isActiveNavigationItem) ?? navItems.value[0] ?? null
 })
 
-const subNavigationItems = computed(() => activeMainItem.value?.children ?? [])
+const subNavigationItems = computed<CatalogNavigationColumn[]>(() => activeMainItem.value?.menu?.columns ?? [])
 
-const mobileSubNavigationItems = computed(() => mobileActiveMainItem.value?.children ?? [])
+const mobileSubNavigationItems = computed<CatalogNavigationColumn[]>(() => mobileActiveMainItem.value?.menu?.columns ?? [])
 
 const forcedMegaMenuValue = computed(() => {
   const rawValue = route.query.nav ?? route.query.menu ?? route.query.activeNav
   const value = Array.isArray(rawValue) ? rawValue[0] : rawValue
 
-  return typeof value === 'string' ? normalizeCategoryPath(value) : ''
+  return typeof value === 'string' ? normalizeUrlPath(value) : ''
 })
 
 const isMegaMenuForced = computed(() => Boolean(forcedMegaMenuValue.value))
 
 const activeMegaMenu = computed(() => {
-  const item = subNavigationItems.value.find(navItem => itemKey(navItem) === activeMegaMenuKey.value)
-
-  if (!item)
-    return null
-
+  if (!activeMegaMenuKey.value) return null
+  const item = findByUrl(activeMegaMenuKey.value)
+  if (!item) return null
   return menuForItem(item)
 })
 
@@ -94,39 +101,58 @@ const activeMegaMenuImages = computed(() => {
     : activeMainItem.value?.menu?.images ?? []
 })
 
-function openMegaMenu(item: CatalogNavigationItem): void {
+function openMegaMenu(column: CatalogNavigationColumn): void {
+  cancelMegaMenuClose()
+  if (!column.url) {
+    activeMegaMenuKey.value = null
+    return
+  }
+  const item = findByUrl(column.url)
+  if (!item) {
+    activeMegaMenuKey.value = null
+    return
+  }
   const menu = menuForItem(item)
   const hasMenuContent = Boolean(menu?.columns?.length || menu?.images?.length || activeMainItem.value?.menu?.images?.length)
-
-  activeMegaMenuKey.value = hasChildren(item) && hasMenuContent ? itemKey(item) : null
+  activeMegaMenuKey.value = hasMenuContent ? column.url : null
 }
 
-function matchesForcedMegaMenu(item: CatalogNavigationItem): boolean {
+function matchesForcedMegaMenuColumn(column: CatalogNavigationColumn): boolean {
   const forcedValue = forcedMegaMenuValue.value
-
-  if (!forcedValue)
-    return false
-
-  return [
-    item.slug,
-    item.path,
-    item.url,
-  ].some(value => normalizeCategoryPath(value) === forcedValue || normalizeCategoryPath(value).endsWith(`/${forcedValue}`))
+  if (!forcedValue || !column.url) return false
+  const normalized = normalizeUrlPath(column.url)
+  return normalized === forcedValue || normalized.endsWith(`/${forcedValue}`)
 }
 
-function toggleMegaMenu(item: CatalogNavigationItem): void {
-  if (activeMegaMenuKey.value === itemKey(item)) {
+function toggleMegaMenu(column: CatalogNavigationColumn): void {
+  if (activeMegaMenuKey.value === column.url) {
     closeMegaMenu()
     return
   }
 
-  openMegaMenu(item)
+  openMegaMenu(column)
+}
+
+let megaMenuCloseTimer: ReturnType<typeof setTimeout> | null = null
+
+function scheduleMegaMenuClose(): void {
+  if (isMegaMenuForced.value) return
+  megaMenuCloseTimer = setTimeout(() => {
+    activeMegaMenuKey.value = null
+    megaMenuCloseTimer = null
+  }, 150)
+}
+
+function cancelMegaMenuClose(): void {
+  if (megaMenuCloseTimer) {
+    clearTimeout(megaMenuCloseTimer)
+    megaMenuCloseTimer = null
+  }
 }
 
 function closeMegaMenu(): void {
-  if (isMegaMenuForced.value)
-    return
-
+  cancelMegaMenuClose()
+  if (isMegaMenuForced.value) return
   activeMegaMenuKey.value = null
 }
 
@@ -169,10 +195,10 @@ watch(
       return
     }
 
-    const item = subNavigationItems.value.find(matchesForcedMegaMenu)
+    const column = subNavigationItems.value.find(matchesForcedMegaMenuColumn)
 
-    if (item)
-      openMegaMenu(item)
+    if (column)
+      openMegaMenu(column)
   },
   { immediate: true },
 )
@@ -287,45 +313,49 @@ onMounted(() => {
       <div
         class="hidden lg:block"
         @mouseenter.stop
-        @mouseleave="closeMegaMenu"
+        @mouseleave="scheduleMegaMenuClose"
       >
         <div
             class="xs:hidden overflow-x-auto mx-auto scrollbar-thin max-w-325">
           <nav
               class="flex h-[41px] min-w-max items-center justify-center gap-[34px] text-[15px] font-bold uppercase leading-none tracking-[0.16em] mt-8">
             <div
-              v-for="item in subNavigationItems"
-              :key="itemKey(item)"
+              v-for="column in subNavigationItems"
+              :key="column.url ?? column.title"
               class="flex h-full items-center uppercase"
-              @mouseenter="openMegaMenu(item)"
+              @mouseenter="openMegaMenu(column)"
             >
               <button
-                v-if="hasChildren(item)"
+                v-if="columnHasMenu(column)"
                 type="button"
                 class="whitespace-nowrap border-b-2 pb-2 pt-2 uppercase"
-                :class="subNavigationItemClass(item)"
-                @click="toggleMegaMenu(item)"
+                :class="subNavigationItemClass(column)"
+                @click="toggleMegaMenu(column)"
               >
-                {{ item.name }}
+                {{ column.title }}
               </button>
 
               <NuxtLink
                 v-else
-                :to="linkTarget(item.url)"
+                :to="linkTarget(column.url ?? '/')"
                 class="whitespace-nowrap border-b-2 pb-2 pt-2 uppercase"
-                :class="subNavigationItemClass(item)"
+                :class="subNavigationItemClass(column)"
               >
-                {{ item.name }}
+                {{ column.title }}
               </NuxtLink>
             </div>
           </nav>
         </div>
 
-        <MegaMenu
-          v-if="activeMegaMenu"
-          :columns="activeMegaMenu.columns"
-          :images="activeMegaMenuImages"
-        />
+        <Transition name="mega-menu">
+          <MegaMenu
+            v-if="activeMegaMenu"
+            :columns="activeMegaMenu.columns"
+            :images="activeMegaMenuImages"
+            @mouseenter="cancelMegaMenuClose"
+            @mouseleave="scheduleMegaMenuClose"
+          />
+        </Transition>
       </div>
 
       <div class="lg:hidden">
@@ -420,24 +450,24 @@ onMounted(() => {
         <div class="bg-black">
           <nav class="container mx-auto flex h-10.25 items-center gap-6.5 overflow-x-auto px-5 text-[14px] font-bold uppercase leading-none tracking-[0.15em] text-white">
             <template
-              v-for="item in subNavigationItems"
-              :key="itemKey(item)"
+              v-for="column in subNavigationItems"
+              :key="column.url ?? column.title"
             >
               <span
-                v-if="hasChildren(item)"
+                v-if="columnHasMenu(column)"
                 class="shrink-0 whitespace-nowrap border-b-2 pb-2 pt-2"
-                :class="subNavigationItemClass(item)"
+                :class="subNavigationItemClass(column)"
               >
-                {{ item.name }}
+                {{ column.title }}
               </span>
 
               <NuxtLink
                 v-else
-                :to="linkTarget(item.url)"
+                :to="linkTarget(column.url ?? '/')"
                 class="shrink-0 whitespace-nowrap border-b-2 pb-2 pt-2"
-                :class="subNavigationItemClass(item)"
+                :class="subNavigationItemClass(column)"
               >
-                {{ item.name }}
+                {{ column.title }}
               </NuxtLink>
             </template>
           </nav>
@@ -445,7 +475,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="h-[99px] lg:h-[104px]" aria-hidden="true" />
+    <div class="h-[99px] lg:h-[136px]" aria-hidden="true" />
   </header>
 
   <Teleport to="body">
@@ -501,14 +531,14 @@ onMounted(() => {
 
         <!-- Sub-nav items -->
         <ul class="flex-1 overflow-y-auto divide-y divide-[#efefef]">
-          <li v-for="subItem in mobileSubNavigationItems" :key="itemKey(subItem)">
+          <li v-for="column in mobileSubNavigationItems" :key="column.url ?? column.title">
             <NuxtLink
-              :to="linkTarget(subItem.url)"
+              :to="linkTarget(column.url ?? '/')"
               class="flex items-center justify-between px-4 py-3.5 text-[14px] text-[#222]"
               @click="isMobileMenuOpen = false"
             >
-              <span>{{ subItem.name }}</span>
-              <Icon v-if="hasChildren(subItem)" name="ph:caret-right" class="size-[14px] shrink-0 text-[#8c8c8c]" />
+              <span>{{ column.title }}</span>
+              <Icon v-if="columnHasMenu(column)" name="ph:caret-right" class="size-[14px] shrink-0 text-[#8c8c8c]" />
             </NuxtLink>
           </li>
         </ul>
@@ -534,5 +564,17 @@ onMounted(() => {
 .mobile-drawer-enter-from,
 .mobile-drawer-leave-to {
   transform: translateX(-100%);
+}
+
+.mega-menu-enter-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.mega-menu-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.mega-menu-enter-from,
+.mega-menu-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
 }
 </style>

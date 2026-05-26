@@ -60,6 +60,10 @@ function normalizeCategoryPath(path: string): string {
     .replace(/\/+$/, '')
 }
 
+function normalizeUrl(url: string): string {
+  return url.replace(/^\/+/, '').replace(/\/+$/, '')
+}
+
 function findItemByPath(items: CatalogNavigationItem[], path: string): CatalogNavigationItem | null {
   const normalizedPath = normalizeCategoryPath(path)
 
@@ -68,6 +72,22 @@ function findItemByPath(items: CatalogNavigationItem[], path: string): CatalogNa
       return item
 
     const child = findItemByPath(item.children ?? [], normalizedPath)
+
+    if (child)
+      return child
+  }
+
+  return null
+}
+
+function findItemByUrl(items: CatalogNavigationItem[], url: string): CatalogNavigationItem | null {
+  const normalizedUrl = normalizeUrl(url)
+
+  for (const item of items) {
+    if (normalizeUrl(item.url) === normalizedUrl)
+      return item
+
+    const child = findItemByUrl(item.children ?? [], url)
 
     if (child)
       return child
@@ -99,9 +119,14 @@ export function useCatalogNavigationTree() {
     return findItemByPath(items.value, path)
   }
 
+  function findByUrl(url: string): CatalogNavigationItem | null {
+    return findItemByUrl(items.value, url)
+  }
+
   return {
     error,
     findByPath,
+    findByUrl,
     items,
     menuForItem,
     pending,

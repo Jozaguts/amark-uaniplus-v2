@@ -26,17 +26,36 @@ const imageSpanClass = computed(() => {
   return 'lg:col-span-6'
 })
 
+function itemChunks(items: CatalogNavigationMenuLink[] | undefined): CatalogNavigationMenuLink[][] {
+  if (!items?.length) return []
+  if (items.length <= 12) return [items]
+  return [items.slice(0, 12), items.slice(12, 20)]
+}
+
+function columnNeedsSplit(col: CatalogNavigationColumn): boolean {
+  return (col.items?.length ?? 0) > 12
+}
+
 function columnSpanClass(column: CatalogNavigationColumn): string {
-  if (props.columns.length === 2 && column.groups)
-    return 'lg:col-span-8'
+  const isSplit = columnNeedsSplit(column)
+  const splitCount = props.columns.filter(columnNeedsSplit).length
+  const n = props.columns.length
 
-  if (props.columns.length === 2)
+  if (splitCount === 0) {
+    if (n === 2 && column.groups) return 'lg:col-span-8'
+    if (n === 2) return 'lg:col-span-4'
+    if (n === 4) return 'lg:col-span-3'
     return 'lg:col-span-4'
+  }
 
-  if (props.columns.length === 4)
-    return 'lg:col-span-3'
-
-  return 'lg:col-span-4'
+  // Una columna "split" toma el doble del ancho de una normal.
+  // n=2: split=8 regular=4  → 8+4=12 ✓
+  // n=3: split=6 regular=3  → 6+3+3=12 ✓
+  // n=4: split=6 regular=2  → 6+2+2+2=12 ✓
+  if (n === 2) return isSplit ? 'lg:col-span-8' : 'lg:col-span-4'
+  if (n === 3) return isSplit ? 'lg:col-span-6' : 'lg:col-span-3'
+  if (n === 4) return isSplit ? 'lg:col-span-6' : 'lg:col-span-2'
+  return isSplit ? 'lg:col-span-6' : 'lg:col-span-3'
 }
 
 function linkTarget(url: string): string {
@@ -63,9 +82,10 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
 </script>
 
 <template>
-  <div class="fixed flex justify-center items-center inset-x-0 top-26 border-b border-[#f4f4f4] bg-white text-left normal-case tracking-normal">
+  <div
+      class="fixed flex justify-center items-center inset-x-0 top-34 border-b border-[#f4f4f4] bg-white text-left normal-case tracking-normal pt-4">
     <div class="mx-72 overflow-x-auto scrollbar-thin h-100">
-      <div class="grid grid-cols-12 gap-4 h-full min-w-[1320px]">
+      <div class="grid grid-cols-12 gap-4 h-full min-w-330">
         <div
           class="col-span-12"
           :class="textSpanClass"
@@ -103,7 +123,7 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
                       {{ item.label }}
                       <span
                         v-if="item.badge"
-                        class="ml-[5px] inline-flex rounded-full bg-[#e5e5e5] px-[6px] py-[1px] align-middle text-[6px] font-bold not-italic leading-none text-black"
+                        class="ml-[5px] inline-flex rounded-full bg-[#e5e5e5] px-2 px-px align-middle text-[6px] font-bold not-italic leading-none text-black"
                       >
                         {{ item.badge }}
                       </span>
@@ -118,7 +138,7 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
                       {{ item.label }}
                       <span
                         v-if="item.badge"
-                        class="ml-[5px] inline-flex rounded-full bg-[#e5e5e5] px-[6px] py-[1px] align-middle text-[6px] font-bold not-italic leading-none text-black"
+                        class="ml-[5px] inline-flex rounded-full bg-[#e5e5e5] px-2 px-px align-middle text-[6px] font-bold not-italic leading-none text-black"
                       >
                         {{ item.badge }}
                       </span>
@@ -145,63 +165,68 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
                 </ul>
               </div>
 
-              <ul
+              <!-- items: se parte en 2 sub-columnas automáticamente si hay más de 12 -->
+              <div
                 v-else
-                class="mb-0 space-y-0"
+                :class="itemChunks(column.items).length > 1 ? 'grid grid-cols-2 gap-x-4' : ''"
               >
-                <li
-                  v-for="item in column.items"
-                  :key="linkKey(item)"
-                  class=""
+                <ul
+                  v-for="(chunk, chunkIdx) in itemChunks(column.items)"
+                  :key="chunkIdx"
+                  class="mb-0 space-y-0"
                 >
-                  <span
-                    v-if="hasChildren(item)"
-                    class="text-[14px] font-normal  text-[#6e6e6e]"
-                    :class="item.italic && 'italic'"
+                  <li
+                    v-for="item in chunk"
+                    :key="linkKey(item)"
                   >
-                    {{ item.label }}
                     <span
-                      v-if="item.badge"
-                      class="ml-[5px] inline-flex rounded-full bg-[#e5e5e5] px-[6px] py-[1px] align-middle text-[6px] font-bold not-italic leading-none text-black"
+                      v-if="hasChildren(item)"
+                      class="text-[14px] font-normal text-[#6e6e6e]"
+                      :class="item.italic && 'italic'"
                     >
-                      {{ item.badge }}
-                    </span>
-                  </span>
-
-                  <NuxtLink
-                    v-else
-                    :to="linkTarget(item.url)"
-                    class="text-[14px] font-normal  text-[#6e6e6e]  hover:underline "
-                    :class="item.italic && 'italic'"
-                  >
-                    {{ item.label }}
-                    <span
-                      v-if="item.badge"
-                      class="ml-[5px] inline-flex rounded-full bg-[#e5e5e5] px-[6px] py-[1px] align-middle text-[6px] font-bold not-italic leading-none text-black"
-                    >
-                      {{ item.badge }}
-                    </span>
-                  </NuxtLink>
-
-                  <ul
-                    v-if="item.children?.length"
-                    class="ml-[10px] mt-[2px] space-y-0"
-                  >
-                    <li
-                      v-for="child in item.children"
-                      :key="linkKey(child)"
-                      class=""
-                    >
-                      <NuxtLink
-                        :to="linkTarget(child.url)"
-                        class="text-[13px] font-normal  text-[#8a8a8a]"
+                      {{ item.label }}
+                      <span
+                        v-if="item.badge"
+                        class="ml-[5px] inline-flex rounded-full bg-[#e5e5e5] px-2 px-px align-middle text-[6px] font-bold not-italic leading-none text-black"
                       >
-                        {{ child.label }}
-                      </NuxtLink>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
+                        {{ item.badge }}
+                      </span>
+                    </span>
+
+                    <NuxtLink
+                      v-else
+                      :to="linkTarget(item.url)"
+                      class="text-[14px] font-normal text-[#6e6e6e] hover:underline"
+                      :class="item.italic && 'italic'"
+                    >
+                      {{ item.label }}
+                      <span
+                        v-if="item.badge"
+                        class="ml-[5px] inline-flex rounded-full bg-[#e5e5e5] px-2 px-px align-middle text-[6px] font-bold not-italic leading-none text-black"
+                      >
+                        {{ item.badge }}
+                      </span>
+                    </NuxtLink>
+
+                    <ul
+                      v-if="item.children?.length"
+                      class="ml-[10px] mt-[2px] space-y-0"
+                    >
+                      <li
+                        v-for="child in item.children"
+                        :key="linkKey(child)"
+                      >
+                        <NuxtLink
+                          :to="linkTarget(child.url)"
+                          class="text-[13px] font-normal text-[#8a8a8a]"
+                        >
+                          {{ child.label }}
+                        </NuxtLink>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
             </section>
           </div>
         </div>

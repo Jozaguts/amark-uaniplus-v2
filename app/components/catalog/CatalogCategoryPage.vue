@@ -198,92 +198,93 @@ function pagePath(page: number): RouteLocationRaw {
 
 <template>
   <main class="page mx-auto w-full max-w-[1344px] px-[20px] pb-[80px] pt-[28px] lg:px-0">
-    <div class="container mx-auto">
-      <nav
-        class="mb-4 mt-4 text-[12px] leading-8 text-[#303030]"
-        aria-label="Breadcrumb"
-      >
-        <template
-          v-for="(item, index) in breadcrumbItems"
-          :key="item.path"
+    <div class="container mx-auto grid grid-cols-12 gap-2">
+      <div class="col-span-3">
+        <nav
+            class="mb-4 mt-4 text-[12px]  leading-8 text-[#303030]"
+            aria-label="Breadcrumb"
         >
-          <NuxtLink
-            v-if="index < breadcrumbItems.length - 1"
-            :to="linkTarget(item.url)"
-            class="underline"
+          <template
+              v-for="(item, index) in breadcrumbItems"
+              :key="item.path"
           >
-            {{ item.name }}
-          </NuxtLink>
-          <span v-else>{{ item.name }}</span>
-          <span
-            v-if="index < breadcrumbItems.length - 1"
-            class="px-[5px]"
-          >/</span>
-        </template>
-      </nav>
-
-      <h1 class="mt-[34px] text-[25px] font-semibold uppercase tracking-[0.16em]">
-        {{ categoryTitle }}
-      </h1>
-
-      <div class="mt-[29px] flex flex-col gap-[48px] lg:flex-row">
-        <CatalogSidebar :groups="sidebarGroups" />
-
-        <section class="min-w-0 flex-1">
-          <CatalogFilterBar
-            :filters="payload?.filters"
-            :pagination="payload?.pagination"
-            :sort="payload?.sort"
-          />
-
-          <p class="sr-only">
-            {{ $t('catalog.category.active') }}: {{ selectedCategory }}
-          </p>
-
-          <p
-            v-if="pending"
-            class="mt-[24px] text-[14px] text-[#606060]"
-          >
-            {{ t('catalog.category.loading') }}
-          </p>
-
-          <p
-            v-else-if="error"
-            class="mt-[24px] text-[14px] text-[#606060]"
-          >
-            {{ t('catalog.category.error') }}
-          </p>
-
-          <div
-            v-else-if="products.length"
-            class="mt-[24px]"
-          >
-            <CatalogProductGrid :products="products" />
-
-            <nav
-              v-if="paginationPages.length"
-              class="mt-10 flex items-center justify-center gap-2"
-              aria-label="Pagination"
+            <NuxtLink
+                v-if="index < breadcrumbItems.length - 1"
+                :to="linkTarget(item.url)"
+                class="underline"
             >
-              <NuxtLink
-                v-for="page in paginationPages"
-                :key="page"
-                :to="pagePath(page)"
-                class="flex size-9 items-center justify-center border border-black text-[13px]"
-                :class="page === payload?.pagination.current_page ? 'bg-black text-white' : 'bg-white text-black'"
-              >
-                {{ page }}
-              </NuxtLink>
-            </nav>
-          </div>
+              {{ item.name }}
+            </NuxtLink>
+            <span v-else>{{ item.name }}</span>
+            <span
+                v-if="index < breadcrumbItems.length - 1"
+                class="px-[5px]"
+            >/</span>
+          </template>
+        </nav>
+        <h1 class="mt-[34px] text-[25px] font-semibold uppercase tracking-[0.16em]">
+          {{ categoryTitle }}
+        </h1>
+        <CatalogSidebar :groups="sidebarGroups" />
+      </div>
+      <div class="col-span-9">
+        <div class="mt-[29px] flex flex-col gap-[48px] lg:flex-row">
+          <section class="min-w-0 flex-1">
+            <CatalogFilterBar
+                :filters="payload?.filters"
+                :pagination="payload?.pagination"
+                :sort="payload?.sort"
+            />
 
-          <p
-            v-else
-            class="mt-[24px] text-[14px] text-[#606060]"
-          >
-            {{ t('catalog.category.empty') }}
-          </p>
-        </section>
+            <p class="sr-only">
+              {{ $t('catalog.category.active') }}: {{ selectedCategory }}
+            </p>
+
+            <p
+                v-if="pending"
+                class="mt-[24px] text-[14px] text-[#606060]"
+            >
+              {{ t('catalog.category.loading') }}
+            </p>
+
+            <p
+                v-else-if="error"
+                class="mt-[24px] text-[14px] text-[#606060]"
+            >
+              {{ t('catalog.category.error') }}
+            </p>
+
+            <div
+                v-else-if="products.length"
+                class="mt-[24px]"
+            >
+              <CatalogProductGrid :products="products" />
+
+              <nav
+                  v-if="paginationPages.length"
+                  class="mt-10 flex items-center justify-center gap-2"
+                  aria-label="Pagination"
+              >
+                <NuxtLink
+                    v-for="page in paginationPages"
+                    :key="page"
+                    :to="pagePath(page)"
+                    class="flex size-9 items-center justify-center border border-black text-[13px]"
+                    :class="page === payload?.pagination.current_page ? 'bg-black text-white' : 'bg-white text-black'"
+                >
+                  {{ page }}
+                </NuxtLink>
+              </nav>
+            </div>
+
+            <p
+                v-else
+                class="mt-[24px] text-[14px] text-[#606060]"
+            >
+              {{ t('catalog.category.empty') }}
+            </p>
+          </section>
+        </div>
       </div>
     </div>
   </main>

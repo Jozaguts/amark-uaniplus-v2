@@ -1,8 +1,8 @@
 import type { RouteLocationRaw } from 'vue-router'
 
-export type CatalogSection = 'women' | 'men' | 'kids' | 'dogs' | 'cats'
+export type CatalogSection = 'women' | 'men' | 'kids' | 'dogs' | 'cats' | 'pet'
 
-const catalogSections = new Set<CatalogSection>(['women', 'men', 'kids', 'dogs', 'cats'])
+const catalogSections = new Set<CatalogSection>(['women', 'men', 'kids', 'dogs', 'cats', 'pet'])
 
 export function slugFromKey(key: string): string {
   const parts = key.split('.')
