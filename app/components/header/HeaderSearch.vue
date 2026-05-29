@@ -33,10 +33,6 @@ function resultPath(result: { type: string, slug?: string, path?: string }): str
   return localePath('/')
 }
 
-function handleResultClick() {
-  clear()
-}
-
 function handleViewAll() {
   navigateTo(localePath('/search?q=' + encodeURIComponent(query.value)))
   clear()
@@ -97,7 +93,7 @@ function handleViewAll() {
             :key="`${result.type}-${result.slug ?? result.path}`"
             :to="resultPath(result)"
             class="flex items-center gap-3 border-b border-[#f0f0f0] px-4 py-3 transition-colors hover:bg-[#f9f9f9]"
-            @click="handleResultClick"
+            @click="clear"
           >
             <!-- Product row -->
             <template v-if="result.type === 'product'">
@@ -149,7 +145,7 @@ function handleViewAll() {
         </template>
 
         <!-- Empty state -->
-        <template v-else-if="isEmpty">
+        <template v-else>
           <div class="px-4 py-6 text-center text-[13px] text-[#888]">
             {{ $t('search.empty', { q: query }) }}
           </div>
