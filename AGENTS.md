@@ -8,7 +8,7 @@ Use the provided URL and screenshots as references. Do not copy protected assets
 
 ## Project Structure & Module Organization
 
-The current app entry is `app/app.vue`. Nuxt config lives in `nuxt.config.ts`, TypeScript settings in `tsconfig.json`, and static files in `public/`. Do not edit `.nuxt/` or `node_modules/`.
+The primary app layout is `app/layouts/default.vue` and pages live under `app/pages/` (Nuxt file-based routing). Nuxt config lives in `nuxt.config.ts`, TypeScript settings in `tsconfig.json`, and static files in `public/`. Do not edit `.nuxt/` or `node_modules/`.
 
 Follow Nuxt conventions:
 
@@ -27,6 +27,7 @@ Follow Nuxt conventions:
 - `pnpm build`: build for production.
 - `pnpm generate`: generate a static site.
 - `pnpm preview`: preview the production build after `pnpm build`.
+- `pnpm install` will also run the repository `postinstall` script which executes `nuxt prepare` (see `package.json`).
 
 ## Coding Style
 
