@@ -10,7 +10,7 @@ withDefaults(defineProps<{
 }>(), {
   activeAssetId: null,
   emptyMessage: 'No assets found.',
-  gridClass: 'grid grid-cols-2 gap-4',
+  gridClass: 'grid grid-cols-1 gap-4',
   itemClass: 'aspect-[4/5]',
 })
 

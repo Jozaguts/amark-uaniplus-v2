@@ -58,7 +58,7 @@ const emit = defineEmits<{
       <div class="space-y-4 pr-1">
         <div
           v-if="props.loading"
-          class="grid grid-cols-2 gap-4"
+          class="grid grid-cols-1 gap-4"
         >
           <ElSkeleton
             v-for="index in 6"
