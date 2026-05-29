@@ -24,6 +24,15 @@ export type EditorProductMockup = {
   height: number
 }
 
+export type EditorProductLifestyleMockup = {
+  viewId: string
+  src: string
+  width: number
+  height: number
+  previewColorId: string
+  previewColorHex: string
+}
+
 export type EditorProductPrintArea = {
   id: string
   label: string
@@ -88,6 +97,7 @@ export type EditorProductConfig = {
   techniques: EditorProductTechnique[]
   views: EditorProductView[]
   word_art: EditorWordArt
+  mockups?: EditorProductLifestyleMockup[]
 }
 
 export type EditorProductProvider = 'printful' | 'apliiq' | 'cj' | 'manual' | 'digital' | string
