@@ -1,0 +1,85 @@
+<h2>¿Dónde va la barra de búsqueda en el header?</h2>
+<p class="subtitle">El logo queda centrado. ¿Cuál posición prefieres para el search?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:12px;font-family:sans-serif;font-size:12px;">
+        <!-- Fila 1: nav | logo | login -->
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:6px 16px;border-bottom:1px solid #f0f0f0;">
+          <div style="font-size:10px;color:#888;">Women · Men · Kids</div>
+          <div style="font-weight:900;letter-spacing:4px;font-size:16px;">UANDI</div>
+          <div style="text-align:right;font-size:10px;color:#888;">🛒 Login</div>
+        </div>
+        <!-- Fila 2: search bar centrada -->
+        <div style="display:flex;justify-content:center;padding:8px 16px;border-bottom:1px solid #f0f0f0;">
+          <div style="display:flex;align-items:center;gap:6px;border:1px solid #d0d0d0;border-radius:20px;padding:5px 14px;width:60%;font-size:11px;color:#aaa;">
+            🔍 <span>Search products, categories...</span>
+          </div>
+        </div>
+        <!-- Fila 3: sub-nav -->
+        <div style="display:flex;justify-content:center;gap:16px;padding:6px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#555;">
+          <span>Clothing</span><span>Dresses</span><span>Shoes</span><span>Accessories</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Fila dedicada centrada</h3>
+      <p>El search ocupa su propia fila entre el logo y la sub-nav, ancho ~60%, centrado.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:12px;font-family:sans-serif;font-size:12px;">
+        <!-- Fila 1: search-left | logo | login-right -->
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:6px 16px;border-bottom:1px solid #f0f0f0;">
+          <div style="display:flex;align-items:center;gap:6px;border:1px solid #d0d0d0;border-radius:20px;padding:4px 12px;font-size:10px;color:#aaa;">
+            🔍 <span>Search...</span>
+          </div>
+          <div style="font-weight:900;letter-spacing:4px;font-size:16px;">UANDI</div>
+          <div style="text-align:right;font-size:10px;color:#888;">🛒 Login</div>
+        </div>
+        <!-- Fila 2: sub-nav -->
+        <div style="display:flex;justify-content:center;gap:16px;padding:6px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#555;">
+          <span>Clothing</span><span>Dresses</span><span>Shoes</span><span>Accessories</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Inline izquierda (reemplaza nav items)</h3>
+      <p>El search reemplaza los nav items (Women/Men/Kids) en la columna izquierda del grid existente. El logo y login no cambian de posición.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:12px;font-family:sans-serif;font-size:12px;">
+        <!-- Fila 1: nav items | logo | login + search icon -->
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:6px 16px;border-bottom:1px solid #f0f0f0;">
+          <div style="font-size:10px;color:#888;">Women · Men · Kids</div>
+          <div style="font-weight:900;letter-spacing:4px;font-size:16px;">UANDI</div>
+          <div style="text-align:right;font-size:10px;color:#888;display:flex;gap:8px;justify-content:flex-end;align-items:center;">
+            🔍 🛒 Login
+          </div>
+        </div>
+        <!-- Expandido al hacer click en 🔍 -->
+        <div style="background:#f9f9f9;padding:8px 16px;border-bottom:1px solid #f0f0f0;">
+          <div style="display:flex;align-items:center;gap:6px;border:1px solid #d0d0d0;border-radius:20px;padding:5px 14px;font-size:11px;color:#aaa;background:#fff;">
+            🔍 <span>Search products, categories...</span>
+          </div>
+        </div>
+        <!-- Fila 3: sub-nav -->
+        <div style="display:flex;justify-content:center;gap:16px;padding:6px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#555;">
+          <span>Clothing</span><span>Dresses</span><span>Shoes</span><span>Accessories</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Ícono en header, expande al hacer click</h3>
+      <p>Un ícono 🔍 en la barra de acciones (junto a cart y login). Al hacer click se expande una barra debajo.</p>
+    </div>
+  </div>
+
+</div>

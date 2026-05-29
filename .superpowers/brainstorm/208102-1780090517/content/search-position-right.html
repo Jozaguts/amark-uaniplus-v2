@@ -1,0 +1,58 @@
+<h2>¿Así queda el search a la derecha?</h2>
+<p class="subtitle">Logo centrado · nav items a la izquierda · search a la derecha (donde estaba el login)</p>
+
+<div class="mockup">
+  <div class="mockup-header">Header desktop — propuesta</div>
+  <div class="mockup-body">
+    <div style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;font-family:sans-serif;font-size:12px;">
+
+      <!-- Fila 1: nav-left | logo-center | search-right -->
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 24px;border-bottom:1px solid #f0f0f0;gap:16px;">
+
+        <!-- Izquierda: nav items (sin cambios) -->
+        <div style="display:flex;gap:14px;font-size:10px;font-weight:600;color:#6d6d6d;">
+          <span>Women</span><span>Men</span><span>Kids</span><span>Dogs</span>
+        </div>
+
+        <!-- Centro: logo (sin cambios) -->
+        <div style="font-weight:900;letter-spacing:4px;font-size:18px;text-align:center;">UANDI</div>
+
+        <!-- Derecha: search bar + cart + idioma (login desaparece aquí o se mueve) -->
+        <div style="display:flex;align-items:center;gap:10px;justify-content:flex-end;">
+          <!-- Search bar -->
+          <div style="display:flex;align-items:center;gap:6px;border:1px solid #d0d0d0;border-radius:20px;padding:5px 14px;font-size:11px;color:#aaa;flex:1;max-width:200px;">
+            🔍 <span>Buscar...</span>
+          </div>
+          <!-- Cart y login siguen aquí -->
+          <span style="color:#555;font-size:14px;">🛒</span>
+          <span style="font-size:10px;font-weight:700;">Login</span>
+        </div>
+      </div>
+
+      <!-- Fila 2: sub-nav (sin cambios) -->
+      <div style="display:flex;justify-content:center;gap:24px;padding:8px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#555;">
+        <span>Clothing</span><span>Dresses</span><span>Shoes</span><span>Accessories</span><span>Sale</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px;">
+  <p class="subtitle">¿Este layout es correcto? O dime cómo ajustarlo.</p>
+  <div class="options">
+    <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+      <div class="letter">✓</div>
+      <div class="content">
+        <h3>Sí, así queda bien</h3>
+        <p>Search a la derecha junto a cart y login, logo centrado, nav items a la izquierda sin cambios.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="no" onclick="toggleSelect(this)">
+      <div class="letter">✗</div>
+      <div class="content">
+        <h3>No, ajustar</h3>
+        <p>Dime en el terminal qué cambiar.</p>
+      </div>
+    </div>
+  </div>
+</div>

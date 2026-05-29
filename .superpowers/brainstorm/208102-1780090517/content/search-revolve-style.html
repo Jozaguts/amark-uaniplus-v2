@@ -1,0 +1,64 @@
+<h2>Layout estilo Revolve</h2>
+<p class="subtitle">Una sola fila: nav items · logo centrado · [search input + iconos + login] a la derecha</p>
+
+<div class="mockup">
+  <div class="mockup-header">Header desktop</div>
+  <div class="mockup-body">
+    <div style="background:#fff;border:1px solid #e8e8e8;border-radius:4px;font-family:sans-serif;font-size:12px;">
+
+      <!-- Fila 1: nav-left | logo-center | search+icons-right -->
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 24px;border-bottom:1px solid #f0f0f0;">
+
+        <!-- Izquierda: nav tabs -->
+        <div style="display:flex;gap:16px;font-size:11px;font-weight:600;color:#888;">
+          <span style="color:#000;border-bottom:1.5px solid #000;padding-bottom:2px;">Women</span>
+          <span>Men</span><span>Kids</span><span>Dogs</span>
+        </div>
+
+        <!-- Centro: logo -->
+        <div style="font-weight:900;letter-spacing:5px;font-size:20px;text-align:center;">UANDI</div>
+
+        <!-- Derecha: search input + iconos + login, todo inline -->
+        <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;">
+          <!-- Search input con ícono -->
+          <div style="display:flex;align-items:center;border-bottom:1px solid #ccc;padding:3px 6px;gap:6px;min-width:140px;">
+            <span style="font-size:11px;color:#aaa;flex:1;">Search</span>
+            <span style="font-size:14px;color:#555;">🔍</span>
+          </div>
+          <!-- Wishlist / favoritos (opcional) -->
+          <span style="font-size:16px;color:#555;">♡</span>
+          <!-- Cart -->
+          <span style="font-size:16px;color:#555;position:relative;">🛒</span>
+          <!-- Idioma -->
+          <span style="font-size:10px;font-weight:700;display:flex;align-items:center;gap:3px;color:#555;">🌐 ES</span>
+          <!-- Login -->
+          <span style="font-size:11px;font-weight:700;color:#000;border-bottom:1px solid #000;padding-bottom:1px;">Login</span>
+        </div>
+      </div>
+
+      <!-- Fila 2: sub-nav categories -->
+      <div style="display:flex;justify-content:center;gap:28px;padding:10px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#333;">
+        <span>New Today</span><span>Clothing</span><span>Dresses</span><span>Shoes</span><span>Accessories</span><span>Sale</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:20px;">
+  <div class="options">
+    <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+      <div class="letter">✓</div>
+      <div class="content">
+        <h3>Sí, así es</h3>
+        <p>Search input inline con los iconos y login, todo en la columna derecha del header.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="no" onclick="toggleSelect(this)">
+      <div class="letter">✗</div>
+      <div class="content">
+        <h3>No, ajustar</h3>
+        <p>Dime en el terminal qué cambiar.</p>
+      </div>
+    </div>
+  </div>
+</div>
