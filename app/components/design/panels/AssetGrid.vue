@@ -11,7 +11,7 @@ withDefaults(defineProps<{
   activeAssetId: null,
   emptyMessage: 'No assets found.',
   gridClass: 'grid grid-cols-1 gap-4',
-  itemClass: 'aspect-[4/5]',
+  itemClass: 'aspect-[2/3]',
 })
 
 const emit = defineEmits<{
@@ -28,11 +28,11 @@ const emit = defineEmits<{
       v-for="asset in assets"
       :key="asset.id"
       type="button"
-      class="group flex w-full flex-col items-start gap-2 text-left"
+      class="group flex w-full flex-col items-start gap-2 text-left max-w-[150px]"
       @click="emit('select-asset', asset.id)"
     >
       <div
-        class="design-checkerboard flex w-full items-center justify-center overflow-hidden rounded-[6px] border border-[#efefeb]"
+        class="design-checkerboard flex w-full max-h-[200px] items-center justify-center overflow-hidden rounded-[6px] border border-[#efefeb]"
         :class="[itemClass, asset.id === activeAssetId ? 'ring-2 ring-primary ring-offset-2 ring-offset-white' : '']"
       >
         <img
