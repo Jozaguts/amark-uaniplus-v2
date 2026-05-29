@@ -1,5 +1,11 @@
 {
   "welcome": "Bienvenido",
+  "search": {
+    "placeholder": "Buscar",
+    "viewAll": "Ver todos los resultados",
+    "empty": "Sin resultados para \"{q}\"",
+    "resultsTitle": "Resultados para \"{q}\""
+  },
   "auth": {
     "brand": "UANDI PLUS",
     "or": "O",
