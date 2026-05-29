@@ -2334,8 +2334,17 @@ useHead(() => ({
             </div>
 
             <div class="min-h-0 flex-1">
+              <DesignMockupPanel
+                v-if="activeTool === 'mockup'"
+                :active-mockup="activeLifestyleMockup"
+                :flat-mockup="activeMockup"
+                :print-area="activePrintArea"
+                :design-objects="activeDesignObjects"
+                :artwork-image-elements="artworkImageElements"
+                :active-view-id="activeViewId"
+              />
               <DesignUploadPanel
-                v-if="activeTool === 'upload'"
+                v-else-if="activeTool === 'upload'"
                 :history-assets="uploadHistoryAssets"
                 :uploaded-assets="uploadedAssets"
                 :active-uploaded-asset-id="activeUploadedAssetId"
