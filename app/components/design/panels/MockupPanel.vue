@@ -15,7 +15,7 @@ const props = defineProps<{
   activeViewId: string
 }>()
 
-const activeCanvas = ref<HTMLCanvasElement | null>(null)
+const compositeCanvas = ref<HTMLCanvasElement | null>(null)
 const compositeDataUrl = ref<string | null>(null)
 const isRendering = ref(false)
 
@@ -50,6 +50,7 @@ const renderComposite = async () => {
     const ctx = canvas.getContext('2d')
 
     if (!ctx) {
+      compositeDataUrl.value = null
       return
     }
 
@@ -93,10 +94,11 @@ const renderComposite = async () => {
         ctx.textAlign = 'center'
         ctx.fillText(object.text, 0, 0, destW)
         ctx.restore()
+        // TODO: letterSpacing and textTransform not yet applied — canvas 2D fidelity gap
       }
     }
 
-    activeCanvas.value = canvas
+    compositeCanvas.value = canvas
     compositeDataUrl.value = canvas.toDataURL('image/png')
   }
   catch {
@@ -113,14 +115,19 @@ watch(
   () => [
     props.activeMockup?.src,
     props.flatMockup?.src,
-    props.designObjects.map(o => `${o.id}:${o.x}:${o.y}:${o.width}:${o.height}:${o.rotation}:${o.text ?? o.src}`).join('|'),
+    props.designObjects.map(o => `${o.id}:${o.x}:${o.y}:${o.width}:${o.height}:${o.rotation}:${o.text ?? o.src ?? ''}`).join('|'),
   ],
   () => debouncedRender(),
   { immediate: true },
 )
 
+watch(
+  () => Object.keys(props.artworkImageElements).join(','),
+  () => debouncedRender(),
+)
+
 const downloadMockup = () => {
-  const canvas = activeCanvas.value
+  const canvas = compositeCanvas.value
 
   if (canvas) {
     canvas.toBlob((blob) => {
