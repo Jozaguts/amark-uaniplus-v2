@@ -16,6 +16,12 @@ if (!q.value) {
   await navigateTo(localePath('/'))
 }
 
+watch(q, (val) => {
+  if (!val) {
+    navigateTo(localePath('/'))
+  }
+})
+
 function queryValue(key: string): string | undefined {
   const value = route.query[key]
   if (Array.isArray(value))
@@ -145,7 +151,7 @@ useHead(() => ({
       v-else-if="error"
       class="py-20 text-center text-sm text-[#888]"
     >
-      {{ $t('search.empty', { q }) }}
+      {{ $t('search.error') }}
     </div>
 
     <!-- Empty -->
@@ -162,7 +168,7 @@ useHead(() => ({
 
       <!-- Pagination -->
       <nav
-        v-if="paginationPages.length > 1"
+        v-if="paginationPages.length"
         class="mt-12 flex items-center justify-center gap-2"
         aria-label="Pagination"
       >

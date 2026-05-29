@@ -4,7 +4,8 @@
     "placeholder": "Buscar",
     "viewAll": "Ver todos los resultados",
     "empty": "Sin resultados para \"{q}\"",
-    "resultsTitle": "Resultados para \"{q}\""
+    "resultsTitle": "Resultados para \"{q}\"",
+    "error": "Algo salió mal. Por favor intenta de nuevo."
   },
   "auth": {
     "brand": "UANDI PLUS",
