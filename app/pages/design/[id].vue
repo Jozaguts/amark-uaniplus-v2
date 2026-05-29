@@ -42,7 +42,7 @@ import type {
   StorefrontUploadArtworkListResponse,
 } from '~~/types/storefront-upload-artwork'
 
-type EditorToolId = 'upload' | 'image' | 'text' | 'product' | 'saved' | 'issues' | 'guide'
+type EditorToolId = 'mockup' | 'upload' | 'image' | 'text' | 'product' | 'saved' | 'issues' | 'guide'
 
 type DesignPlacement = {
   x: number
@@ -171,6 +171,7 @@ const priceSummary = computed(() => {
 })
 
 const editorToolsTop = [
+  { id: 'mockup', label: 'Mockup', icon: 'ph:image' },
   { id: 'upload', label: 'Upload', icon: 'ph:upload-simple' },
   { id: 'image', label: 'Image', icon: 'ph:image-square' },
   { id: 'text', label: 'Text', icon: 'ph:text-t' },
@@ -289,6 +290,19 @@ const activePrintArea = computed(() => {
 const activeMockup = computed<EditorProductMockup | null>(() => {
   return activeView.value?.mockup ?? null
 })
+
+const activeMockups = computed(() => editor.value?.mockups ?? [])
+
+const activeLifestyleMockup = computed(() => {
+  const viewId = activeViewId.value
+  const colorId = selectedColorId.value
+  const candidates = activeMockups.value.filter(m => m.viewId === viewId)
+
+  return candidates.find(m => m.previewColorId === colorId)
+    ?? candidates[0]
+    ?? null
+})
+
 const activeDesignObjects = computed(() => {
   if (!activeViewId.value) {
     return []
