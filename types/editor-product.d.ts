@@ -26,11 +26,11 @@ export type EditorProductMockup = {
 
 export type EditorProductLifestyleMockup = {
   viewId: string
+  previewColorId: string
+  previewColorHex: string
   src: string
   width: number
   height: number
-  previewColorId: string
-  previewColorHex: string
 }
 
 export type EditorProductPrintArea = {
