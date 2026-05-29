@@ -2,6 +2,7 @@
 import DesignPriceSummaryPopover from '~/components/design/PriceSummaryPopover.vue'
 import DesignImageManagementDialog from '~/components/design/panels/ImageManagementDialog.vue'
 import DesignImagePanel from '~/components/design/panels/ImagePanel.vue'
+import DesignMockupPanel from '~/components/design/panels/MockupPanel.vue'
 import DesignProductPanel from '~/components/design/panels/ProductPanel.vue'
 import DesignSaveSuccessDialog from '~/components/design/SaveSuccessDialog.vue'
 import DesignSavedPanel from '~/components/design/panels/SavedPanel.vue'
