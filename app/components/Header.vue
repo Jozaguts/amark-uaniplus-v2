@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import HeaderSearch from '~/components/header/HeaderSearch.vue'
 import MegaMenu from '~/components/header/MegaMenu.vue'
 import type { CatalogNavigationColumn, CatalogNavigationItem, CatalogNavigationMenuLink } from '~/types/catalog-navigation'
 
@@ -315,6 +316,7 @@ onMounted(() => {
         </NuxtLink>
 
         <div class="flex items-center justify-end gap-5 pt-[-1px] text-[16px] font-bold leading-none">
+          <HeaderSearch />
           <NuxtLink :to="localePath('/account/cart')" :aria-label="$t('header.actions.cart')" class="relative pt-px">
             <Icon name="icon:shopping-cart" class="size-6" />
             <span
@@ -588,6 +590,11 @@ onMounted(() => {
           >
             <Icon name="ph:x" class="size-[18px]" />
           </button>
+        </div>
+
+        <!-- Search -->
+        <div class="shrink-0 border-b border-[#e8e8e8] px-4 py-3">
+          <HeaderSearch :full-width="true" />
         </div>
 
         <!-- Main nav tabs -->
