@@ -15,14 +15,17 @@ const props = defineProps<{
   activeViewId: string
 }>()
 
+const displayCanvasRef = ref<HTMLCanvasElement | null>(null)
 const compositeCanvas = ref<HTMLCanvasElement | null>(null)
 const compositeDataUrl = ref<string | null>(null)
+const hasComposite = ref(false)
 const isRendering = ref(false)
 
+// Load without crossOrigin so display always works regardless of CORS headers.
+// The canvas may become tainted (download disabled) but the visual renders fine.
 const loadImage = (src: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const img = new Image()
-    img.crossOrigin = 'anonymous'
     img.onload = () => resolve(img)
     img.onerror = () => reject(new Error(`Could not load mockup image: ${src}`))
     img.src = src
@@ -37,6 +40,7 @@ const renderComposite = async () => {
   const bgHeight = props.activeMockup?.height ?? flat?.height
 
   if (!bgSrc || !bgWidth || !bgHeight || !flat) {
+    hasComposite.value = false
     compositeDataUrl.value = null
     return
   }
@@ -50,6 +54,7 @@ const renderComposite = async () => {
     const ctx = canvas.getContext('2d')
 
     if (!ctx) {
+      hasComposite.value = false
       compositeDataUrl.value = null
       return
     }
@@ -99,9 +104,29 @@ const renderComposite = async () => {
     }
 
     compositeCanvas.value = canvas
-    compositeDataUrl.value = canvas.toDataURL('image/png')
+    hasComposite.value = true
+
+    // Copy to the visible DOM canvas for display (works even if canvas is tainted)
+    await nextTick()
+    const display = displayCanvasRef.value
+    if (display) {
+      display.width = bgWidth
+      display.height = bgHeight
+      display.getContext('2d')?.drawImage(canvas, 0, 0)
+    }
+
+    // Try to export a data URL for download.
+    // Fails with SecurityError if canvas is tainted (cross-origin images without CORS headers).
+    try {
+      compositeDataUrl.value = canvas.toDataURL('image/png')
+    }
+    catch {
+      // Canvas tainted — display still works via displayCanvasRef, download is disabled.
+      compositeDataUrl.value = null
+    }
   }
   catch {
+    hasComposite.value = false
     compositeDataUrl.value = null
   }
   finally {
@@ -172,15 +197,15 @@ const downloadMockup = () => {
         <span class="text-xs">Generating mockup…</span>
       </div>
 
-      <img
-        v-else-if="compositeDataUrl"
-        :src="compositeDataUrl"
-        alt="Mockup preview"
+      <!-- Visible canvas for display — works even when canvas is tainted (no CORS) -->
+      <canvas
+        v-show="hasComposite && !isRendering"
+        ref="displayCanvasRef"
         class="max-h-full max-w-full rounded object-contain shadow-sm"
-      >
+      />
 
       <div
-        v-else
+        v-if="!hasComposite && !isRendering"
         class="flex flex-col items-center gap-2 text-center text-[#8b8f94]"
       >
         <Icon
@@ -207,6 +232,12 @@ const downloadMockup = () => {
         />
         Download
       </button>
+      <p
+        v-if="hasComposite && !compositeDataUrl"
+        class="mt-2 text-center text-[11px] text-[#8b8f94]"
+      >
+        Download requires CORS headers on the media server.
+      </p>
     </div>
   </div>
 </template>
