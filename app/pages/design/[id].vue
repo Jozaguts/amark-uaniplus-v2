@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import DesignPriceSummaryPopover from '~/components/design/PriceSummaryPopover.vue'
+import DesignMockupGallery from '~/components/design/MockupGallery.vue'
 import DesignImageManagementDialog from '~/components/design/panels/ImageManagementDialog.vue'
 import DesignImagePanel from '~/components/design/panels/ImagePanel.vue'
-import DesignMockupPanel from '~/components/design/panels/MockupPanel.vue'
 import DesignProductPanel from '~/components/design/panels/ProductPanel.vue'
 import DesignSaveSuccessDialog from '~/components/design/SaveSuccessDialog.vue'
 import DesignSavedPanel from '~/components/design/panels/SavedPanel.vue'
@@ -43,7 +43,7 @@ import type {
   StorefrontUploadArtworkListResponse,
 } from '~~/types/storefront-upload-artwork'
 
-type EditorToolId = 'mockup' | 'upload' | 'image' | 'text' | 'product' | 'saved' | 'issues' | 'guide'
+type EditorToolId = 'upload' | 'image' | 'text' | 'product' | 'saved' | 'issues' | 'guide'
 
 type DesignPlacement = {
   x: number
@@ -103,6 +103,7 @@ const querySizeId = computed(() => {
   return typeof size === 'string' ? size : undefined
 })
 const { $storefront } = useNuxtApp()
+const { t } = useI18n()
 const runtimeConfig = useRuntimeConfig()
 const {
   createDesignDraft,
@@ -172,7 +173,6 @@ const priceSummary = computed(() => {
 })
 
 const editorToolsTop = [
-  { id: 'mockup', label: 'Mockup', icon: 'ph:image' },
   { id: 'upload', label: 'Upload', icon: 'ph:upload-simple' },
   { id: 'image', label: 'Image', icon: 'ph:image-square' },
   { id: 'text', label: 'Text', icon: 'ph:text-t' },
@@ -230,6 +230,8 @@ const toastTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 const successDialogTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 const savedDraftsRefreshKey = ref(0)
 const zoomScaleFactor = ref(1)
+const activeWorkspaceTab = shallowRef<'design' | 'mockups'>('design')
+const designOverlayUrls = shallowRef<Record<string, string | null>>({})
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -291,18 +293,89 @@ const activePrintArea = computed(() => {
 const activeMockup = computed<EditorProductMockup | null>(() => {
   return activeView.value?.mockup ?? null
 })
+const allEditorMockups = computed(() => editor.value?.mockups ?? [])
 
-const activeMockups = computed(() => editor.value?.mockups ?? [])
+const DISPLAY_CANVAS_MAX_PX = 800
 
-const activeLifestyleMockup = computed(() => {
-  const viewId = activeViewId.value
-  const colorId = selectedColorId.value
-  const candidates = activeMockups.value.filter(m => m.viewId === viewId)
+const renderDesignOnlyCanvas = (view: EditorProductView): HTMLCanvasElement | null => {
+  const objects = designObjectsByView.value[view.id] ?? []
+  const area = view.printArea
 
-  return candidates.find(m => m.previewColorId === colorId)
-    ?? candidates[0]
-    ?? null
-})
+  if (!objects.length) return null
+
+  const scale = DISPLAY_CANVAS_MAX_PX / Math.max(area.width, area.height)
+  const canvasWidth = Math.max(1, Math.round(area.width * scale))
+  const canvasHeight = Math.max(1, Math.round(area.height * scale))
+  const canvas = document.createElement('canvas')
+
+  canvas.width = canvasWidth
+  canvas.height = canvasHeight
+
+  const context = canvas.getContext('2d')
+
+  if (!context) return null
+
+  context.clearRect(0, 0, canvasWidth, canvasHeight)
+
+  for (const object of objects) {
+    const destinationX = (object.x - area.x) * scale
+    const destinationY = (object.y - area.y) * scale
+    const destinationWidth = object.width * scale
+    const destinationHeight = object.height * scale
+    const rotation = (object.rotation * Math.PI) / 180
+
+    if (object.type === 'image' && object.src) {
+      const image = artworkImageElements.value[object.assetId]
+
+      if (!image) continue
+
+      context.save()
+      context.translate(destinationX + destinationWidth / 2, destinationY + destinationHeight / 2)
+      context.rotate(rotation)
+      context.drawImage(image, -destinationWidth / 2, -destinationHeight / 2, destinationWidth, destinationHeight)
+      context.restore()
+    }
+    else if (object.type === 'text' && object.text) {
+      const fontSize = Math.max(1, Math.round((object.fontSize ?? 28) * scale))
+
+      context.save()
+      context.translate(destinationX + destinationWidth / 2, destinationY + destinationHeight / 2)
+      context.rotate(rotation)
+      context.fillStyle = object.fill ?? '#111314'
+      context.font = `${object.fontStyle ?? 'normal'} ${fontSize}px ${object.fontFamily ?? 'Arial'}`
+      context.textBaseline = 'middle'
+      context.textAlign = 'center'
+      context.fillText(object.text, 0, 0, destinationWidth)
+      context.restore()
+    }
+  }
+
+  return canvas
+}
+
+const updateDesignOverlays = useDebounceFn(() => {
+  if (activeWorkspaceTab.value !== 'mockups') return
+
+  designOverlayUrls.value = availableViews.value.reduce<Record<string, string | null>>((urls, view) => {
+    const canvas = renderDesignOnlyCanvas(view)
+
+    try {
+      urls[view.id] = canvas ? canvas.toDataURL('image/png') : null
+    }
+    catch {
+      urls[view.id] = null
+    }
+
+    return urls
+  }, {})
+}, 200)
+
+if (import.meta.client) {
+  watch(
+    [activeWorkspaceTab, designObjectsByView, artworkImageElements],
+    () => void updateDesignOverlays(),
+  )
+}
 
 const activeDesignObjects = computed(() => {
   if (!activeViewId.value) {
@@ -2268,7 +2341,10 @@ useHead(() => ({
       </header>
 
       <div class="flex min-h-0 flex-1 flex-col gap-1 lg:flex-row">
-        <aside class="order-2 flex w-full shrink-0 lg:order-1 lg:w-[334px]">
+        <aside
+          v-show="activeWorkspaceTab === 'design'"
+          class="order-2 flex w-full shrink-0 lg:order-1 lg:w-[334px]"
+        >
           <div class="hidden w-16 shrink-0 flex-col justify-between bg-cotton-grey-2 lg:flex">
             <menu class="flex flex-col gap-1">
               <button
@@ -2335,17 +2411,8 @@ useHead(() => ({
             </div>
 
             <div class="min-h-0 flex-1">
-              <DesignMockupPanel
-                v-if="activeTool === 'mockup'"
-                :active-mockup="activeLifestyleMockup"
-                :flat-mockup="activeMockup"
-                :print-area="activePrintArea"
-                :design-objects="activeDesignObjects"
-                :artwork-image-elements="artworkImageElements"
-                :active-view-id="activeViewId"
-              />
               <DesignUploadPanel
-                v-else-if="activeTool === 'upload'"
+                v-if="activeTool === 'upload'"
                 :history-assets="uploadHistoryAssets"
                 :uploaded-assets="uploadedAssets"
                 :active-uploaded-asset-id="activeUploadedAssetId"
@@ -2414,7 +2481,7 @@ useHead(() => ({
         </aside>
 
         <section class="order-1 flex min-h-[420px] flex-1 flex-col overflow-hidden rounded-lg bg-white lg:order-2">
-          <div class="flex items-center justify-between border-b border-borderSecondary px-3 py-2 lg:px-4">
+          <div class="grid grid-cols-[1fr_auto_1fr] items-center border-b border-borderSecondary px-3 py-2 lg:px-4">
             <div class="flex flex-wrap items-center gap-2">
               <button
                 v-for="color in previewColors"
@@ -2429,7 +2496,26 @@ useHead(() => ({
               </button>
             </div>
 
-            <div class="flex items-center gap-1 lg:gap-2">
+            <div class="flex overflow-hidden rounded-[8px] border border-borderSecondary">
+              <button
+                type="button"
+                class="px-4 py-1.5 text-[13px] font-semibold transition"
+                :class="activeWorkspaceTab === 'design' ? 'bg-primary text-white' : 'bg-white text-[#6d6d6d] hover:bg-cotton-grey-1'"
+                @click="activeWorkspaceTab = 'design'"
+              >
+                {{ t('storefront.designEditor.tabs.design') }}
+              </button>
+              <button
+                type="button"
+                class="border-l border-borderSecondary px-4 py-1.5 text-[13px] font-semibold transition"
+                :class="activeWorkspaceTab === 'mockups' ? 'bg-primary text-white' : 'bg-white text-[#6d6d6d] hover:bg-cotton-grey-1'"
+                @click="activeWorkspaceTab = 'mockups'"
+              >
+                {{ t('storefront.designEditor.tabs.mockups') }}
+              </button>
+            </div>
+
+            <div class="flex items-center justify-end gap-1 lg:gap-2">
 <!--              <span class="hidden h-2 w-2 rounded-full bg-[#ff4d4f] lg:inline-flex" />-->
 <!--              <div class="flex items-center gap-2 rounded-md p-2 text-xs hover:bg-cotton-grey-1">-->
 <!--                <span class="hidden sm:inline text-primary">Adjusted mockup</span>-->
@@ -2494,6 +2580,7 @@ useHead(() => ({
           </div>
 
           <div
+            v-show="activeWorkspaceTab === 'design'"
             ref="workspaceRef"
             class="relative flex-1 bg-white"
           >
@@ -2573,9 +2660,22 @@ useHead(() => ({
               </button>
             </div>
           </div>
+
+          <DesignMockupGallery
+            v-if="activeWorkspaceTab === 'mockups'"
+            class="min-h-0 flex-1"
+            :mockups="allEditorMockups"
+            :views="availableViews"
+            :design-overlay-urls="designOverlayUrls"
+            :selected-color-id="selectedColorId"
+            :active-view-id="activeViewId"
+          />
         </section>
 
-        <aside class="order-3 flex w-full shrink-0 flex-col gap-1 lg:w-[327px]">
+        <aside
+          v-show="activeWorkspaceTab === 'design'"
+          class="order-3 flex w-full shrink-0 flex-col gap-1 lg:w-[327px]"
+        >
           <div class="relative flex flex-1 flex-col space-y-6 overflow-hidden rounded-lg bg-white px-3 py-4">
             <div>
               <h2 class="mb-2 font-semibold tracking-[0.32px]">

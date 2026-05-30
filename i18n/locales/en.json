@@ -578,6 +578,18 @@
       "product": "Product",
       "start": "Start design"
     },
+    "designEditor": {
+      "tabs": {
+        "design": "Design",
+        "mockups": "Mockups"
+      },
+      "mockups": {
+        "previewAlt": "Mockup preview",
+        "download": "Download",
+        "downloading": "Downloading...",
+        "downloadError": "Download requires CORS headers on the media server."
+      }
+    },
     "product": {
       "title": "Product Details",
       "active": "Product slug",

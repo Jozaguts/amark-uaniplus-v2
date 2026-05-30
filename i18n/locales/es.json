@@ -578,6 +578,18 @@
       "product": "Producto",
       "start": "Empezar diseño"
     },
+    "designEditor": {
+      "tabs": {
+        "design": "Diseño",
+        "mockups": "Mockups"
+      },
+      "mockups": {
+        "previewAlt": "Vista previa del mockup",
+        "download": "Descargar",
+        "downloading": "Descargando...",
+        "downloadError": "La descarga requiere encabezados CORS en el servidor de medios."
+      }
+    },
     "product": {
       "title": "Detalle del producto",
       "active": "Slug del producto",

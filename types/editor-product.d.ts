@@ -31,6 +31,8 @@ export type EditorProductLifestyleMockup = {
   src: string
   width: number
   height: number
+  printZone?: { x: number; y: number; w: number; h: number } | null
+  blendMode?: 'multiply' | 'screen' | 'overlay' | null
 }
 
 export type EditorProductPrintArea = {
