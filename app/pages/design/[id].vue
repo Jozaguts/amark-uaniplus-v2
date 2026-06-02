@@ -2680,6 +2680,7 @@ useHead(() => ({
             :views="availableViews"
             :design-overlay-urls="designOverlayUrls"
             :selected-color-id="selectedColorId"
+            :selected-color-hex="selectedColor?.hex ?? ''"
             :active-view-id="activeViewId"
           />
         </section>
