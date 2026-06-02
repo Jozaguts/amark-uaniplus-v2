@@ -119,21 +119,52 @@ const downloadMockup = async () => {
 
     context.drawImage(backgroundImage, 0, 0, width, height)
 
+    if (isLifestyle(mockup) && mockup?.maskUrl && props.selectedColorHex) {
+      const maskImage = await loadImageForCanvas(mockup.maskUrl)
+
+      // Build the color-only-where-garment layer on a scratch canvas.
+      const tintCanvas = document.createElement('canvas')
+      tintCanvas.width = width
+      tintCanvas.height = height
+      const tintContext = tintCanvas.getContext('2d')
+
+      if (tintContext) {
+        tintContext.fillStyle = props.selectedColorHex
+        tintContext.fillRect(0, 0, width, height)
+        tintContext.globalCompositeOperation = 'destination-in'
+        tintContext.drawImage(maskImage, 0, 0, width, height)
+
+        // Multiply the masked color onto the photo — same look as the CSS layer.
+        context.globalCompositeOperation = 'multiply'
+        context.drawImage(tintCanvas, 0, 0, width, height)
+        context.globalCompositeOperation = 'source-over'
+      }
+    }
+
     const overlayUrl = props.designOverlayUrls[view.id]
     const resolved = resolveZoneForView(view.id)
 
     if (overlayUrl && resolved) {
       const overlayImage = await loadImageForCanvas(overlayUrl)
       const { zone, blendMode } = resolved
+      const zoneX = zone.x * width
+      const zoneY = zone.y * height
+      const zoneW = zone.w * width
+      const zoneH = zone.h * height
 
       context.globalCompositeOperation = blendMode
-      context.drawImage(
-        overlayImage,
-        zone.x * width,
-        zone.y * height,
-        zone.w * width,
-        zone.h * height,
-      )
+
+      if (zone.rotation) {
+        context.save()
+        context.translate(zoneX + zoneW / 2, zoneY + zoneH / 2)
+        context.rotate((zone.rotation * Math.PI) / 180)
+        context.drawImage(overlayImage, -zoneW / 2, -zoneH / 2, zoneW, zoneH)
+        context.restore()
+      }
+      else {
+        context.drawImage(overlayImage, zoneX, zoneY, zoneW, zoneH)
+      }
+
       context.globalCompositeOperation = 'source-over'
     }
 
