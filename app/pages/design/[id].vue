@@ -293,7 +293,7 @@ const activePrintArea = computed(() => {
 const activeMockup = computed<EditorProductMockup | null>(() => {
   return activeView.value?.mockup ?? null
 })
-const allEditorMockups = computed(() => editor.value?.mockups ?? [])
+const allEditorMockups = computed(() => withDevLifestyleMockups(editor.value?.mockups ?? [], availableViews.value))
 
 const DISPLAY_CANVAS_MAX_PX = 800
 
@@ -2680,6 +2680,7 @@ useHead(() => ({
             :views="availableViews"
             :design-overlay-urls="designOverlayUrls"
             :selected-color-id="selectedColorId"
+            :selected-color-hex="selectedColor?.hex ?? ''"
             :active-view-id="activeViewId"
           />
         </section>

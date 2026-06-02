@@ -26,13 +26,18 @@ export type EditorProductMockup = {
 
 export type EditorProductLifestyleMockup = {
   viewId: string
-  previewColorId: string
-  previewColorHex: string
-  src: string
+  kind?: 'lifestyle' | 'flat'        // 'lifestyle' = tintable model photo; default treated as 'flat'
+  src: string                        // model photo (neutral/white garment, opaque background OK)
   width: number
   height: number
-  printZone?: { x: number; y: number; w: number; h: number } | null
-  blendMode?: 'multiply' | 'screen' | 'overlay' | null
+  // Tint: alpha = garment (1 inside, 0 outside). Presence enables CSS tint.
+  maskUrl?: string | null
+  // Print zone as RATIOS (0–1) plus rotation in degrees.
+  printZone?: { x: number; y: number; w: number; h: number; rotation: number } | null
+  blendMode?: 'multiply' | 'screen' | 'overlay' | null  // default 'multiply'
+  // Optional / ignored for 'lifestyle' (photo is neutral; color comes from the Design tab)
+  previewColorId?: string
+  previewColorHex?: string
 }
 
 export type EditorProductPrintArea = {

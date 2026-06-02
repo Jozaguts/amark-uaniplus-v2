@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 import type { EditorProductLifestyleMockup, EditorProductView } from '~~/types/editor-product'
+import { designOverlayStyle, isLifestyle, resolvePrintZone, selectMockupForView, tintLayerStyle } from '~/utils/mockupRender'
 
 const props = defineProps<{
   mockups: EditorProductLifestyleMockup[]
   views: EditorProductView[]
   designOverlayUrls: Record<string, string | null>
   selectedColorId: string
+  selectedColorHex: string
   activeViewId: string
 }>()
 
@@ -27,12 +29,7 @@ const previewFrameStyle = computed<CSSProperties>(() => ({
 
 const mockupsByView = computed(() => {
   return props.views.reduce<Record<string, EditorProductLifestyleMockup | null>>((mockups, view) => {
-    const candidates = props.mockups.filter(mockup => mockup.viewId === view.id)
-
-    mockups[view.id] = candidates.find(mockup => mockup.previewColorId === props.selectedColorId)
-      ?? candidates[0]
-      ?? null
-
+    mockups[view.id] = selectMockupForView(props.mockups, view, props.selectedColorId)
     return mockups
   }, {})
 })
@@ -44,9 +41,8 @@ const activeView = computed(() => {
 })
 const activeMockup = computed(() => activeView.value ? mockupsByView.value[activeView.value.id] : null)
 const activeMockupSrc = computed(() => activeMockup.value?.src ?? activeView.value?.mockup.src ?? '')
-const activeOverlayStyle = computed(() => {
-  return activeView.value ? overlayStyleForView(activeView.value.id) : null
-})
+const activeOverlayStyle = computed(() => activeView.value ? overlayStyleForView(activeView.value.id) : null)
+const activeTintStyle = computed(() => activeView.value ? tintStylesByView.value[activeView.value.id] ?? null : null)
 
 watch(() => props.activeViewId, (viewId) => {
   selectedViewId.value = viewId
@@ -60,55 +56,28 @@ const mockupSrcForView = (view: EditorProductView) => {
   return mockupsByView.value[view.id]?.src ?? view.mockup.src
 }
 
-type ResolvedPrintZone = {
-  zone: { x: number; y: number; w: number; h: number }
-  blendMode: NonNullable<EditorProductLifestyleMockup['blendMode']>
-}
-
-// Resolves where the design overlay sits on whichever image is shown for a view.
-// - Explicit backend printZone (lifestyle photo with mapped coordinates) wins.
-// - Otherwise derive the zone from printArea, which shares the flat template's
-//   pixel space. Ratios are resolution-independent, so this works for the flat
-//   fallback and for same-framing mockups that ship without a printZone.
-const resolvePrintZone = (view: EditorProductView): ResolvedPrintZone | null => {
-  const mockup = mockupsByView.value[view.id]
-
-  if (mockup?.printZone) {
-    return { zone: mockup.printZone, blendMode: mockup.blendMode ?? 'multiply' }
-  }
-
-  const area = view.printArea
-  const base = view.mockup
-
-  if (!area || !base?.width || !base?.height) return null
-
-  return {
-    zone: {
-      x: area.x / base.width,
-      y: area.y / base.height,
-      w: area.width / base.width,
-      h: area.height / base.height,
-    },
-    blendMode: mockup?.blendMode ?? 'multiply',
-  }
+const resolveZoneForView = (viewId: string) => {
+  const view = props.views.find(candidate => candidate.id === viewId)
+  return view ? resolvePrintZone(view, mockupsByView.value[view.id]) : null
 }
 
 const overlayStyleForView = (viewId: string): CSSProperties | null => {
-  const view = props.views.find(candidate => candidate.id === viewId)
-  const resolved = view ? resolvePrintZone(view) : null
-
-  if (!resolved) return null
-
-  const { zone, blendMode } = resolved
-
-  return {
-    left: `${zone.x * 100}%`,
-    top: `${zone.y * 100}%`,
-    width: `${zone.w * 100}%`,
-    height: `${zone.h * 100}%`,
-    mixBlendMode: blendMode,
-  }
+  const resolved = resolveZoneForView(viewId)
+  return resolved ? designOverlayStyle(resolved.zone, resolved.blendMode) : null
 }
+
+const tintStyleForView = (viewId: string): CSSProperties | null => {
+  const mockup = mockupsByView.value[viewId]
+  if (!isLifestyle(mockup) || !mockup?.maskUrl || !props.selectedColorHex) return null
+  return tintLayerStyle(mockup.maskUrl, props.selectedColorHex)
+}
+
+const tintStylesByView = computed(() => {
+  return props.views.reduce<Record<string, CSSProperties | null>>((styles, view) => {
+    styles[view.id] = tintStyleForView(view.id)
+    return styles
+  }, {})
+})
 
 const loadImageForCanvas = (src: string): Promise<HTMLImageElement> => {
   return new Promise((resolve, reject) => {
@@ -150,21 +119,52 @@ const downloadMockup = async () => {
 
     context.drawImage(backgroundImage, 0, 0, width, height)
 
+    if (isLifestyle(mockup) && mockup?.maskUrl && props.selectedColorHex) {
+      const maskImage = await loadImageForCanvas(mockup.maskUrl)
+
+      // Build the color-only-where-garment layer on a scratch canvas.
+      const tintCanvas = document.createElement('canvas')
+      tintCanvas.width = width
+      tintCanvas.height = height
+      const tintContext = tintCanvas.getContext('2d')
+
+      if (tintContext) {
+        tintContext.fillStyle = props.selectedColorHex
+        tintContext.fillRect(0, 0, width, height)
+        tintContext.globalCompositeOperation = 'destination-in'
+        tintContext.drawImage(maskImage, 0, 0, width, height)
+
+        // Multiply the masked color onto the photo — same look as the CSS layer.
+        context.globalCompositeOperation = 'multiply'
+        context.drawImage(tintCanvas, 0, 0, width, height)
+        context.globalCompositeOperation = 'source-over'
+      }
+    }
+
     const overlayUrl = props.designOverlayUrls[view.id]
-    const resolved = resolvePrintZone(view)
+    const resolved = resolveZoneForView(view.id)
 
     if (overlayUrl && resolved) {
       const overlayImage = await loadImageForCanvas(overlayUrl)
       const { zone, blendMode } = resolved
+      const zoneX = zone.x * width
+      const zoneY = zone.y * height
+      const zoneW = zone.w * width
+      const zoneH = zone.h * height
 
       context.globalCompositeOperation = blendMode
-      context.drawImage(
-        overlayImage,
-        zone.x * width,
-        zone.y * height,
-        zone.w * width,
-        zone.h * height,
-      )
+
+      if (zone.rotation) {
+        context.save()
+        context.translate(zoneX + zoneW / 2, zoneY + zoneH / 2)
+        context.rotate((zone.rotation * Math.PI) / 180)
+        context.drawImage(overlayImage, -zoneW / 2, -zoneH / 2, zoneW, zoneH)
+        context.restore()
+      }
+      else {
+        context.drawImage(overlayImage, zoneX, zoneY, zoneW, zoneH)
+      }
+
       context.globalCompositeOperation = 'source-over'
     }
 
@@ -208,13 +208,18 @@ const downloadMockup = async () => {
           :alt="view.label"
           class="block w-full bg-[#f9f9f9] object-contain"
         >
+        <div
+          v-if="tintStylesByView[view.id]"
+          class="pointer-events-none absolute inset-0"
+          :style="tintStylesByView[view.id]!"
+        />
         <img
           v-if="designOverlayUrls[view.id] && overlayStyleForView(view.id)"
           :src="designOverlayUrls[view.id]!"
           alt=""
           class="pointer-events-none absolute"
           :style="overlayStyleForView(view.id)!"
-        >
+        />
         <span class="absolute inset-x-0 bottom-0 truncate bg-black/50 px-1 py-0.5 text-center text-[9px] text-white">
           {{ view.label }}
         </span>
@@ -234,6 +239,11 @@ const downloadMockup = async () => {
             class="block object-contain"
             :style="previewFrameStyle"
           >
+          <div
+            v-if="activeTintStyle"
+            class="pointer-events-none absolute inset-0"
+            :style="activeTintStyle"
+          />
           <img
             v-if="activeView && designOverlayUrls[activeView.id] && activeOverlayStyle"
             :src="designOverlayUrls[activeView.id]!"
