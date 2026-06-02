@@ -42,7 +42,7 @@ const activeView = computed(() => {
 const activeMockup = computed(() => activeView.value ? mockupsByView.value[activeView.value.id] : null)
 const activeMockupSrc = computed(() => activeMockup.value?.src ?? activeView.value?.mockup.src ?? '')
 const activeOverlayStyle = computed(() => activeView.value ? overlayStyleForView(activeView.value.id) : null)
-const activeTintStyle = computed(() => activeView.value ? tintStyleForView(activeView.value.id) : null)
+const activeTintStyle = computed(() => activeView.value ? tintStylesByView.value[activeView.value.id] ?? null : null)
 
 watch(() => props.activeViewId, (viewId) => {
   selectedViewId.value = viewId
@@ -71,6 +71,13 @@ const tintStyleForView = (viewId: string): CSSProperties | null => {
   if (!isLifestyle(mockup) || !mockup?.maskUrl || !props.selectedColorHex) return null
   return tintLayerStyle(mockup.maskUrl, props.selectedColorHex)
 }
+
+const tintStylesByView = computed(() => {
+  return props.views.reduce<Record<string, CSSProperties | null>>((styles, view) => {
+    styles[view.id] = tintStyleForView(view.id)
+    return styles
+  }, {})
+})
 
 const loadImageForCanvas = (src: string): Promise<HTMLImageElement> => {
   return new Promise((resolve, reject) => {
@@ -171,9 +178,9 @@ const downloadMockup = async () => {
           class="block w-full bg-[#f9f9f9] object-contain"
         >
         <div
-          v-if="tintStyleForView(view.id)"
+          v-if="tintStylesByView[view.id]"
           class="pointer-events-none absolute inset-0"
-          :style="tintStyleForView(view.id)!"
+          :style="tintStylesByView[view.id]!"
         />
         <img
           v-if="designOverlayUrls[view.id] && overlayStyleForView(view.id)"

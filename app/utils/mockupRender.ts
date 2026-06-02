@@ -49,8 +49,6 @@ export function resolvePrintZone(
 export function tintLayerStyle(maskUrl: string, colorHex: string): CSSProperties {
   const mask = `url("${maskUrl}")`
   return {
-    position: 'absolute',
-    inset: 0,
     backgroundColor: colorHex,
     mixBlendMode: 'multiply',
     WebkitMaskImage: mask,
