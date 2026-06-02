@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'vue'
 import type { EditorProductLifestyleMockup, EditorProductView } from '~~/types/editor-product'
 
 export function isLifestyle(mockup: EditorProductLifestyleMockup | null): boolean {
@@ -42,5 +43,35 @@ export function resolvePrintZone(
       rotation: 0,
     },
     blendMode: mockup?.blendMode ?? 'multiply',
+  }
+}
+
+export function tintLayerStyle(maskUrl: string, colorHex: string): CSSProperties {
+  const mask = `url("${maskUrl}")`
+  return {
+    position: 'absolute',
+    inset: 0,
+    backgroundColor: colorHex,
+    mixBlendMode: 'multiply',
+    WebkitMaskImage: mask,
+    maskImage: mask,
+    WebkitMaskSize: '100% 100%',
+    maskSize: '100% 100%',
+    WebkitMaskRepeat: 'no-repeat',
+    maskRepeat: 'no-repeat',
+  }
+}
+
+export function designOverlayStyle(
+  zone: ResolvedPrintZone['zone'],
+  blendMode: NonNullable<EditorProductLifestyleMockup['blendMode']>,
+): CSSProperties {
+  return {
+    left: `${zone.x * 100}%`,
+    top: `${zone.y * 100}%`,
+    width: `${zone.w * 100}%`,
+    height: `${zone.h * 100}%`,
+    transform: zone.rotation ? `rotate(${zone.rotation}deg)` : undefined,
+    mixBlendMode: blendMode,
   }
 }

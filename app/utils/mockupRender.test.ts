@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isLifestyle, resolvePrintZone, selectMockupForView } from './mockupRender'
+import { designOverlayStyle, isLifestyle, resolvePrintZone, selectMockupForView, tintLayerStyle } from './mockupRender'
 import type { EditorProductLifestyleMockup, EditorProductView } from '~~/types/editor-product'
 
 const view: EditorProductView = {
@@ -54,5 +54,32 @@ describe('resolvePrintZone', () => {
   it('returns null when base dimensions are missing', () => {
     const broken: EditorProductView = { ...view, mockup: { ...view.mockup, width: 0 } }
     expect(resolvePrintZone(broken, null)).toBeNull()
+  })
+})
+
+describe('tintLayerStyle', () => {
+  it('builds a masked multiply color layer', () => {
+    const s = tintLayerStyle('/mask.png', '#1e2a55')
+    expect(s.backgroundColor).toBe('#1e2a55')
+    expect(s.mixBlendMode).toBe('multiply')
+    expect(s.maskImage).toBe('url("/mask.png")')
+    expect(s.WebkitMaskImage).toBe('url("/mask.png")')
+    expect(s.maskSize).toBe('100% 100%')
+  })
+})
+
+describe('designOverlayStyle', () => {
+  it('positions the overlay in the zone as percentages with blend mode', () => {
+    const s = designOverlayStyle({ x: 0.3, y: 0.4, w: 0.3, h: 0.25, rotation: 0 }, 'multiply')
+    expect(s.left).toBe('30%')
+    expect(s.top).toBe('40%')
+    expect(s.width).toBe('30%')
+    expect(s.height).toBe('25%')
+    expect(s.mixBlendMode).toBe('multiply')
+    expect(s.transform).toBeUndefined()
+  })
+  it('applies a rotate transform when rotation is non-zero', () => {
+    const s = designOverlayStyle({ x: 0, y: 0, w: 1, h: 1, rotation: 8 }, 'multiply')
+    expect(s.transform).toBe('rotate(8deg)')
   })
 })
