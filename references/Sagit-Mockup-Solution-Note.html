@@ -1,0 +1,120 @@
+
+<body>
+<div class="wrap">
+  <div class="eyebrow">
+    <span>AZ Ventures</span>
+    <span class="eq">i&nbsp;+&nbsp;<span class="h">&#10084;</span>&nbsp;=&nbsp;Me</span>
+    <span>Para Sagit</span>
+  </div>
+  <article>
+<h1>uandiplus → iPlusLove</h1>
+<h3>Nota técnica para Sagit · Mockup en vivo vs. producción</h3>
+<blockquote>
+<p><strong>El problema:</strong> el Mockup Generator de Printful tarda ~2 min. Eso NO sirve para una vista previa en vivo.
+<strong>La solución:</strong> separa la <strong>vista previa</strong> (instantánea, en el navegador) de la <strong>producción</strong> (Printful, en segundo plano, después del pago).</p>
+</blockquote>
+<hr />
+<h2>1. El diagnóstico (por qué está atascado)</h2>
+<p>El <strong>Mockup Generator de Printful es asíncrono y basado en tareas</strong>: tú envías un trabajo → Printful lo renderiza en sus servidores → tú consultas (poll) el resultado. Está diseñado para <strong>generar catálogo en segundo plano</strong>, NO para una vista previa en tiempo real mientras el cliente mira la pantalla.</p>
+<p><strong>Conclusión clave:</strong> nunca vas a hacerlo lo suficientemente rápido. No intentes acelerar a Printful. En vez de eso, <strong>deja de usar Printful para la vista previa en vivo.</strong> Usa Printful SOLO al final, para el archivo de producción.</p>
+<hr />
+<h2>2. La arquitectura correcta — separa en dos</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│  VISTA PREVIA (instantánea, en el navegador, SIN API)         │
+│  El cliente diseña y ve el resultado al instante en el canvas │
+│  → Fabric.js: foto del modelo de fondo + diseño encima        │
+└─────────────────────────────────────────────────────────────┘
+                          │  (el cliente paga)
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│  PRODUCCIÓN (lenta, en segundo plano, DESPUÉS del checkout)   │
+│  Job en cola (Horizon) → Printful Mockup + Order API          │
+│  El cliente YA pagó y recibió confirmación. No espera nada.   │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<p>Los ~2 minutos de Printful ahora ocurren <strong>en segundo plano, después del pago</strong>, donde no molestan a nadie.</p>
+<hr />
+<h2>3. La vista previa en vivo (la parte que lo desatasca HOY)</h2>
+<p>Ya estás usando <strong>Fabric.js</strong> para que el cliente diseñe. Esa <strong>misma canvas es la vista previa</strong>. No necesitas a Printful para esto.</p>
+<h3>Opción A — Overlay con Fabric.js (recomendada, simple, ya casi la tienes)</h3>
+<p>La idea: la <strong>foto del modelo</strong> va como fondo, y el <strong>diseño del cliente</strong> se renderiza encima, dentro del área de impresión, con un poco de mezcla para que parezca tela.</p>
+<pre><code class="language-javascript">// 1. Foto del modelo como fondo de la canvas (NO editable)
+fabric.Image.fromURL(modelPhotoUrl, (img) =&gt; {
+  img.set({ selectable: false, evented: false });
+  canvas.backgroundImage = img;
+  canvas.renderAll();
+});
+
+// 2. El diseño del cliente (texto + arte) va en una zona definida
+//    = el &quot;print area&quot; mapeado sobre la foto del modelo.
+const printArea = { left: 220, top: 180, width: 260, height: 340 }; // por producto/variante
+
+// 3. Clip: el diseño NO se sale del área de impresión
+designGroup.clipPath = new fabric.Rect({
+  left: printArea.left, top: printArea.top,
+  width: printArea.width, height: printArea.height,
+  absolutePositioned: true
+});
+
+// 4. Que parezca impreso sobre tela (no un sticker plano)
+designGroup.set({
+  opacity: 0.92,
+  globalCompositeOperation: 'multiply' // se funde con sombras/pliegues de la tela
+});
+canvas.add(designGroup);
+canvas.renderAll(); // INSTANTÁNEO — sin llamada a API
+</code></pre>
+<p><strong>Por qué funciona:</strong> cada cambio del cliente (escribir, mover, color) se ve <strong>al instante</strong> porque todo pasa en el navegador. Cero latencia, cero costo de API.</p>
+<h3>Opción B — Si quieres que se vea más realista (después, no ahora)</h3>
+<ul>
+<li>Una capa de <strong>displacement map</strong> (mapa de desplazamiento) de la tela para que el diseño siga los pliegues. Más realista, más trabajo.</li>
+<li>O una librería tipo smart-object en canvas.</li>
+<li><strong>No lo necesitas para lanzar.</strong> El overlay de la Opción A es suficiente para "escribe tu texto → míralo en la camiseta".</li>
+</ul>
+<h3>El punto honesto</h3>
+<p>La vista previa hecha por nosotros <strong>no será idéntica</strong> a la foto final de Printful. Está bien y es lo normal:
+- Etiquétala como <strong>"Vista previa"</strong> (preview).
+- Usa tus <strong>fotos reales de modelos talla grande</strong> (Rawpixel / Placeit) como las imágenes "hero" del producto.
+- El overlay en vivo es la capa <strong>interactiva</strong>, no la foto de estudio. Nadie espera que una vista previa en vivo sea una foto profesional — espera que sea <strong>instantánea</strong>.</p>
+<hr />
+<h2>4. La producción (la parte lenta, oculta)</h2>
+<p><strong>Solo DESPUÉS del checkout:</strong></p>
+<ol>
+<li>Aplana el diseño del cliente a un <strong>archivo de impresión PNG</strong> con el <strong>DPI y dimensiones exactas que pide Printful para esa variante</strong> (no resolución de pantalla — si no, sale borroso).</li>
+<li>Lanza un <strong>job en cola (Horizon)</strong>:
+   - (opcional) genera el mockup oficial de Printful para el correo/historial — async, sin bloquear.
+   - crea la <strong>orden en Printful</strong> usando el <strong>Variant ID</strong> (NUNCA el Product ID) + el archivo + la posición.</li>
+<li>Guarda <code>printful_order_id</code> y el estado. Maneja los <strong>webhooks</strong> de Printful para fulfillment/envío → manda el tracking al cliente.</li>
+</ol>
+<p>El cliente ya pagó y vio su confirmación. Los 2 minutos ya no le importan a nadie.</p>
+<hr />
+<h2>5. Estructúralo para que iPlusLove sea un FORK limpio</h2>
+<p>iPlusLove = uandiplus <strong>menos CJDropshipping</strong>, <strong>más</strong> el filtro de talla grande. Estás <strong>borrando un módulo</strong>, no añadiendo uno. Para que el copy-paste sea trivial, haz esto AHORA en uandiplus:</p>
+<ul>
+<li><strong>El proveedor de fulfillment debe ser configuración, no código fijo.</strong> <code>FULFILLMENT_DRIVER = printful | cjdropshipping</code>. En iPlusLove simplemente apagas CJ.</li>
+<li><strong>La fuente del catálogo debe ser configuración.</strong> Un filtro/flag, no IDs escritos a mano.</li>
+<li><strong>El overlay de mockup (foto del modelo + print area) debe leerse de config/DB por producto</strong>, no hardcodeado. Así iPlusLove solo cambia las fotos de modelos (a talla grande) y el área de impresión.</li>
+<li><strong>El filtro <code>size_inclusive</code></strong> (que ya está en el blueprint de iPlusLove) es básicamente el único añadido nuevo: muestra un producto solo si Printful lo ofrece en tallas grandes (calcula el flag desde los datos en vivo, no a mano).</li>
+</ul>
+<p>Si lo construyes así, <strong>iPlusLove es un fork con dos o tres settings cambiados</strong>, no una reconstrucción.</p>
+<hr />
+<h2>6. Resumen en una línea (para Sagit)</h2>
+<blockquote>
+<p><strong>Vista previa = Fabric.js en el navegador, instantánea, sin API.</strong>
+<strong>Printful = solo para producción, en un job en cola, después del pago.</strong>
+Y deja el fulfillment + catálogo + overlay como <strong>configuración</strong> para que iPlusLove sea un fork limpio.</p>
+</blockquote>
+<hr />
+<h2>7. English summary (quick reference)</h2>
+<ul>
+<li><strong>Don't use Printful's Mockup Generator for the live preview</strong> — it's async (~2 min), built for back-office catalog generation, not real-time. You'll never make it fast enough.</li>
+<li><strong>Live preview = render it yourself client-side with Fabric.js:</strong> model photo as <code>backgroundImage</code>, customer design as a clipped group inside the print area, <code>multiply</code> blend + slight opacity so it reads as printed-on-fabric. Instant, no API call. You're already on Fabric — the design canvas <em>is</em> the preview.</li>
+<li><strong>Production = after checkout only:</strong> flatten to a print-ready PNG at Printful's required DPI/dimensions per variant, then a queued Horizon job creates the Printful order by <strong>Variant ID</strong> (never Product ID). Customer already paid; the 2 minutes happens in the background.</li>
+<li><strong>Label the live preview "Preview";</strong> use real plus-size model photos (Rawpixel/Placeit) as the polished hero images. A live preview is expected to be instant, not a studio shot.</li>
+<li><strong>Make it fork cleanly:</strong> fulfillment driver, catalog source, and the mockup overlay (model photo + print area) should all be <strong>config/DB-driven, not hardcoded.</strong> Then iPlusLove = uandiplus with CJ turned off + the <code>size_inclusive</code> filter on. Deleting a module, not building one.</li>
+</ul>
+<hr />
+<p><em>uandiplus → iPlusLove · You design, we print, we deliver. AZ Ventures.</em></p>
+  </article>
+  <footer>iPlusLove &middot; You design, we print, we deliver</footer>
+</div>

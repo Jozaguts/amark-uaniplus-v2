@@ -344,7 +344,7 @@ Added between the color pickers and the zoom controls in the center section head
 <!-- MockupGallery: v-if="activeWorkspaceTab === 'mockups'" -->
 ```
 
----
+---[Sagit-Mockup-Solution-Note.html](../../../../../../Downloads/Sagit-Mockup-Solution-Note.html)
 
 ## File Map
 

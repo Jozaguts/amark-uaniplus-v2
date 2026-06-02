@@ -455,7 +455,7 @@ onMounted(() => {
 
           <div class="flex items-center gap-[15px]">
             <NuxtLink :to="localePath('/account/cart')" :aria-label="$t('header.actions.cart')" class="relative">
-              <Icon name="icon:shoping-cart" class="size-[25px]" />
+              <Icon name="icon:shopping-cart" class="size-[25px]" />
               <span
                 v-if="itemCount"
                 class="absolute -right-2 -top-2 flex min-h-[17px] min-w-[17px] items-center justify-center rounded-full bg-black px-1 text-[10px] font-semibold leading-none text-white"

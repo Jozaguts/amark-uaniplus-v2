@@ -54,7 +54,7 @@ onMounted(() => {
           :aria-label="$t('header.actions.cart')"
           class="relative flex items-center"
         >
-          <Icon name="icon:shoping-cart" class="size-[25px]" />
+          <Icon name="icon:shopping-cart" class="size-[25px]" />
           <span
             v-if="itemCount"
             class="absolute -right-2 -top-2 flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full bg-black px-1 text-[10px] font-semibold leading-none text-white"

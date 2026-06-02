@@ -297,7 +297,12 @@ const allEditorMockups = computed(() => editor.value?.mockups ?? [])
 
 const DISPLAY_CANVAS_MAX_PX = 800
 
-const renderDesignOnlyCanvas = (view: EditorProductView): HTMLCanvasElement | null => {
+// Renders the design (artwork + text) on a transparent canvas sized to the
+// print area. Artwork is loaded through loadCanvasImage (crossOrigin) so the
+// canvas stays untainted and toDataURL() can export the overlay; the Konva
+// display cache (artworkImageElements) is loaded without crossOrigin and would
+// taint the canvas, blocking the export.
+const renderDesignOnlyCanvas = async (view: EditorProductView): Promise<HTMLCanvasElement | null> => {
   const objects = designObjectsByView.value[view.id] ?? []
   const area = view.printArea
 
@@ -325,9 +330,16 @@ const renderDesignOnlyCanvas = (view: EditorProductView): HTMLCanvasElement | nu
     const rotation = (object.rotation * Math.PI) / 180
 
     if (object.type === 'image' && object.src) {
-      const image = artworkImageElements.value[object.assetId]
+      let image: HTMLImageElement
 
-      if (!image) continue
+      try {
+        image = await loadCanvasImage(object.src)
+        console.warn('🔍[MOCKUP-DEBUG] B2 image loaded OK', view.id, object.src.slice(0, 80))
+      }
+      catch {
+        console.warn('🔍[MOCKUP-DEBUG] B2 image FAILED to load (CORS/network?)', view.id, object.src.slice(0, 120))
+        continue
+      }
 
       context.save()
       context.translate(destinationX + destinationWidth / 2, destinationY + destinationHeight / 2)
@@ -353,21 +365,47 @@ const renderDesignOnlyCanvas = (view: EditorProductView): HTMLCanvasElement | nu
   return canvas
 }
 
-const updateDesignOverlays = useDebounceFn(() => {
+const updateDesignOverlays = useDebounceFn(async () => {
+  console.warn('🔍[MOCKUP-DEBUG] updateDesignOverlays called. tab =', activeWorkspaceTab.value)
   if (activeWorkspaceTab.value !== 'mockups') return
 
-  designOverlayUrls.value = availableViews.value.reduce<Record<string, string | null>>((urls, view) => {
-    const canvas = renderDesignOnlyCanvas(view)
+  console.warn('🔍[MOCKUP-DEBUG] B0 views:', availableViews.value.map(v => v.id))
+  console.warn('🔍[MOCKUP-DEBUG] B0 editor.mockups count:', allEditorMockups.value.length, allEditorMockups.value.map(m => ({ viewId: m.viewId, hasPrintZone: !!m.printZone })))
 
-    try {
-      urls[view.id] = canvas ? canvas.toDataURL('image/png') : null
-    }
-    catch {
-      urls[view.id] = null
-    }
+  const entries = await Promise.all(
+    availableViews.value.map(async (view) => {
+      const objects = designObjectsByView.value[view.id] ?? []
+      console.warn('🔍[MOCKUP-DEBUG] B1 view', view.id, 'objects:', objects.length, objects.map(o => o.type))
 
-    return urls
-  }, {})
+      try {
+        const canvas = await renderDesignOnlyCanvas(view)
+
+        if (!canvas) {
+          console.warn('🔍[MOCKUP-DEBUG] B3 canvas NULL for', view.id)
+          return [view.id, null] as const
+        }
+
+        const url = canvas.toDataURL('image/png')
+        console.warn('🔍[MOCKUP-DEBUG] B3/B4 toDataURL OK for', view.id, 'len:', url.length, 'canvas:', canvas.width, 'x', canvas.height)
+        // derive the fallback printZone the gallery will use
+        const base = view.mockup
+        const a = view.printArea
+        console.warn('🔍[MOCKUP-DEBUG] B5 fallback printZone for', view.id, {
+          printArea: { x: a.x, y: a.y, w: a.width, h: a.height },
+          mockupWH: { w: base.width, h: base.height },
+          zone: base.width && base.height ? { x: a.x / base.width, y: a.y / base.height, w: a.width / base.width, h: a.height / base.height } : 'NO MOCKUP DIMS',
+        })
+        return [view.id, url] as const
+      }
+      catch (error) {
+        console.warn('🔍[MOCKUP-DEBUG] B3 toDataURL THREW (tainted canvas?) for', view.id, error)
+        return [view.id, null] as const
+      }
+    }),
+  )
+
+  designOverlayUrls.value = Object.fromEntries(entries)
+  console.warn('🔍[MOCKUP-DEBUG] B4 final designOverlayUrls:', Object.entries(designOverlayUrls.value).map(([k, v]) => `${k}: ${v ? `${v.length} chars` : 'NULL'}`))
 }, 200)
 
 if (import.meta.client) {
@@ -2503,7 +2541,7 @@ useHead(() => ({
                 :class="activeWorkspaceTab === 'design' ? 'bg-primary text-white' : 'bg-white text-[#6d6d6d] hover:bg-cotton-grey-1'"
                 @click="activeWorkspaceTab = 'design'"
               >
-                {{ t('storefront.designEditor.tabs.design') }}
+                {{ t('catalog.designEditor.tabs.design') }}
               </button>
               <button
                 type="button"
@@ -2511,7 +2549,7 @@ useHead(() => ({
                 :class="activeWorkspaceTab === 'mockups' ? 'bg-primary text-white' : 'bg-white text-[#6d6d6d] hover:bg-cotton-grey-1'"
                 @click="activeWorkspaceTab = 'mockups'"
               >
-                {{ t('storefront.designEditor.tabs.mockups') }}
+                {{ t('catalog.designEditor.tabs.mockups') }}
               </button>
             </div>
 
