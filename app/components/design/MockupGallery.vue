@@ -190,20 +190,6 @@ const downloadMockup = async () => {
     isDownloading.value = false
   }
 }
-
-watchEffect(() => {
-  const view = activeView.value
-  if (!view) {
-    console.warn('🔍[MOCKUP-DEBUG] gallery: NO activeView')
-    return
-  }
-  console.warn('🔍[MOCKUP-DEBUG] gallery activeView:', view.id, {
-    overlayUrl: props.designOverlayUrls[view.id] ? `${props.designOverlayUrls[view.id]!.length} chars` : 'NULL/MISSING',
-    lifestyleMockup: mockupsByView.value[view.id] ? 'YES' : 'NONE (fallback)',
-    resolvedStyle: overlayStyleForView(view.id),
-    willRenderOverlay: !!(props.designOverlayUrls[view.id] && overlayStyleForView(view.id)),
-  })
-})
 </script>
 
 <template>

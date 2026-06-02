@@ -334,10 +334,8 @@ const renderDesignOnlyCanvas = async (view: EditorProductView): Promise<HTMLCanv
 
       try {
         image = await loadCanvasImage(object.src)
-        console.warn('🔍[MOCKUP-DEBUG] B2 image loaded OK', view.id, object.src.slice(0, 80))
       }
       catch {
-        console.warn('🔍[MOCKUP-DEBUG] B2 image FAILED to load (CORS/network?)', view.id, object.src.slice(0, 120))
         continue
       }
 
@@ -366,46 +364,22 @@ const renderDesignOnlyCanvas = async (view: EditorProductView): Promise<HTMLCanv
 }
 
 const updateDesignOverlays = useDebounceFn(async () => {
-  console.warn('🔍[MOCKUP-DEBUG] updateDesignOverlays called. tab =', activeWorkspaceTab.value)
   if (activeWorkspaceTab.value !== 'mockups') return
-
-  console.warn('🔍[MOCKUP-DEBUG] B0 views:', availableViews.value.map(v => v.id))
-  console.warn('🔍[MOCKUP-DEBUG] B0 editor.mockups count:', allEditorMockups.value.length, allEditorMockups.value.map(m => ({ viewId: m.viewId, hasPrintZone: !!m.printZone })))
 
   const entries = await Promise.all(
     availableViews.value.map(async (view) => {
-      const objects = designObjectsByView.value[view.id] ?? []
-      console.warn('🔍[MOCKUP-DEBUG] B1 view', view.id, 'objects:', objects.length, objects.map(o => o.type))
-
       try {
         const canvas = await renderDesignOnlyCanvas(view)
 
-        if (!canvas) {
-          console.warn('🔍[MOCKUP-DEBUG] B3 canvas NULL for', view.id)
-          return [view.id, null] as const
-        }
-
-        const url = canvas.toDataURL('image/png')
-        console.warn('🔍[MOCKUP-DEBUG] B3/B4 toDataURL OK for', view.id, 'len:', url.length, 'canvas:', canvas.width, 'x', canvas.height)
-        // derive the fallback printZone the gallery will use
-        const base = view.mockup
-        const a = view.printArea
-        console.warn('🔍[MOCKUP-DEBUG] B5 fallback printZone for', view.id, {
-          printArea: { x: a.x, y: a.y, w: a.width, h: a.height },
-          mockupWH: { w: base.width, h: base.height },
-          zone: base.width && base.height ? { x: a.x / base.width, y: a.y / base.height, w: a.width / base.width, h: a.height / base.height } : 'NO MOCKUP DIMS',
-        })
-        return [view.id, url] as const
+        return [view.id, canvas ? canvas.toDataURL('image/png') : null] as const
       }
-      catch (error) {
-        console.warn('🔍[MOCKUP-DEBUG] B3 toDataURL THREW (tainted canvas?) for', view.id, error)
+      catch {
         return [view.id, null] as const
       }
     }),
   )
 
   designOverlayUrls.value = Object.fromEntries(entries)
-  console.warn('🔍[MOCKUP-DEBUG] B4 final designOverlayUrls:', Object.entries(designOverlayUrls.value).map(([k, v]) => `${k}: ${v ? `${v.length} chars` : 'NULL'}`))
 }, 200)
 
 if (import.meta.client) {
