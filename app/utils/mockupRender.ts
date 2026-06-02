@@ -14,3 +14,33 @@ export function selectMockupForView(
   if (lifestyle) return lifestyle
   return candidates.find(mockup => mockup.previewColorId === selectedColorId) ?? candidates[0] ?? null
 }
+
+export type ResolvedPrintZone = {
+  zone: { x: number; y: number; w: number; h: number; rotation: number }
+  blendMode: NonNullable<EditorProductLifestyleMockup['blendMode']>
+}
+
+export function resolvePrintZone(
+  view: EditorProductView,
+  mockup: EditorProductLifestyleMockup | null,
+): ResolvedPrintZone | null {
+  if (mockup?.printZone) {
+    return { zone: mockup.printZone, blendMode: mockup.blendMode ?? 'multiply' }
+  }
+
+  const area = view.printArea
+  const base = view.mockup
+
+  if (!area || !base?.width || !base?.height) return null
+
+  return {
+    zone: {
+      x: area.x / base.width,
+      y: area.y / base.height,
+      w: area.width / base.width,
+      h: area.height / base.height,
+      rotation: 0,
+    },
+    blendMode: mockup?.blendMode ?? 'multiply',
+  }
+}

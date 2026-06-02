@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isLifestyle, selectMockupForView } from './mockupRender'
+import { isLifestyle, resolvePrintZone, selectMockupForView } from './mockupRender'
 import type { EditorProductLifestyleMockup, EditorProductView } from '~~/types/editor-product'
 
 const view: EditorProductView = {
@@ -34,5 +34,25 @@ describe('isLifestyle', () => {
     expect(isLifestyle({ viewId: 'front', kind: 'lifestyle', src: '/p.jpg', width: 1, height: 1 })).toBe(false)
     expect(isLifestyle({ viewId: 'front', src: '/p.jpg', width: 1, height: 1, maskUrl: '/m.png' })).toBe(false)
     expect(isLifestyle(null)).toBe(false)
+  })
+})
+
+describe('resolvePrintZone', () => {
+  it('uses the lifestyle printZone (incl. rotation) and its blendMode', () => {
+    const m = { ...lifestyle, printZone: { x: 0.3, y: 0.4, w: 0.3, h: 0.25, rotation: 8 }, blendMode: 'screen' as const }
+    expect(resolvePrintZone(view, m)).toEqual({
+      zone: { x: 0.3, y: 0.4, w: 0.3, h: 0.25, rotation: 8 },
+      blendMode: 'screen',
+    })
+  })
+  it('derives the zone from printArea ratios with rotation 0 when no mockup', () => {
+    expect(resolvePrintZone(view, null)).toEqual({
+      zone: { x: 0.25, y: 0.25, w: 0.5, h: 0.5, rotation: 0 },
+      blendMode: 'multiply',
+    })
+  })
+  it('returns null when base dimensions are missing', () => {
+    const broken: EditorProductView = { ...view, mockup: { ...view.mockup, width: 0 } }
+    expect(resolvePrintZone(broken, null)).toBeNull()
   })
 })
