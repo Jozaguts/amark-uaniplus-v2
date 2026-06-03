@@ -1,0 +1,83 @@
+name: Deploy Nuxt App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    environment: production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy Nuxt App via SSH
+        env:
+          NUXT_PUBLIC_URL_BACKEND: ${{ vars.NUXT_PUBLIC_URL_BACKEND }}
+          NUXT_PUBLIC_API_BASE: '/api'
+          GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+          GOOGLE_MAPS_API_KEY: ${{ vars.GOOGLE_MAPS_API_KEY }}
+          NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ vars.NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+          NUXT_PUBLIC_HOST: ${{ vars.NUXT_PUBLIC_HOST }}
+          NUXT_PUBLIC_SSR: {{{ vars.NUXT_PUBLIC_SSR || 'false' }}}""
+          NUXT_PUBLIC_PRESET: ${{ vars.NUXT_PUBLIC_PRESET }}
+        run: |
+          ssh -p ${{ vars.SSH_PORT}} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+            set -Eeuo pipefail
+            trap 'echo "[frontend-deploy] Failed at line $LINENO" >&2' ERR
+            cd "$DEPLOY_PATH"
+
+            # Ensure Node from nvm first when available
+            if [ -s "$HOME/.nvm/nvm.sh" ]; then
+              . "$HOME/.nvm/nvm.sh"
+              nvm use --lts || true
+            fi
+
+            command -v node >/dev/null 2>&1 || { echo 'ERROR: Node.js is not installed on VPS'; exit 1; }
+
+            # Ensure clean working tree and latest code
+            git fetch --prune
+            git checkout main
+            git reset --hard
+            git clean -fd
+            git pull --ff-only origin main
+
+            # Ensure pnpm is available (prefer corepack)
+            if command -v corepack >/dev/null 2>&1; then
+              corepack enable
+              corepack prepare pnpm@9.15.5 --activate
+            elif ! command -v pnpm >/dev/null 2>&1; then
+              npm install -g pnpm@9.15.5
+            fi
+
+            command -v pnpm >/dev/null 2>&1 || { echo 'ERROR: pnpm is not available on VPS'; exit 1; }
+            pnpm --version
+
+            # Write .env after cleaning (avoid heredoc indentation issues)
+            (
+              echo "NUXT_PUBLIC_URL_BACKEND=$NUXT_PUBLIC_URL_BACKEND"
+              echo "NUXT_PUBLIC_API_BASE=$NUXT_PUBLIC_API_BASE"
+              echo "GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID"
+              echo "GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY"
+              echo "NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=$NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"
+              echo "NUXT_PUBLIC_HOST=$NUXT_PUBLIC_HOST"
+              echo "NUXT_PUBLIC_SSR=$NUXT_PUBLIC_SSR"
+              echo "NUXT_PUBLIC_PRESET=$NUXT_PUBLIC_PRESET"
+            ) > .env
+
+            pnpm install --frozen-lockfile
+            NODE_OPTIONS=--max-old-space-size=4096 pnpm exec nuxt generate --dotenv .env
+
+            # Assuming the generated static files are in the 'dist' directory
+           
+          EOF
