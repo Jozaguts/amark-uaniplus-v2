@@ -1087,6 +1087,14 @@ const mockupImageConfig = computed(() => ({
   listening: false,
 }))
 
+const productColorBackdropConfig = computed(() =>
+  buildColorBackdropConfig(
+    imageLayout.value,
+    selectedColor.value?.hex ?? null,
+    availableColors.value.length > 0,
+  ),
+)
+
 const canvasScale = computed(() => {
   const mockup = activeMockup.value
 
@@ -2605,6 +2613,10 @@ useHead(() => ({
                 @touchstart="handleStagePointerDown"
               >
                 <v-layer>
+                  <v-rect
+                    v-if="productColorBackdropConfig"
+                    :config="productColorBackdropConfig"
+                  />
                   <v-image
                     v-if="canvasImage"
                     :config="mockupImageConfig"
