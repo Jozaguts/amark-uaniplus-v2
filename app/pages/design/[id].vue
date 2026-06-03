@@ -232,6 +232,25 @@ const successDialogTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 const savedDraftsRefreshKey = ref(0)
 const zoomScaleFactor = ref(1)
 const activeWorkspaceTab = shallowRef<'design' | 'mockups'>('design')
+const MOCKUPS_LOADING_MS = 3000
+const hasShownMockupsLoading = ref(false)
+const mockupsLoadingVisible = ref(false)
+let mockupsLoadingTimer: ReturnType<typeof setTimeout> | null = null
+
+if (import.meta.client) {
+  watch(activeWorkspaceTab, (tab) => {
+    if (tab !== 'mockups' || hasShownMockupsLoading.value) {
+      return
+    }
+
+    hasShownMockupsLoading.value = true
+    mockupsLoadingVisible.value = true
+    mockupsLoadingTimer = setTimeout(() => {
+      mockupsLoadingVisible.value = false
+      mockupsLoadingTimer = null
+    }, MOCKUPS_LOADING_MS)
+  })
+}
 const designOverlayUrls = shallowRef<Record<string, string | null>>({})
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -2272,6 +2291,10 @@ if (import.meta.client) {
 }
 
 onBeforeUnmount(() => {
+  if (mockupsLoadingTimer) {
+    clearTimeout(mockupsLoadingTimer)
+    mockupsLoadingTimer = null
+  }
   clearPostSaveFeedbackTimers()
   uploadRequests.forEach((request) => {
     request.abort()
@@ -2501,7 +2524,7 @@ useHead(() => ({
           </section>
         </aside>
 
-        <section class="order-1 flex min-h-[420px] flex-1 flex-col overflow-hidden rounded-lg bg-white lg:order-2">
+        <section class="relative order-1 flex min-h-[420px] flex-1 flex-col overflow-hidden rounded-lg bg-white lg:order-2">
           <div class="grid grid-cols-[1fr_auto_1fr] items-center border-b border-borderSecondary px-3 py-2 lg:px-4">
             <div class="flex flex-wrap items-center gap-2">
               <button
@@ -2696,6 +2719,15 @@ useHead(() => ({
             :selected-color-hex="selectedColor?.hex ?? ''"
             :active-view-id="activeViewId"
           />
+          <div
+            v-if="mockupsLoadingVisible"
+            class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-white/80 backdrop-blur-sm"
+          >
+            <Icon name="icon:spinner-gap" size="32px" class="animate-spin text-primary" />
+            <span class="text-sm font-medium text-primary">
+              {{ t('catalog.designEditor.mockups.preparing') }}
+            </span>
+          </div>
         </section>
 
         <aside

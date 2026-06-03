@@ -587,7 +587,8 @@
         "previewAlt": "Vista previa del mockup",
         "download": "Descargar",
         "downloading": "Descargando...",
-        "downloadError": "La descarga requiere encabezados CORS en el servidor de medios."
+        "downloadError": "La descarga requiere encabezados CORS en el servidor de medios.",
+        "preparing": "Generando mockups…"
       }
     },
     "product": {
