@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
+import type { ImageLayoutBox } from './productColorBackdrop'
 import { buildColorBackdropConfig } from './productColorBackdrop'
 
-const layout = { x: 10, y: 20, width: 240, height: 300 }
+const layout: ImageLayoutBox = { x: 10, y: 20, width: 240, height: 300 }
 
 describe('buildColorBackdropConfig', () => {
   it('returns a konva rect config when a color applies', () => {
@@ -23,6 +24,7 @@ describe('buildColorBackdropConfig', () => {
   it('returns null when no color hex is provided', () => {
     expect(buildColorBackdropConfig(layout, '', true)).toBeNull()
     expect(buildColorBackdropConfig(layout, null, true)).toBeNull()
+    expect(buildColorBackdropConfig(layout, undefined, true)).toBeNull()
   })
 
   it('returns null when layout is missing', () => {

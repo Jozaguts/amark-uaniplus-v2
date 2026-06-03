@@ -33,6 +33,7 @@ import type {
   EditorProductView,
   EditorWordArtOption as ApiEditorWordArtOption,
 } from '~~/types/editor-product'
+import { buildColorBackdropConfig } from '~/utils/productColorBackdrop'
 import type { ProductDetail, ProductDetailSelectableOption, ProductType } from '~~/types/product'
 import type { StorefrontFetchError } from '~~/types/storefront'
 import type {
