@@ -54,10 +54,12 @@ jobs:
 
             # Ensure pnpm is available (prefer corepack)
             if command -v corepack >/dev/null 2>&1; then
-              corepack enable
+              export COREPACK_HOME="$HOME/.cache/corepack"
               corepack prepare pnpm@9.15.5 --activate
+              export PATH="$COREPACK_HOME:$PATH"
             elif ! command -v pnpm >/dev/null 2>&1; then
-              npm install -g pnpm@9.15.5
+              npm install --prefix "$HOME/.local" pnpm@9.15.5
+              export PATH="$HOME/.local/bin:$PATH"
             fi
 
             command -v pnpm >/dev/null 2>&1 || { echo 'ERROR: pnpm is not available on VPS'; exit 1; }
