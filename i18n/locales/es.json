@@ -588,7 +588,7 @@
         "download": "Descargar",
         "downloading": "Descargando...",
         "downloadError": "La descarga requiere encabezados CORS en el servidor de medios.",
-        "preparing": "Generando mockups…"
+        "preparing": "Generando mockups..."
       }
     },
     "product": {

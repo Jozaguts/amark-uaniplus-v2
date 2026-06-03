@@ -235,7 +235,7 @@ const activeWorkspaceTab = shallowRef<'design' | 'mockups'>('design')
 const MOCKUPS_LOADING_MS = 3000
 const hasShownMockupsLoading = ref(false)
 const mockupsLoadingVisible = ref(false)
-let mockupsLoadingTimer: ReturnType<typeof setTimeout> | null = null
+let mockupsLoadingTimer: ReturnType<typeof window.setTimeout> | null = null
 
 if (import.meta.client) {
   watch(activeWorkspaceTab, (tab) => {
@@ -245,7 +245,7 @@ if (import.meta.client) {
 
     hasShownMockupsLoading.value = true
     mockupsLoadingVisible.value = true
-    mockupsLoadingTimer = setTimeout(() => {
+    mockupsLoadingTimer = window.setTimeout(() => {
       mockupsLoadingVisible.value = false
       mockupsLoadingTimer = null
     }, MOCKUPS_LOADING_MS)
@@ -2721,6 +2721,8 @@ useHead(() => ({
           />
           <div
             v-if="mockupsLoadingVisible"
+            role="status"
+            aria-live="polite"
             class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-white/80 backdrop-blur-sm"
           >
             <Icon name="icon:spinner-gap" size="32px" class="animate-spin text-primary" />
