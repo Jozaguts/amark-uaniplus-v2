@@ -587,7 +587,8 @@
         "previewAlt": "Mockup preview",
         "download": "Download",
         "downloading": "Downloading...",
-        "downloadError": "Download requires CORS headers on the media server."
+        "downloadError": "Download requires CORS headers on the media server.",
+        "preparing": "Preparing mockups..."
       }
     },
     "product": {
