@@ -30,6 +30,7 @@ jobs:
           NUXT_PUBLIC_HOST: ${{ vars.NUXT_PUBLIC_HOST }}
           NUXT_PUBLIC_SSR: ${{ vars.NUXT_PUBLIC_SSR}}
           NUXT_PUBLIC_PRESET: ${{ vars.NUXT_PUBLIC_PRESET }}
+          DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
         run: |
           ssh -p ${{ vars.SSH_PORT}} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
             set -Eeuo pipefail
