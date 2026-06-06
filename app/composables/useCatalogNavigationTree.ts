@@ -23,22 +23,26 @@ function itemToMenuLink(item: CatalogNavigationItem): CatalogNavigationMenuLink 
     label: item.name,
     url: item.url,
     path: item.path,
-    badge: item.badge ?? null,
-    italic: item.italic ?? false,
     children: item.children?.map(itemToMenuLink) ?? [],
   }
 }
 
+function itemToColumn(item: CatalogNavigationItem): CatalogNavigationColumn {
+  return {
+    id: item.id,
+    title: item.name,
+    url: item.url,
+    items: item.children?.map(itemToMenuLink) ?? [],
+  }
+}
+
+// El mega-menú de un nodo se arma con sus hijos directos como columnas; los
+// nietos quedan como enlaces dentro de cada columna (árbol uniforme `children`).
 function childrenToMenu(item: CatalogNavigationItem): CatalogNavigationMenu | null {
   if (!item.children?.length)
     return null
 
-  const columns: CatalogNavigationColumn[] = [{
-    title: item.name,
-    items: item.children.map(itemToMenuLink),
-  }]
-
-  return { columns, images: [] }
+  return { columns: item.children.map(itemToColumn) }
 }
 
 function normalizePayload(response: CatalogNavigationResponse | CatalogNavigationPayload | CatalogNavigationItem[] | null | undefined): CatalogNavigationPayload {
@@ -109,9 +113,6 @@ export function useCatalogNavigationTree() {
   const items = computed(() => activeItems(payload.value.items))
 
   function menuForItem(item: CatalogNavigationItem): CatalogNavigationMenu | null {
-    if (item.menu?.columns?.length)
-      return item.menu
-
     return childrenToMenu(item)
   }
 

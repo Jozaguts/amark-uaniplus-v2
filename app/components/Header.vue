@@ -12,8 +12,6 @@ const { authReady, displayName, hydrateAuth, isAuthenticated, logout } = useStor
 interface MobileNavLink {
   label: string
   url: string
-  badge?: string | null
-  italic?: boolean
   children: MobileNavLink[]
 }
 
@@ -78,8 +76,7 @@ function columnHasMenu(column: CatalogNavigationColumn): boolean {
   if (!column.url) return false
   const item = findByUrl(column.url)
   if (!item) return false
-  const menu = menuForItem(item)
-  return Boolean(menu?.columns?.length || menu?.images?.length || activeMainItem.value?.menu?.images?.length)
+  return Boolean(menuForItem(item)?.columns?.length)
 }
 
 const nextLocale = computed(() => locale.value === 'es' ? 'en' : 'es')
@@ -92,9 +89,13 @@ const activeMainItem = computed(() => {
   return navItems.value.find(isActiveNavigationItem) ?? navItems.value[0] ?? null
 })
 
-const subNavigationItems = computed<CatalogNavigationColumn[]>(() => activeMainItem.value?.menu?.columns ?? [])
+const subNavigationItems = computed<CatalogNavigationColumn[]>(() =>
+  activeMainItem.value ? menuForItem(activeMainItem.value)?.columns ?? [] : [],
+)
 
-const mobileSubNavigationItems = computed<CatalogNavigationColumn[]>(() => mobileActiveMainItem.value?.menu?.columns ?? [])
+const mobileSubNavigationItems = computed<CatalogNavigationColumn[]>(() =>
+  mobileActiveMainItem.value ? menuForItem(mobileActiveMainItem.value)?.columns ?? [] : [],
+)
 
 const forcedMegaMenuValue = computed(() => {
   const rawValue = route.query.nav ?? route.query.menu ?? route.query.activeNav
@@ -112,12 +113,6 @@ const activeMegaMenu = computed(() => {
   return menuForItem(item)
 })
 
-const activeMegaMenuImages = computed(() => {
-  return activeMegaMenu.value?.images?.length
-    ? activeMegaMenu.value.images
-    : activeMainItem.value?.menu?.images ?? []
-})
-
 function openMegaMenu(column: CatalogNavigationColumn): void {
   cancelMegaMenuClose()
   if (!column.url) {
@@ -129,8 +124,7 @@ function openMegaMenu(column: CatalogNavigationColumn): void {
     activeMegaMenuKey.value = null
     return
   }
-  const menu = menuForItem(item)
-  const hasMenuContent = Boolean(menu?.columns?.length || menu?.images?.length || activeMainItem.value?.menu?.images?.length)
+  const hasMenuContent = Boolean(menuForItem(item)?.columns?.length)
   activeMegaMenuKey.value = hasMenuContent ? column.url : null
 }
 
@@ -177,15 +171,11 @@ function menuLinkToNavLink(link: CatalogNavigationMenuLink): MobileNavLink {
   return {
     label: link.label,
     url: link.url,
-    badge: link.badge,
-    italic: link.italic,
     children: (link.children ?? []).map(menuLinkToNavLink),
   }
 }
 
 function columnToNavLinks(column: CatalogNavigationColumn): MobileNavLink[] {
-  if (column.groups?.length)
-    return column.groups.flat().map(menuLinkToNavLink)
   return (column.items ?? []).map(menuLinkToNavLink)
 }
 
@@ -430,7 +420,6 @@ onMounted(() => {
           <MegaMenu
             v-if="activeMegaMenu"
             :columns="activeMegaMenu.columns"
-            :images="activeMegaMenuImages"
             @mouseenter="cancelMegaMenuClose"
             @mouseleave="scheduleMegaMenuClose"
           />
@@ -680,13 +669,7 @@ onMounted(() => {
                     class="flex w-full items-center justify-between px-4 py-4 text-[14px] text-[#222]"
                     @click="mobileOpenLink(link)"
                   >
-                    <span :class="link.italic && 'italic'">
-                      {{ link.label }}
-                      <span
-                        v-if="link.badge"
-                        class="ml-1.5 inline-flex rounded-full bg-[#e5e5e5] px-2 py-px align-middle text-[9px] font-bold not-italic leading-none text-black"
-                      >{{ link.badge }}</span>
-                    </span>
+                    <span>{{ link.label }}</span>
                     <Icon name="ph:caret-right" class="size-[14px] shrink-0 text-[#bbb]" />
                   </button>
 
@@ -694,14 +677,9 @@ onMounted(() => {
                     v-else
                     :to="linkTarget(link.url)"
                     class="flex items-center px-4 py-4 text-[14px] text-[#222]"
-                    :class="link.italic && 'italic'"
                     @click="isMobileMenuOpen = false"
                   >
                     {{ link.label }}
-                    <span
-                      v-if="link.badge"
-                      class="ml-1.5 inline-flex rounded-full bg-[#e5e5e5] px-2 py-px align-middle text-[9px] font-bold not-italic leading-none text-black"
-                    >{{ link.badge }}</span>
                   </NuxtLink>
                 </div>
               </div>

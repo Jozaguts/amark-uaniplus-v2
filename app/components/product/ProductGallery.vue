@@ -30,11 +30,11 @@ function imageAlt(image: ProductGalleryImage): string {
       />
     </button>
 
-    <div class="grid min-h-[640px] grid-cols-1 items-end gap-[44px] px-[55px] md:grid-cols-2">
+    <div class="grid  place-content-center grid-cols-1 items-end gap-[44px] px-[55px] md:grid-cols-2">
       <div
         v-for="image in images.slice(0, 2)"
         :key="image.src"
-        class="flex min-h-[560px] items-end justify-center"
+        class="flex  items-center justify-center"
       >
         <img
           :src="image.src"
