@@ -33,7 +33,6 @@ import type {
   EditorProductView,
   EditorWordArtOption as ApiEditorWordArtOption,
 } from '~~/types/editor-product'
-import { buildColorBackdropConfig } from '~/utils/productColorBackdrop'
 import type { ProductDetail, ProductDetailSelectableOption, ProductType } from '~~/types/product'
 import type { StorefrontFetchError } from '~~/types/storefront'
 import type {
@@ -1106,14 +1105,6 @@ const mockupImageConfig = computed(() => ({
   name: 'product-mockup',
   listening: false,
 }))
-
-const productColorBackdropConfig = computed(() =>
-  buildColorBackdropConfig(
-    imageLayout.value,
-    selectedColor.value?.hex ?? null,
-    availableColors.value.length > 0,
-  ),
-)
 
 const canvasScale = computed(() => {
   const mockup = activeMockup.value
@@ -2637,10 +2628,9 @@ useHead(() => ({
                 @touchstart="handleStagePointerDown"
               >
                 <v-layer>
-                  <v-rect
-                    v-if="productColorBackdropConfig"
-                    :config="productColorBackdropConfig"
-                  />
+                  <!-- El color seleccionado ya NO recolorea la prenda en el editor de
+                       diseño (las líneas guía del PNG se perdían en colores oscuros).
+                       El cambio de color visual vive sólo en la sección de mockups. -->
                   <v-image
                     v-if="canvasImage"
                     :config="mockupImageConfig"
