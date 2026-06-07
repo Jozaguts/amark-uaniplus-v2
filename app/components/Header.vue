@@ -30,10 +30,23 @@ const mobileNavGoingBack = shallowRef(false)
 const logoutPending = shallowRef(false)
 const userMenuRef = shallowRef<HTMLElement | null>(null)
 const { items: navItems, menuForItem, findByUrl, subColumnsFor } = useCatalogNavigationTree()
+const { activeCategoryPath } = useActiveNavigation()
 
 function normalizePath(path: string): string {
   return path.replace(/^\/(en|es)(?=\/)/, '').replace(/\/$/, '') || '/'
 }
+
+// La ruta usada para resolver el estado activo del nav. En la página de producto
+// (`/products/{slug}`) la URL no refleja la categoría, así que usamos la última
+// categoría navegada para no perder la sección (p. ej. Men > New).
+const activeNavPath = computed(() => {
+  const routePath = normalizePath(route.path)
+
+  if (routePath.startsWith('/products') && activeCategoryPath.value)
+    return `/${activeCategoryPath.value}`
+
+  return routePath
+})
 
 function normalizeUrlPath(url: string): string {
   return url.replace(/^\/+/, '').replace(/\/+$/, '')
@@ -51,7 +64,7 @@ function linkTarget(url: string): string {
 }
 
 function isActiveNavigationItem(item: CatalogNavigationItem): boolean {
-  const currentPath = normalizePath(route.path)
+  const currentPath = activeNavPath.value
   const itemPath = normalizePath(item.url)
 
   return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`)
@@ -59,7 +72,7 @@ function isActiveNavigationItem(item: CatalogNavigationItem): boolean {
 
 function isActiveColumn(column: CatalogNavigationColumn): boolean {
   if (!column.url) return false
-  const currentPath = normalizePath(route.path)
+  const currentPath = activeNavPath.value
   const colPath = normalizePath(column.url)
   return currentPath === colPath || currentPath.startsWith(`${colPath}/`)
 }

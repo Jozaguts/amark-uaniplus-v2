@@ -9,8 +9,8 @@ const activeTab = shallowRef('description')
 
 const tabs = [
   { key: 'description', labelKey: 'catalog.product.tabs.description' },
-  { key: 'sizeFit', labelKey: 'catalog.product.tabs.sizeFit' },
-  { key: 'aboutBrand', labelKey: 'catalog.product.tabs.aboutBrand' },
+  // { key: 'sizeFit', labelKey: 'catalog.product.tabs.sizeFit' },
+  // { key: 'aboutBrand', labelKey: 'catalog.product.tabs.aboutBrand' },
 ] as const
 
 const descriptionItems = computed(() => props.content?.description ?? [])

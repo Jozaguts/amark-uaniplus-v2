@@ -7,7 +7,13 @@ const props = defineProps<{
 
 const { t } = useI18n()
 
-const thumbnailImages = computed(() => props.images.slice(0, 4))
+// La galería siempre muestra como máximo 4 imágenes (slides, paginación y
+// thumbnails), aunque el backend envíe más.
+const MAX_SLIDES = 4
+const slides = computed<ProductGalleryImage[]>(() => props.images.slice(0, MAX_SLIDES))
+
+const mainSwiper = ref<(HTMLElement & { swiper?: { slideTo: (index: number) => void, activeIndex: number } }) | null>(null)
+const activeIndex = ref(0)
 
 function imageAlt(image: ProductGalleryImage): string {
   if (image.alt)
@@ -15,63 +21,85 @@ function imageAlt(image: ProductGalleryImage): string {
 
   return image.altKey ? t(image.altKey) : ''
 }
+
+function goTo(index: number): void {
+  mainSwiper.value?.swiper?.slideTo(index)
+  activeIndex.value = index
+}
+
+function onSlideChange(event: Event): void {
+  const swiper = (event as CustomEvent).detail?.[0]
+
+  if (swiper)
+    activeIndex.value = swiper.activeIndex
+}
 </script>
 
 <template>
   <section class="relative min-w-0">
-    <button
-      type="button"
-      class="absolute left-[28px] top-[50%] z-10 -translate-y-1/2 text-black"
-      :aria-label="$t('catalog.product.gallery.previous')"
-    >
-      <Icon
-        name="lucide:chevron-left"
-        class="size-[28px]"
-      />
-    </button>
-
-    <div class="grid  place-content-center grid-cols-1 items-end gap-[44px] px-[55px] md:grid-cols-2">
-      <div
-        v-for="image in images.slice(0, 2)"
-        :key="image.src"
-        class="flex  items-center justify-center"
+    <ClientOnly>
+      <swiper-container
+        ref="mainSwiper"
+        class="product-gallery-swiper w-full"
+        slides-per-view="1"
+        space-between="0"
+        auto-height="true"
+        navigation="true"
+        pagination="true"
+        @swiperslidechange="onSlideChange"
       >
-        <img
-          :src="image.src"
-          :srcset="image.srcset"
-          :alt="imageAlt(image)"
-          class="max-h-[500px] w-full object-contain object-bottom"
-          width="960"
-          height="1450"
+        <swiper-slide
+          v-for="image in slides"
+          :key="image.src"
         >
-      </div>
-    </div>
+          <div class="flex h-full items-center justify-center px-[40px] md:px-[55px]">
+            <img
+              :src="image.src"
+              :srcset="image.srcset"
+              :alt="imageAlt(image)"
+              class="max-h-[420px] w-full object-contain md:max-h-[520px]"
+              width="960"
+              height="1450"
+            >
+          </div>
+        </swiper-slide>
+      </swiper-container>
 
-    <button
-      type="button"
-      class="absolute right-[20px] top-[50%] z-10 -translate-y-1/2 text-black"
-      :aria-label="$t('catalog.product.gallery.next')"
+      <template #fallback>
+        <div class="flex items-center justify-center px-[40px] md:px-[55px]">
+          <img
+            v-if="slides[0]"
+            :src="slides[0].src"
+            :srcset="slides[0].srcset"
+            :alt="imageAlt(slides[0])"
+            class="max-h-[420px] w-full object-contain md:max-h-[520px]"
+            width="960"
+            height="1450"
+          >
+        </div>
+      </template>
+    </ClientOnly>
+
+    <!-- Thumbnails sincronizados (escritorio); en móvil basta swipe + bullets -->
+    <div
+      v-if="slides.length > 1"
+      class="mt-[24px] hidden justify-center gap-[10px] overflow-x-auto pb-[4px] md:flex"
     >
-      <Icon
-        name="lucide:chevron-right"
-        class="size-[28px]"
-      />
-    </button>
-
-    <div class="mt-[36px] flex justify-center gap-[10px]">
       <button
-        v-for="(image, index) in thumbnailImages"
+        v-for="(image, index) in slides"
         :key="image.thumb"
         type="button"
-        class="grid size-[39px] place-items-center rounded-full border bg-white"
-        :class="index === 0 ? 'border-black' : 'border-[#e0e0e0]'"
+        class="grid size-[44px] shrink-0 place-items-center overflow-hidden rounded-full border bg-white transition-colors"
+        :class="index === activeIndex ? 'border-black' : 'border-[#e0e0e0]'"
         :aria-label="$t('catalog.product.gallery.thumbnail', { number: index + 1 })"
+        :aria-current="index === activeIndex"
+        @click="goTo(index)"
       >
         <img
           :src="image.thumb"
           :srcset="image.thumbSrcset"
           :alt="imageAlt(image)"
-          class="max-h-[29px] max-w-[30px] object-contain"
+          class="size-full object-cover"
           width="87"
           height="131"
         >
@@ -79,3 +107,28 @@ function imageAlt(image: ProductGalleryImage): string {
     </div>
   </section>
 </template>
+
+<style scoped>
+.product-gallery-swiper {
+  --swiper-navigation-color: #000;
+  --swiper-navigation-size: 24px;
+  --swiper-pagination-color: #000;
+  --swiper-pagination-bottom: 4px;
+  padding-bottom: 28px;
+}
+
+/* Móvil: swipe + bullets de paginación; ocultamos las flechas. */
+@media (max-width: 767px) {
+  .product-gallery-swiper::part(button-prev),
+  .product-gallery-swiper::part(button-next) {
+    display: none;
+  }
+}
+
+/* Escritorio: el indicador de posición son los thumbnails; ocultamos los bullets. */
+@media (min-width: 768px) {
+  .product-gallery-swiper::part(pagination) {
+    display: none;
+  }
+}
+</style>

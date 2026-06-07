@@ -5,6 +5,7 @@ import type { CatalogNavigationItem } from '~/types/catalog-navigation'
 const route = useRoute()
 const localePath = useLocalePath()
 const { findByPath } = useCatalogNavigationTree()
+const { setActiveCategoryPath } = useActiveNavigation()
 
 const categoryPath = computed(() => {
   const path = route.params.path
@@ -13,6 +14,12 @@ const categoryPath = computed(() => {
 })
 
 const category = computed(() => findByPath(categoryPath.value))
+
+// Recuerda la categoría navegada para que el nav siga activo al abrir un producto.
+watch(category, (current) => {
+  if (current)
+    setActiveCategoryPath(current.path)
+}, { immediate: true })
 
 const childGroups = computed(() => category.value?.children ?? [])
 

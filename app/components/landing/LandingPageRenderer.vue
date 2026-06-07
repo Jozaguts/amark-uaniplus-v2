@@ -78,7 +78,7 @@ function gridColumnsClass(section: LandingSection): string {
             :aria-label="itemAriaLabel(item)"
           >
             <img
-              class="absolute left-0 top-0 h-full w-full object-cover align-middle"
+              class="absolute left-0 top-0 h-full w-full object-contain align-middle"
               :src="item.image.src"
               :srcset="item.image.srcset || undefined"
               :alt="item.image.alt"

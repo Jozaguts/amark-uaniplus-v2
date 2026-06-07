@@ -10,6 +10,7 @@ const props = defineProps<{
 
 const localePath = useLocalePath()
 const { locale, t } = useI18n()
+const { setActiveCategoryPath } = useActiveNavigation()
 
 function linkTarget(url: string): string {
   if (/^https?:\/\//.test(url))
@@ -48,6 +49,15 @@ const backTo = computed<RouteLocationRaw>(() => {
 
   return lastCategory?.url ? linkTarget(lastCategory.url) : props.fallbackBackTo
 })
+
+// Si el producto trae breadcrumbs de categoría, fija el nav activo (útil en
+// enlaces directos/recarga). Si no, se conserva la última categoría navegada.
+watch(product, (current) => {
+  const lastCategory = current?.breadcrumbs?.at(-1)
+
+  if (lastCategory)
+    setActiveCategoryPath(lastCategory.url)
+}, { immediate: true })
 
 const designTo = computed<RouteLocationRaw | undefined>(() => {
   if (!product.value?.is_designable || !product.value.design_url)
@@ -106,7 +116,7 @@ useSeoMeta({
         <ProductGallery :images="galleryImages" />
       </div>
 
-      <div class="pt-[2px]">
+      <div class="w-full pt-[2px] lg:w-[430px] lg:shrink-0">
         <ProductInfoPanel
           :product="product"
           :design-to="designTo"
