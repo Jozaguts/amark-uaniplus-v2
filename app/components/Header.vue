@@ -29,7 +29,7 @@ const mobileNavStack = shallowRef<MobileNavPanel[]>([])
 const mobileNavGoingBack = shallowRef(false)
 const logoutPending = shallowRef(false)
 const userMenuRef = shallowRef<HTMLElement | null>(null)
-const { items: navItems, menuForItem, findByUrl } = useCatalogNavigationTree()
+const { items: navItems, menuForItem, findByUrl, subColumnsFor } = useCatalogNavigationTree()
 
 function normalizePath(path: string): string {
   return path.replace(/^\/(en|es)(?=\/)/, '').replace(/\/$/, '') || '/'
@@ -89,13 +89,12 @@ const activeMainItem = computed(() => {
   return navItems.value.find(isActiveNavigationItem) ?? navItems.value[0] ?? null
 })
 
-const subNavigationItems = computed<CatalogNavigationColumn[]>(() =>
-  activeMainItem.value ? menuForItem(activeMainItem.value)?.columns ?? [] : [],
-)
+// Las pestañas de sub-navegación son las categorías reales (children) del nodo
+// raíz activo; cada una necesita su propia URL navegable. El mega-menú de cada
+// pestaña sí respeta `menu_groups` vía `menuForItem`.
+const subNavigationItems = computed<CatalogNavigationColumn[]>(() => subColumnsFor(activeMainItem.value))
 
-const mobileSubNavigationItems = computed<CatalogNavigationColumn[]>(() =>
-  mobileActiveMainItem.value ? menuForItem(mobileActiveMainItem.value)?.columns ?? [] : [],
-)
+const mobileSubNavigationItems = computed<CatalogNavigationColumn[]>(() => subColumnsFor(mobileActiveMainItem.value))
 
 const forcedMegaMenuValue = computed(() => {
   const rawValue = route.query.nav ?? route.query.menu ?? route.query.activeNav

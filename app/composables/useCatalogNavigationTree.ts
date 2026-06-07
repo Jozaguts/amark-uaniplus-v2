@@ -2,10 +2,26 @@ import type {
   CatalogNavigationColumn,
   CatalogNavigationItem,
   CatalogNavigationMenu,
+  CatalogNavigationMenuGroup,
   CatalogNavigationMenuLink,
   CatalogNavigationPayload,
   CatalogNavigationResponse,
 } from '~/types/catalog-navigation'
+
+function bySortOrder<T extends { sort_order?: number }>(first: T, second: T): number {
+  return (first.sort_order ?? 0) - (second.sort_order ?? 0)
+}
+
+function activeGroups(groups: CatalogNavigationMenuGroup[] = []): CatalogNavigationMenuGroup[] {
+  return groups
+    .map(group => ({
+      ...group,
+      items: (group.items ?? [])
+        .filter(item => item.is_active !== false)
+        .sort(bySortOrder),
+    }))
+    .sort(bySortOrder)
+}
 
 function activeItems(items: CatalogNavigationItem[] = []): CatalogNavigationItem[] {
   return items
@@ -13,8 +29,9 @@ function activeItems(items: CatalogNavigationItem[] = []): CatalogNavigationItem
     .map(item => ({
       ...item,
       children: activeItems(item.children),
+      menu_groups: item.menu_groups ? activeGroups(item.menu_groups) : undefined,
     }))
-    .sort((first, second) => (first.sort_order ?? 0) - (second.sort_order ?? 0))
+    .sort(bySortOrder)
 }
 
 function itemToMenuLink(item: CatalogNavigationItem): CatalogNavigationMenuLink {
@@ -27,6 +44,7 @@ function itemToMenuLink(item: CatalogNavigationItem): CatalogNavigationMenuLink 
   }
 }
 
+// Cada hijo directo es una categoría real → columna con su propia URL navegable.
 function itemToColumn(item: CatalogNavigationItem): CatalogNavigationColumn {
   return {
     id: item.id,
@@ -36,13 +54,33 @@ function itemToColumn(item: CatalogNavigationItem): CatalogNavigationColumn {
   }
 }
 
-// El mega-menú de un nodo se arma con sus hijos directos como columnas; los
-// nietos quedan como enlaces dentro de cada columna (árbol uniforme `children`).
-function childrenToMenu(item: CatalogNavigationItem): CatalogNavigationMenu | null {
-  if (!item.children?.length)
-    return null
+// Un grupo visual NO es categoría navegable: sólo encabezado (sin `url`); sus
+// `items[]` sí son categorías reales.
+function groupToColumn(group: CatalogNavigationMenuGroup): CatalogNavigationColumn {
+  return {
+    id: group.id,
+    title: group.title,
+    items: group.items.map(itemToMenuLink),
+  }
+}
 
-  return { columns: item.children.map(itemToColumn) }
+// Columnas del mega-menú: si el nodo trae `menu_groups[]`, esos son las
+// columnas visuales; si no, se usan los hijos reales como columnas/lista.
+function menuFromGroupsOrChildren(item: CatalogNavigationItem): CatalogNavigationMenu | null {
+  if (item.menu_groups?.length)
+    return { columns: item.menu_groups.map(groupToColumn) }
+
+  if (item.children?.length)
+    return { columns: item.children.map(itemToColumn) }
+
+  return null
+}
+
+// Columnas siempre desde categorías reales (`children`), ignorando los grupos
+// visuales. Se usa para la barra de sub-navegación, cuyas pestañas necesitan
+// una URL navegable por pestaña.
+function childColumns(item: CatalogNavigationItem): CatalogNavigationColumn[] {
+  return item.children?.map(itemToColumn) ?? []
 }
 
 function normalizePayload(response: CatalogNavigationResponse | CatalogNavigationPayload | CatalogNavigationItem[] | null | undefined): CatalogNavigationPayload {
@@ -113,7 +151,11 @@ export function useCatalogNavigationTree() {
   const items = computed(() => activeItems(payload.value.items))
 
   function menuForItem(item: CatalogNavigationItem): CatalogNavigationMenu | null {
-    return childrenToMenu(item)
+    return menuFromGroupsOrChildren(item)
+  }
+
+  function subColumnsFor(item: CatalogNavigationItem | null | undefined): CatalogNavigationColumn[] {
+    return item ? childColumns(item) : []
   }
 
   function findByPath(path: string): CatalogNavigationItem | null {
@@ -132,6 +174,7 @@ export function useCatalogNavigationTree() {
     menuForItem,
     pending,
     refresh,
+    subColumnsFor,
     version: computed(() => payload.value.version),
   }
 }

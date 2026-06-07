@@ -111,7 +111,9 @@ const parentCategory = computed(() => parentPath.value ? findByPath(parentPath.v
 
 const topCategory = computed(() => navigationBreadcrumbItems.value[0] ?? props.category)
 
-const selectedCategory = computed(() => props.category.slug)
+// El contrato advierte que `slug` puede traer sufijos por colisión (ej. tops-2);
+// para mostrar al usuario usamos `name`. La identidad/navegación va por `path`.
+const selectedCategory = computed(() => props.category.name)
 
 function categoryItems(items: CatalogNavigationItem[]): CatalogSidebarGroup['items'] {
   return items.map(item => ({

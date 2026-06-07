@@ -1,7 +1,8 @@
 // --- API contract (GET /api/catalog/navigation) ---
-// La navegación se construye desde la tabla `categories`: un árbol jerárquico
-// uniforme expuesto en `children[]` recursivo. Ya no existe el bloque `menu`
-// (mega-menú) ni los campos `badge`/`icon`/`italic`. `name` es string plano.
+// La navegación se construye desde la tabla `categories`: las categorías reales
+// viven en `children[]` (máximo 3 niveles) y la organización visual del
+// mega-menú se expone aparte en `menu_groups[]`. Ya no existe el bloque `menu`
+// (columns/images) ni los campos `badge`/`icon`/`italic`. `name` es string plano.
 
 export interface CatalogNavigationResponse {
   // El endpoint devuelve la forma plana; conservamos `data` por compatibilidad
@@ -30,10 +31,22 @@ export interface CatalogNavigationItem {
   is_active?: boolean
   children?: CatalogNavigationItem[]
 
+  // Presentación del mega-menú (columnas visuales). Sólo cuando existe.
+  menu_groups?: CatalogNavigationMenuGroup[]
+
   // Opcionales — sólo presentes si tienen valor.
   description?: string | null
   seo_title?: string | null
   seo_description?: string | null
+}
+
+// Grupo visual del mega-menú. `title` es sólo un encabezado de columna, NO una
+// categoría navegable; cada `items[]` sí es una categoría real.
+export interface CatalogNavigationMenuGroup {
+  id?: number | string
+  title: string
+  sort_order?: number
+  items: CatalogNavigationItem[]
 }
 
 // --- Modelos de vista (derivados del árbol para render del mega-menú) ---
