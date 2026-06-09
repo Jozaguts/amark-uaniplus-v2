@@ -67,7 +67,7 @@ jobs:
             ) > .env
 
             pnpm install --frozen-lockfile
-            NODE_OPTIONS=--max-old-space-size=4096 pnpm exec nuxt generate --dotenv .env
+            NODE_OPTIONS=--max-old-space-size=2048 pnpm exec nuxt generate --dotenv .env
 
             # Assuming the generated static files are in the 'dist' directory
            
