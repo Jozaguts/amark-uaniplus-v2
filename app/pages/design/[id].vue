@@ -312,7 +312,7 @@ const activePrintArea = computed(() => {
 const activeMockup = computed<EditorProductMockup | null>(() => {
   return activeView.value?.mockup ?? null
 })
-const allEditorMockups = computed(() => withDevLifestyleMockups(editor.value?.mockups ?? [], availableViews.value))
+const allEditorMockups = computed(() => editor.value?.mockups ?? [])
 
 const DISPLAY_CANVAS_MAX_PX = 800
 
