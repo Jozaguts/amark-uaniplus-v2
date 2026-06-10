@@ -325,6 +325,9 @@ const renderDesignOnlyCanvas = async (view: EditorProductView): Promise<HTMLCanv
   const objects = designObjectsByView.value[view.id] ?? []
   const area = view.printArea
 
+  // [DEBUG-OVERLAY] temporal — quitar tras diagnosticar
+  console.debug('[DEBUG-OVERLAY] render view', view.id, 'objects:', objects.length, objects.map(o => ({ type: o.type, text: o.text, fill: o.fill })))
+
   if (!objects.length) return null
 
   const scale = DISPLAY_CANVAS_MAX_PX / Math.max(area.width, area.height)
@@ -374,6 +377,8 @@ const renderDesignOnlyCanvas = async (view: EditorProductView): Promise<HTMLCanv
       context.font = `${object.fontStyle ?? 'normal'} ${fontSize}px ${object.fontFamily ?? 'Arial'}`
       context.textBaseline = 'middle'
       context.textAlign = 'center'
+      // [DEBUG-OVERLAY] temporal
+      console.debug('[DEBUG-OVERLAY] drawText', { text: object.text, fill: context.fillStyle, font: context.font, fontStyleRaw: object.fontStyle })
       context.fillText(object.text, 0, 0, destinationWidth)
       context.restore()
     }
@@ -397,6 +402,9 @@ const updateDesignOverlays = useDebounceFn(async () => {
       }
     }),
   )
+
+  // [DEBUG-OVERLAY] temporal
+  console.debug('[DEBUG-OVERLAY] overlay urls', entries.map(([id, url]) => [id, url ? `len:${url.length}` : 'NULL']))
 
   designOverlayUrls.value = Object.fromEntries(entries)
 }, 200)
@@ -1512,6 +1520,9 @@ const updateActiveTextFontSize = (value: number | undefined) => {
 const updateActiveTextColor = (value: string | null) => {
   const object = activeTextObject.value
   const viewId = activeViewId.value
+
+  // [DEBUG-OVERLAY] temporal
+  console.debug('[DEBUG-OVERLAY] updateActiveTextColor', { value, type: typeof value, viewId, objectId: object?.id })
 
   if (!object || !viewId || !value) {
     return
