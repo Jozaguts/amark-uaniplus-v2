@@ -15,6 +15,11 @@ export default defineNuxtConfig({
     defaultLocale: 'en',
     strategy: 'prefix_except_default',
   },
+  // ✅ devServer va al nivel raíz, NO dentro de vite
+  devServer: {
+    host: '0.0.0.0',
+    port: 3000,
+  },
   vite: {
     plugins: [
       tailwindcss(),
@@ -23,14 +28,12 @@ export default defineNuxtConfig({
       sourcemap: false,
     },
     server: {
-      host: '127.0.0.1',
-      port: 5173,
       allowedHosts: [process.env.NUXT_PUBLIC_HOST ?? 'uandiplus.test','uandiplus.com'],
       strictPort: true,
       hmr: {
         protocol: 'ws',
         host: process.env.NUXT_PUBLIC_HOST ?? 'uandiplus.test',
-        port: 5173,
+        port: 80,
         clientPort: 80,
       },
     },
