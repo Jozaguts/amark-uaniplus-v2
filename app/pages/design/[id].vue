@@ -316,6 +316,10 @@ const allEditorMockups = computed(() => editor.value?.mockups ?? [])
 
 const DISPLAY_CANVAS_MAX_PX = 800
 
+// Tamaño de fuente inicial al agregar texto/número al canvas. El usuario puede
+// ajustarlo después; este es solo el valor de arranque.
+const INITIAL_TEXT_FONT_SIZE = 90
+
 // Renders the design (artwork + text) on a transparent canvas sized to the
 // print area. Artwork is loaded through loadCanvasImage (crossOrigin) so the
 // canvas stays untainted and toDataURL() can export the overlay; the Konva
@@ -324,9 +328,6 @@ const DISPLAY_CANVAS_MAX_PX = 800
 const renderDesignOnlyCanvas = async (view: EditorProductView): Promise<HTMLCanvasElement | null> => {
   const objects = designObjectsByView.value[view.id] ?? []
   const area = view.printArea
-
-  // [DEBUG-OVERLAY] temporal — quitar tras diagnosticar
-  console.debug('[DEBUG-OVERLAY] render view', view.id, 'objects:', objects.length, objects.map(o => ({ type: o.type, text: o.text, fill: o.fill })))
 
   if (!objects.length) return null
 
@@ -377,8 +378,6 @@ const renderDesignOnlyCanvas = async (view: EditorProductView): Promise<HTMLCanv
       context.font = `${object.fontStyle ?? 'normal'} ${fontSize}px ${object.fontFamily ?? 'Arial'}`
       context.textBaseline = 'middle'
       context.textAlign = 'center'
-      // [DEBUG-OVERLAY] temporal
-      console.debug('[DEBUG-OVERLAY] drawText', { text: object.text, fill: context.fillStyle, font: context.font, fontStyleRaw: object.fontStyle })
       context.fillText(object.text, 0, 0, destinationWidth)
       context.restore()
     }
@@ -402,9 +401,6 @@ const updateDesignOverlays = useDebounceFn(async () => {
       }
     }),
   )
-
-  // [DEBUG-OVERLAY] temporal
-  console.debug('[DEBUG-OVERLAY] overlay urls', entries.map(([id, url]) => [id, url ? `len:${url.length}` : 'NULL']))
 
   designOverlayUrls.value = Object.fromEntries(entries)
 }, 200)
@@ -1521,9 +1517,6 @@ const updateActiveTextColor = (value: string | null) => {
   const object = activeTextObject.value
   const viewId = activeViewId.value
 
-  // [DEBUG-OVERLAY] temporal
-  console.debug('[DEBUG-OVERLAY] updateActiveTextColor', { value, type: typeof value, viewId, objectId: object?.id })
-
   if (!object || !viewId || !value) {
     return
   }
@@ -1841,7 +1834,7 @@ const addDesignTextToActiveView = (selection: DesignTextArtSelection) => {
     return
   }
 
-  const style = getTextArtStyle(selection.option)
+  const style = { ...getTextArtStyle(selection.option), fontSize: INITIAL_TEXT_FONT_SIZE }
   const placement = createPlacementForTextArt(selection, style, area)
 
   if (!placement) {

@@ -34,7 +34,7 @@ export type EditorProductLifestyleMockup = {
   maskUrl?: string | null
   // Print zone as RATIOS (0–1) plus rotation in degrees.
   printZone?: { x: number; y: number; w: number; h: number; rotation: number } | null
-  blendMode?: 'multiply' | 'screen' | 'overlay' | null  // default 'multiply'
+  blendMode?: 'normal' | 'multiply' | 'screen' | 'overlay' | null  // default 'normal' (el diseño se imprime en su color real; 'multiply' oscurece y oculta tinta clara sobre prendas oscuras)
   // Optional / ignored for 'lifestyle' (photo is neutral; color comes from the Design tab)
   previewColorId?: string
   previewColorHex?: string

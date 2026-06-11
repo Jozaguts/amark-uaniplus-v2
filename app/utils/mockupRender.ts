@@ -26,7 +26,7 @@ export function resolvePrintZone(
   mockup: EditorProductLifestyleMockup | null,
 ): ResolvedPrintZone | null {
   if (mockup?.printZone) {
-    return { zone: mockup.printZone, blendMode: mockup.blendMode ?? 'multiply' }
+    return { zone: mockup.printZone, blendMode: mockup.blendMode ?? 'normal' }
   }
 
   const area = view.printArea
@@ -42,7 +42,7 @@ export function resolvePrintZone(
       h: area.height / base.height,
       rotation: 0,
     },
-    blendMode: mockup?.blendMode ?? 'multiply',
+    blendMode: mockup?.blendMode ?? 'normal',
   }
 }
 

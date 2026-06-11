@@ -39,6 +39,17 @@ const activeView = computed(() => {
     ?? props.views[0]
     ?? null
 })
+const mockupSrcForView = (view: EditorProductView) => {
+  return mockupsByView.value[view.id]?.src ?? view.mockup.src
+}
+const resolveZoneForView = (viewId: string) => {
+  const view = props.views.find(candidate => candidate.id === viewId)
+  return view ? resolvePrintZone(view, mockupsByView.value[view.id]) : null
+}
+const overlayStyleForView = (viewId: string): CSSProperties | null => {
+  const resolved = resolveZoneForView(viewId)
+  return resolved ? designOverlayStyle(resolved.zone, resolved.blendMode) : null
+}
 const activeMockup = computed(() => activeView.value ? mockupsByView.value[activeView.value.id] : null)
 const activeMockupSrc = computed(() => activeMockup.value?.src ?? activeView.value?.mockup.src ?? '')
 const activeOverlayStyle = computed(() => activeView.value ? overlayStyleForView(activeView.value.id) : null)
@@ -52,19 +63,7 @@ watch(selectedViewId, () => {
   downloadError.value = false
 })
 
-const mockupSrcForView = (view: EditorProductView) => {
-  return mockupsByView.value[view.id]?.src ?? view.mockup.src
-}
 
-const resolveZoneForView = (viewId: string) => {
-  const view = props.views.find(candidate => candidate.id === viewId)
-  return view ? resolvePrintZone(view, mockupsByView.value[view.id]) : null
-}
-
-const overlayStyleForView = (viewId: string): CSSProperties | null => {
-  const resolved = resolveZoneForView(viewId)
-  return resolved ? designOverlayStyle(resolved.zone, resolved.blendMode) : null
-}
 
 const tintStyleForView = (viewId: string): CSSProperties | null => {
   const mockup = mockupsByView.value[viewId]
@@ -152,7 +151,8 @@ const downloadMockup = async () => {
       const zoneW = zone.w * width
       const zoneH = zone.h * height
 
-      context.globalCompositeOperation = blendMode
+      // El canvas usa 'source-over' como equivalente del 'normal' de CSS mix-blend-mode.
+      context.globalCompositeOperation = blendMode === 'normal' ? 'source-over' : blendMode
 
       if (zone.rotation) {
         context.save()
@@ -208,7 +208,7 @@ const downloadMockup = async () => {
           :alt="view.label"
           class="block w-full bg-[#f9f9f9] object-contain"
         >
-        <div
+        <span
           v-if="tintStylesByView[view.id]"
           class="pointer-events-none absolute inset-0"
           :style="tintStylesByView[view.id]!"
