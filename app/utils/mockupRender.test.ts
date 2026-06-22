@@ -48,7 +48,7 @@ describe('resolvePrintZone', () => {
   it('derives the zone from printArea ratios with rotation 0 when no mockup', () => {
     expect(resolvePrintZone(view, null)).toEqual({
       zone: { x: 0.25, y: 0.25, w: 0.5, h: 0.5, rotation: 0 },
-      blendMode: 'multiply',
+      blendMode: 'normal',
     })
   })
   it('returns null when base dimensions are missing', () => {
