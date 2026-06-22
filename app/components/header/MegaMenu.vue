@@ -59,7 +59,7 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
 
 <template>
   <div
-      class="fixed inset-x-0 top-[63px] flex items-center justify-center border-b border-[#f4f4f4] bg-white pt-4 text-left normal-case tracking-normal">
+      class="fixed inset-x-0 top-34 flex items-center justify-center border-b border-[#f4f4f4] bg-white pt-4 text-left normal-case tracking-normal">
     <div class="mx-72 overflow-x-auto scrollbar-thin h-100">
       <div class="grid grid-cols-12 gap-4 h-full min-w-330">
         <div class="col-span-12">

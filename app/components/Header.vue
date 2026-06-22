@@ -270,45 +270,7 @@ onMounted(() => {
   <header>
     <div class="fixed inset-x-0 top-0 z-50 border-b border-[#e8e8e8] bg-white text-black">
       <div class="hidden h-[63px] grid-cols-[1fr_auto_1fr] items-start px-[288px] pt-[21px] lg:grid">
-        <nav
-          class="flex items-center gap-[18px] pt-px text-[12px] font-semibold leading-none"
-          @mouseleave="scheduleMegaMenuClose"
-        >
-          <template
-            v-for="item in navItems"
-            :key="itemKey(item)"
-          >
-            <NuxtLink
-              v-if="itemCanNavigate(item)"
-              :to="linkTarget(item.url)"
-              class="capitalize text-[#6d6d6d]"
-              :class="activeMainItem && itemKey(activeMainItem) === itemKey(item) && 'border-b border-black pb-0.75 text-black'"
-              @mouseenter="openMegaMenuForItem(item)"
-              @focus="openMegaMenuForItem(item)"
-            >
-              {{ item.name }}
-            </NuxtLink>
-            <button
-              v-else-if="itemHasDropdown(item)"
-              type="button"
-              class="capitalize text-[#6d6d6d]"
-              :class="activeMegaMenuKey === itemKey(item) && 'border-b border-black pb-0.75 text-black'"
-              :aria-expanded="activeMegaMenuKey === itemKey(item)"
-              aria-haspopup="true"
-              @mouseenter="openMegaMenuForItem(item)"
-              @focus="openMegaMenuForItem(item)"
-              @click="toggleMegaMenuForItem(item)"
-            >
-              {{ item.name }}
-            </button>
-            <span
-              v-else
-              class="capitalize text-[#6d6d6d]"
-            >
-              {{ item.name }}
-            </span>
-          </template>
-        </nav>
+        <div aria-hidden="true" />
 
         <NuxtLink
           :to="localePath('/')"
@@ -400,14 +362,54 @@ onMounted(() => {
         </div>
       </div>
 
-      <Transition name="mega-menu">
-        <MegaMenu
-          v-if="activeMegaMenu"
-          :columns="activeMegaMenu.columns"
-          @mouseenter="cancelMegaMenuClose"
-          @mouseleave="scheduleMegaMenuClose"
-        />
-      </Transition>
+      <div
+        class="hidden lg:block"
+        @mouseenter.stop
+        @mouseleave="scheduleMegaMenuClose"
+      >
+        <nav class="hidden h-[41px] min-w-max items-center justify-center gap-[34px] text-[15px] font-bold uppercase leading-none tracking-[0.16em] mt-8 lg:flex">
+          <template
+            v-for="item in navItems"
+            :key="itemKey(item)"
+          >
+            <NuxtLink
+              v-if="itemCanNavigate(item)"
+              :to="linkTarget(item.url)"
+              class="text-[#6d6d6d]"
+              :class="activeMainItem && itemKey(activeMainItem) === itemKey(item) && 'border-b-2 border-black pb-2 text-black'"
+              @mouseenter="openMegaMenuForItem(item)"
+              @focus="openMegaMenuForItem(item)"
+            >
+              {{ item.name }}
+            </NuxtLink>
+            <button
+              v-else-if="itemHasDropdown(item)"
+              type="button"
+              class="text-[#6d6d6d]"
+              :class="activeMegaMenuKey === itemKey(item) && 'border-b-2 border-black pb-2 text-black'"
+              :aria-expanded="activeMegaMenuKey === itemKey(item)"
+              aria-haspopup="true"
+              @mouseenter="openMegaMenuForItem(item)"
+              @focus="openMegaMenuForItem(item)"
+              @click="toggleMegaMenuForItem(item)"
+            >
+              {{ item.name }}
+            </button>
+            <span v-else class="text-[#6d6d6d]">
+              {{ item.name }}
+            </span>
+          </template>
+        </nav>
+
+        <Transition name="mega-menu">
+          <MegaMenu
+            v-if="activeMegaMenu"
+            :columns="activeMegaMenu.columns"
+            @mouseenter="cancelMegaMenuClose"
+            @mouseleave="scheduleMegaMenuClose"
+          />
+        </Transition>
+      </div>
 
       <div class="lg:hidden">
         <div class="flex h-[58px] items-center justify-between bg-white pl-[15px] pr-[15px]">
@@ -501,7 +503,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="h-[58px] lg:h-[63px]" aria-hidden="true" />
+    <div class="h-[58px] lg:h-[136px]" aria-hidden="true" />
   </header>
 
   <Teleport to="body">
