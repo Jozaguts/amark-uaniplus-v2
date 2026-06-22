@@ -40,6 +40,7 @@ function itemToMenuLink(item: CatalogNavigationItem): CatalogNavigationMenuLink 
     label: item.name,
     url: item.url,
     path: item.path,
+    isClickable: catalogNavigationState(item).canNavigate,
     children: item.children?.map(itemToMenuLink) ?? [],
   }
 }
@@ -50,6 +51,7 @@ function itemToColumn(item: CatalogNavigationItem): CatalogNavigationColumn {
     id: item.id,
     title: item.name,
     url: item.url,
+    isClickable: catalogNavigationState(item).canNavigate,
     items: item.children?.map(itemToMenuLink) ?? [],
   }
 }
@@ -60,6 +62,7 @@ function groupToColumn(group: CatalogNavigationMenuGroup): CatalogNavigationColu
   return {
     id: group.id,
     title: group.title,
+    isClickable: false,
     items: group.items.map(itemToMenuLink),
   }
 }

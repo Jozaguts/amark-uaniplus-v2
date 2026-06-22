@@ -1,6 +1,6 @@
 # Storefront Navigation — contrato para el front (`GET /api/catalog/navigation`)
 
-> **Cambio importante (2026-06-06):** la navegación ahora se construye desde
+> **Cambio importante (2026-06-22):** la navegación ahora se construye desde
 > `categories` como única fuente de verdad. Ya no existen `CategorySection`,
 > `Subcategory`, `catalog_navigation_items` ni promociones legacy como contrato
 > para el storefront.
@@ -38,7 +38,7 @@ Accept: application/json
 ```
 
 Tras la limpieza de raíces, `items` contiene **exactamente 3 nodos raíz**:
-`women`, `men`, `pet`. Ningún `path` público debe exceder tres segmentos, por
+`women`, `men`, `collection`. Ningún `path` público debe exceder tres segmentos, por
 ejemplo `women/clothing/tshirts`.
 
 `slug` se expone como el último segmento de `path`. Como la tabla conserva un
@@ -59,6 +59,7 @@ tratar `path` como identificador real.
   "level": 1,                  // 1 = raíz, 2, 3. Nunca mayor a 3
   "sort_order": 0,
   "is_active": true,
+  "is_clickable": false,      // sólo true autoriza al front a crear un enlace
   "children": [ /* categorías reales hijas, máximo nivel 3 */ ],
   "menu_groups": [ /* opcional, sólo presentación del mega-menú */ ],
 
@@ -122,13 +123,13 @@ tratar `path` como identificador real.
 | `name` como objeto traducible `{ "en": "...", "es": "..." }` | `name` es **string plano** |
 | Nodos de menú con clave `label` | Siempre `name` |
 | Campos `badge`, `icon`, `italic` | **Ya no se emiten** |
-| Raíces variables (incluían provider/legacy) | **Sólo** `women`, `men`, `pet` |
+| Raíces variables (incluían provider/legacy) | **Sólo** `women`, `men`, `collection` |
 | Grupos como `shop-by-category`, `trending`, `occasion` dentro del path | No son categorías; son `menu_groups.title` |
 | Productos ligados a `subcategory_id` / `category_id` legacy | Productos ligados a `category_product` |
 
 ## Cómo se importa `docs/navigation_complete_structure.json`
 
-- `navigation.women`, `navigation.men` y `navigation.pet` son las únicas raíces.
+- `navigation.women`, `navigation.men` y `navigation.collection` son las únicas raíces.
 - Cada item en `categories[]` se convierte en categoría nivel 2.
 - Cada item en `subcategories[]` sin `children[]` se convierte en categoría nivel 3.
 - Cada item en `subcategories[]` con `children[]` se convierte en `menu_groups[]` para la categoría nivel 2.
@@ -145,12 +146,14 @@ tratar `path` como identificador real.
 
 - Renderizar la navegación principal desde `payload.items`.
 - Renderizar categorías reales desde `node.children[]`.
+- Crear enlaces sólo cuando `node.is_clickable === true`.
+- Si `is_clickable` es `false` o no existe, renderizar texto o un trigger y no usar `url`.
 - Renderizar columnas visuales del mega-menú desde `node.menu_groups[]` cuando exista.
 - Para construir links usar `node.path` como fuente principal o `node.url` si el router acepta ese formato.
 - No usar `label`; usar siempre `name`.
 - No leer `section`, `subcategory`, `menu.columns`, `menu.images`, `badge`, `icon` ni `italic`.
 - No crear paths desde grupos visuales. `menu_groups[].title` es sólo un encabezado de columna.
-- Cada item dentro de `menu_groups[].items[]` ya es una categoría real navegable.
+- Cada item dentro de `menu_groups[].items[]` es una categoría real; sólo es navegable cuando `is_clickable === true`.
 - El detalle/listado de productos por categoría se obtiene con:
   `GET /api/storefront/catalog/categories/{path}/products`.
 - El endpoint de productos por categoría incluye productos asignados a esa categoría y a sus descendientes.
@@ -171,7 +174,7 @@ Ejemplos válidos:
 /women/clothing
 /women/clothing/tshirts
 /women/accessories/bags
-/pet/dog/collars
+/collection/summer
 ```
 
 Ejemplos inválidos:
@@ -192,7 +195,7 @@ Para cada nodo:
 
 1. Si tiene `menu_groups[]`, usar esos grupos como columnas visuales.
 2. Si no tiene `menu_groups[]`, se puede usar `children[]` como columnas/lista simple.
-3. Cada `menu_groups[].items[]` debe renderizarse como link usando `item.name` e `item.path`.
+3. Cada `menu_groups[].items[]` usa `item.name`; sólo crea un link con `item.path` cuando `is_clickable === true`.
 4. No asumir cantidad fija de columnas; pueden existir 0, 1 o N grupos.
 5. No asumir que `items` sólo existe en nivel 1. Cualquier categoría puede tener `menu_groups[]`, aunque normalmente se usará en nivel 2.
 
@@ -209,6 +212,7 @@ type NavigationNode = {
   level: 1 | 2 | 3;
   sort_order: number;
   is_active: boolean;
+  is_clickable: boolean;
   children: NavigationNode[];
   menu_groups?: MenuGroup[];
 };
@@ -248,7 +252,7 @@ function renderMegaMenuColumns(node: NavigationNode) {
   }));
 }
 
-payload.items.forEach(renderMegaMenuColumns); // items = [women, men, pet]
+payload.items.forEach(renderMegaMenuColumns); // items = [women, men, collection]
 ```
 
 ## Contrato de productos por categoría

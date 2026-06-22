@@ -45,6 +45,10 @@ function hasChildren(item: CatalogNavigationItem): boolean {
   return Boolean(item.children?.length)
 }
 
+function canNavigate(item: CatalogNavigationItem): boolean {
+  return catalogNavigationState(item).canNavigate
+}
+
 function linkTarget(url: string): string {
   if (/^https?:\/\//.test(url))
     return url
@@ -96,23 +100,33 @@ function toggleGroup(item: CatalogNavigationItem): void {
           >
             <li v-for="child in item.children" :key="child.path">
               <NuxtLink
+                v-if="canNavigate(child)"
                 :to="linkTarget(child.url)"
                 class="block px-4 py-3.5 text-[14px] text-[#222]"
               >
                 {{ child.name }}
               </NuxtLink>
+              <span v-else class="block px-4 py-3.5 text-[14px] text-[#222]">
+                {{ child.name }}
+              </span>
             </li>
           </ul>
         </template>
 
         <!-- group is a direct link -->
         <NuxtLink
-          v-else
+          v-else-if="canNavigate(item)"
           :to="linkTarget(item.url)"
           class="flex w-full items-center px-4 py-4 text-[14px] font-semibold uppercase tracking-[0.083em] text-black"
         >
           {{ item.name }}
         </NuxtLink>
+        <span
+          v-else
+          class="flex w-full items-center px-4 py-4 text-[14px] font-semibold uppercase tracking-[0.083em] text-black"
+        >
+          {{ item.name }}
+        </span>
       </div>
     </div>
 
@@ -134,21 +148,31 @@ function toggleGroup(item: CatalogNavigationItem): void {
         </span>
 
         <NuxtLink
-          v-else
+          v-else-if="canNavigate(item)"
           :to="linkTarget(item.url)"
           class="mb-3 block border-b border-[#e4e4e4] pb-2 text-[14px] font-semibold uppercase leading-none tracking-[0.083em] text-black"
         >
           {{ item.name }}
         </NuxtLink>
+        <span
+          v-else
+          class="mb-3 block border-b border-[#e4e4e4] pb-2 text-[14px] font-semibold uppercase leading-none tracking-[0.083em] text-black"
+        >
+          {{ item.name }}
+        </span>
 
         <ul v-if="item.children?.length" class="space-y-1">
           <li v-for="child in item.children" :key="child.path">
             <NuxtLink
+              v-if="canNavigate(child)"
               :to="linkTarget(child.url)"
               class="text-[14px] font-normal leading-[1.4] text-[#6e6e6e]"
             >
               {{ child.name }}
             </NuxtLink>
+            <span v-else class="text-[14px] font-normal leading-[1.4] text-[#6e6e6e]">
+              {{ child.name }}
+            </span>
           </li>
         </ul>
       </article>

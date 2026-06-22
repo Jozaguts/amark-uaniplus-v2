@@ -4,7 +4,7 @@ export interface CatalogSidebarGroup {
   title: string
   items: {
     label: string
-    to: RouteLocationRaw
+    to?: RouteLocationRaw
     active?: boolean
     danger?: boolean
   }[]

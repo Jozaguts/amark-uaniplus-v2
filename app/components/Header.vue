@@ -12,6 +12,7 @@ const { authReady, displayName, hydrateAuth, isAuthenticated, logout } = useStor
 interface MobileNavLink {
   label: string
   url: string
+  isClickable: boolean
   children: MobileNavLink[]
 }
 
@@ -29,7 +30,7 @@ const mobileNavStack = shallowRef<MobileNavPanel[]>([])
 const mobileNavGoingBack = shallowRef(false)
 const logoutPending = shallowRef(false)
 const userMenuRef = shallowRef<HTMLElement | null>(null)
-const { items: navItems, menuForItem, findByUrl, subColumnsFor } = useCatalogNavigationTree()
+const { items: navItems, menuForItem, subColumnsFor } = useCatalogNavigationTree()
 const { activeCategoryPath } = useActiveNavigation()
 
 function normalizePath(path: string): string {
@@ -70,28 +71,6 @@ function isActiveNavigationItem(item: CatalogNavigationItem): boolean {
   return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`)
 }
 
-function isActiveColumn(column: CatalogNavigationColumn): boolean {
-  if (!column.url) return false
-  const currentPath = activeNavPath.value
-  const colPath = normalizePath(column.url)
-  return currentPath === colPath || currentPath.startsWith(`${colPath}/`)
-}
-
-function subNavigationItemClass(column: CatalogNavigationColumn): string {
-  const isActive = activeMegaMenuKey.value === column.url || isActiveColumn(column)
-
-  return isActive
-    ? 'border-white md:border-black text-white md:text-black'
-    : 'border-transparent text-white md:text-black'
-}
-
-function columnHasMenu(column: CatalogNavigationColumn): boolean {
-  if (!column.url) return false
-  const item = findByUrl(column.url)
-  if (!item) return false
-  return Boolean(menuForItem(item)?.columns?.length)
-}
-
 const nextLocale = computed(() => locale.value === 'es' ? 'en' : 'es')
 
 const nextLocalePath = computed(() => switchLocalePath(nextLocale.value))
@@ -101,11 +80,6 @@ const nextLocaleLabel = computed(() => nextLocale.value.toUpperCase())
 const activeMainItem = computed(() => {
   return navItems.value.find(isActiveNavigationItem) ?? navItems.value[0] ?? null
 })
-
-// Las pestañas de sub-navegación son las categorías reales (children) del nodo
-// raíz activo; cada una necesita su propia URL navegable. El mega-menú de cada
-// pestaña sí respeta `menu_groups` vía `menuForItem`.
-const subNavigationItems = computed<CatalogNavigationColumn[]>(() => subColumnsFor(activeMainItem.value))
 
 const mobileSubNavigationItems = computed<CatalogNavigationColumn[]>(() => subColumnsFor(mobileActiveMainItem.value))
 
@@ -120,40 +94,39 @@ const isMegaMenuForced = computed(() => Boolean(forcedMegaMenuValue.value))
 
 const activeMegaMenu = computed(() => {
   if (!activeMegaMenuKey.value) return null
-  const item = findByUrl(activeMegaMenuKey.value)
+  const item = navItems.value.find(item => itemKey(item) === activeMegaMenuKey.value)
   if (!item) return null
   return menuForItem(item)
 })
 
-function openMegaMenu(column: CatalogNavigationColumn): void {
-  cancelMegaMenuClose()
-  if (!column.url) {
-    activeMegaMenuKey.value = null
-    return
-  }
-  const item = findByUrl(column.url)
-  if (!item) {
-    activeMegaMenuKey.value = null
-    return
-  }
-  const hasMenuContent = Boolean(menuForItem(item)?.columns?.length)
-  activeMegaMenuKey.value = hasMenuContent ? column.url : null
+function itemCanNavigate(item: CatalogNavigationItem): boolean {
+  return catalogNavigationState(item).canNavigate
 }
 
-function matchesForcedMegaMenuColumn(column: CatalogNavigationColumn): boolean {
+function itemHasDropdown(item: CatalogNavigationItem): boolean {
+  return catalogNavigationState(item).hasChildren
+}
+
+function openMegaMenuForItem(item: CatalogNavigationItem): void {
+  cancelMegaMenuClose()
+  const hasMenuContent = Boolean(menuForItem(item)?.columns?.length)
+  activeMegaMenuKey.value = hasMenuContent ? itemKey(item) : null
+}
+
+function matchesForcedMegaMenuItem(item: CatalogNavigationItem): boolean {
   const forcedValue = forcedMegaMenuValue.value
-  if (!forcedValue || !column.url) return false
-  const normalized = normalizeUrlPath(column.url)
+  if (!forcedValue) return false
+  const normalized = normalizeUrlPath(item.url)
   return normalized === forcedValue || normalized.endsWith(`/${forcedValue}`)
 }
 
-function toggleMegaMenu(column: CatalogNavigationColumn): void {
-  if (activeMegaMenuKey.value === column.url) {
+function toggleMegaMenuForItem(item: CatalogNavigationItem): void {
+  if (activeMegaMenuKey.value === itemKey(item)) {
     closeMegaMenu()
     return
   }
 
-  openMegaMenu(column)
+  openMegaMenuForItem(item)
 }
 
 let megaMenuCloseTimer: ReturnType<typeof setTimeout> | null = null
@@ -183,6 +156,7 @@ function menuLinkToNavLink(link: CatalogNavigationMenuLink): MobileNavLink {
   return {
     label: link.label,
     url: link.url,
+    isClickable: link.isClickable,
     children: (link.children ?? []).map(menuLinkToNavLink),
   }
 }
@@ -268,17 +242,17 @@ watch(route, () => {
 })
 
 watch(
-  [subNavigationItems, forcedMegaMenuValue],
+  [navItems, forcedMegaMenuValue],
   () => {
     if (!forcedMegaMenuValue.value) {
       activeMegaMenuKey.value = null
       return
     }
 
-    const column = subNavigationItems.value.find(matchesForcedMegaMenuColumn)
+    const item = navItems.value.find(matchesForcedMegaMenuItem)
 
-    if (column)
-      openMegaMenu(column)
+    if (item)
+      openMegaMenuForItem(item)
   },
   { immediate: true },
 )
@@ -296,17 +270,44 @@ onMounted(() => {
   <header>
     <div class="fixed inset-x-0 top-0 z-50 border-b border-[#e8e8e8] bg-white text-black">
       <div class="hidden h-[63px] grid-cols-[1fr_auto_1fr] items-start px-[288px] pt-[21px] lg:grid">
-        <nav class="flex items-center gap-[18px] pt-px text-[12px] font-semibold leading-none">
-          <NuxtLink
+        <nav
+          class="flex items-center gap-[18px] pt-px text-[12px] font-semibold leading-none"
+          @mouseleave="scheduleMegaMenuClose"
+        >
+          <template
             v-for="item in navItems"
             :key="itemKey(item)"
-            :to="linkTarget(item.url)"
-            class="capitalize text-[#6d6d6d]"
-            :class="activeMainItem && itemKey(activeMainItem) === itemKey(item) &&
-            'border-b border-white md:border-black pb-0.75 text-white md:text-black'"
           >
-            {{ item.name }}
-          </NuxtLink>
+            <NuxtLink
+              v-if="itemCanNavigate(item)"
+              :to="linkTarget(item.url)"
+              class="capitalize text-[#6d6d6d]"
+              :class="activeMainItem && itemKey(activeMainItem) === itemKey(item) && 'border-b border-black pb-0.75 text-black'"
+              @mouseenter="openMegaMenuForItem(item)"
+              @focus="openMegaMenuForItem(item)"
+            >
+              {{ item.name }}
+            </NuxtLink>
+            <button
+              v-else-if="itemHasDropdown(item)"
+              type="button"
+              class="capitalize text-[#6d6d6d]"
+              :class="activeMegaMenuKey === itemKey(item) && 'border-b border-black pb-0.75 text-black'"
+              :aria-expanded="activeMegaMenuKey === itemKey(item)"
+              aria-haspopup="true"
+              @mouseenter="openMegaMenuForItem(item)"
+              @focus="openMegaMenuForItem(item)"
+              @click="toggleMegaMenuForItem(item)"
+            >
+              {{ item.name }}
+            </button>
+            <span
+              v-else
+              class="capitalize text-[#6d6d6d]"
+            >
+              {{ item.name }}
+            </span>
+          </template>
         </nav>
 
         <NuxtLink
@@ -399,52 +400,14 @@ onMounted(() => {
         </div>
       </div>
 
-      <div
-        class="hidden lg:block"
-        @mouseenter.stop
-        @mouseleave="scheduleMegaMenuClose"
-      >
-        <div
-            class="xs:hidden overflow-x-auto mx-auto scrollbar-thin max-w-325">
-          <nav
-              class="flex h-[41px] min-w-max items-center justify-center gap-[34px] text-[15px] font-bold uppercase leading-none tracking-[0.16em] mt-8">
-            <div
-              v-for="column in subNavigationItems"
-              :key="column.url ?? column.title"
-              class="flex h-full items-center uppercase"
-              @mouseenter="openMegaMenu(column)"
-            >
-              <button
-                v-if="columnHasMenu(column)"
-                type="button"
-                class="whitespace-nowrap border-b-2 pb-2 pt-2 uppercase"
-                :class="subNavigationItemClass(column)"
-                @click="toggleMegaMenu(column)"
-              >
-                {{ column.title }}
-              </button>
-
-              <NuxtLink
-                v-else
-                :to="linkTarget(column.url ?? '/')"
-                class="whitespace-nowrap border-b-2 pb-2 pt-2 uppercase"
-                :class="subNavigationItemClass(column)"
-              >
-                {{ column.title }}
-              </NuxtLink>
-            </div>
-          </nav>
-        </div>
-
-        <Transition name="mega-menu">
-          <MegaMenu
-            v-if="activeMegaMenu"
-            :columns="activeMegaMenu.columns"
-            @mouseenter="cancelMegaMenuClose"
-            @mouseleave="scheduleMegaMenuClose"
-          />
-        </Transition>
-      </div>
+      <Transition name="mega-menu">
+        <MegaMenu
+          v-if="activeMegaMenu"
+          :columns="activeMegaMenu.columns"
+          @mouseenter="cancelMegaMenuClose"
+          @mouseleave="scheduleMegaMenuClose"
+        />
+      </Transition>
 
       <div class="lg:hidden">
         <div class="flex h-[58px] items-center justify-between bg-white pl-[15px] pr-[15px]">
@@ -535,35 +498,10 @@ onMounted(() => {
           </div>
         </div>
 
-        <div class="bg-black">
-          <nav class="container mx-auto flex h-10.25 items-center gap-6.5 overflow-x-auto px-5 text-[14px] font-bold uppercase leading-none tracking-[0.15em] text-white">
-            <template
-              v-for="column in subNavigationItems"
-              :key="column.url ?? column.title"
-            >
-              <span
-                v-if="columnHasMenu(column)"
-                class="shrink-0 whitespace-nowrap border-b-2 pb-2 pt-2"
-                :class="subNavigationItemClass(column)"
-              >
-                {{ column.title }}
-              </span>
-
-              <NuxtLink
-                v-else
-                :to="linkTarget(column.url ?? '/')"
-                class="shrink-0 whitespace-nowrap border-b-2 pb-2 pt-2"
-                :class="subNavigationItemClass(column)"
-              >
-                {{ column.title }}
-              </NuxtLink>
-            </template>
-          </nav>
-        </div>
       </div>
     </div>
 
-    <div class="h-[99px] lg:h-[136px]" aria-hidden="true" />
+    <div class="h-[58px] lg:h-[63px]" aria-hidden="true" />
   </header>
 
   <Teleport to="body">
@@ -608,18 +546,52 @@ onMounted(() => {
 
         <!-- Main nav tabs -->
         <div class="flex shrink-0 border-b border-[#e8e8e8]">
-          <button
+          <template
             v-for="item in navItems"
             :key="itemKey(item)"
-            type="button"
-            class="flex-1 border-b-2 py-3.5 text-[11px] font-semibold uppercase tracking-[0.1em] transition-colors"
-            :class="mobileActiveMainItem && itemKey(mobileActiveMainItem) === itemKey(item)
-              ? 'border-black text-black'
-              : 'border-transparent text-[#8c8c8c]'"
-            @click="setMobileSection(item)"
           >
-            {{ item.name }}
-          </button>
+            <div
+              v-if="itemHasDropdown(item)"
+              class="flex flex-1 items-center justify-center border-b-2 text-[11px] font-semibold uppercase tracking-[0.1em] transition-colors"
+              :class="mobileActiveMainItem && itemKey(mobileActiveMainItem) === itemKey(item)
+                ? 'border-black text-black'
+                : 'border-transparent text-[#8c8c8c]'"
+            >
+              <NuxtLink
+                v-if="itemCanNavigate(item)"
+                :to="linkTarget(item.url)"
+                class="py-3.5"
+                @click="isMobileMenuOpen = false"
+              >
+                {{ item.name }}
+              </NuxtLink>
+              <button
+                type="button"
+                class="flex items-center py-3.5"
+                :class="itemCanNavigate(item) ? 'ml-1' : ''"
+                :aria-label="itemCanNavigate(item) ? item.name : undefined"
+                aria-haspopup="true"
+                @click="setMobileSection(item)"
+              >
+                <span v-if="!itemCanNavigate(item)">{{ item.name }}</span>
+                <Icon v-else name="ph:caret-down" class="size-[11px]" />
+              </button>
+            </div>
+            <NuxtLink
+              v-else-if="itemCanNavigate(item)"
+              :to="linkTarget(item.url)"
+              class="flex-1 border-b-2 border-transparent py-3.5 text-center text-[11px] font-semibold uppercase tracking-[0.1em] text-[#8c8c8c]"
+              @click="isMobileMenuOpen = false"
+            >
+              {{ item.name }}
+            </NuxtLink>
+            <span
+              v-else
+              class="flex-1 border-b-2 border-transparent py-3.5 text-center text-[11px] font-semibold uppercase tracking-[0.1em] text-[#8c8c8c]"
+            >
+              {{ item.name }}
+            </span>
+          </template>
         </div>
 
         <!-- Multi-level nav panels -->
@@ -635,24 +607,37 @@ onMounted(() => {
                 v-for="column in mobileSubNavigationItems"
                 :key="column.url ?? column.title"
               >
-                <button
+                <div
                   v-if="columnToNavLinks(column).length"
-                  type="button"
                   class="flex w-full items-center justify-between px-4 py-4 text-[14px] text-[#222]"
-                  @click="mobileOpenColumn(column)"
                 >
-                  <span>{{ column.title }}</span>
-                  <Icon name="ph:caret-right" class="size-[14px] shrink-0 text-[#bbb]" />
-                </button>
+                  <NuxtLink
+                    v-if="column.isClickable && column.url"
+                    :to="linkTarget(column.url)"
+                    @click="isMobileMenuOpen = false"
+                  >
+                    {{ column.title }}
+                  </NuxtLink>
+                  <span v-else>{{ column.title }}</span>
+                  <button type="button" class="p-1" :aria-label="column.title" @click="mobileOpenColumn(column)">
+                    <Icon name="ph:caret-right" class="size-[14px] shrink-0 text-[#bbb]" />
+                  </button>
+                </div>
 
                 <NuxtLink
-                  v-else
+                  v-else-if="column.isClickable && column.url"
                   :to="linkTarget(column.url ?? '/')"
                   class="flex items-center px-4 py-4 text-[14px] text-[#222]"
                   @click="isMobileMenuOpen = false"
                 >
                   {{ column.title }}
                 </NuxtLink>
+                <span
+                  v-else
+                  class="flex items-center px-4 py-4 text-[14px] text-[#222]"
+                >
+                  {{ column.title }}
+                </span>
               </div>
             </div>
 
@@ -683,24 +668,37 @@ onMounted(() => {
                   v-for="link in currentMobilePanel.links"
                   :key="link.url"
                 >
-                  <button
+                  <div
                     v-if="link.children.length"
-                    type="button"
                     class="flex w-full items-center justify-between px-4 py-4 text-[14px] text-[#222]"
-                    @click="mobileOpenLink(link)"
                   >
-                    <span>{{ link.label }}</span>
-                    <Icon name="ph:caret-right" class="size-[14px] shrink-0 text-[#bbb]" />
-                  </button>
+                    <NuxtLink
+                      v-if="link.isClickable"
+                      :to="linkTarget(link.url)"
+                      @click="isMobileMenuOpen = false"
+                    >
+                      {{ link.label }}
+                    </NuxtLink>
+                    <span v-else>{{ link.label }}</span>
+                    <button type="button" class="p-1" :aria-label="link.label" @click="mobileOpenLink(link)">
+                      <Icon name="ph:caret-right" class="size-[14px] shrink-0 text-[#bbb]" />
+                    </button>
+                  </div>
 
                   <NuxtLink
-                    v-else
+                    v-else-if="link.isClickable"
                     :to="linkTarget(link.url)"
                     class="flex items-center px-4 py-4 text-[14px] text-[#222]"
                     @click="isMobileMenuOpen = false"
                   >
                     {{ link.label }}
                   </NuxtLink>
+                  <span
+                    v-else
+                    class="flex items-center px-4 py-4 text-[14px] text-[#222]"
+                  >
+                    {{ link.label }}
+                  </span>
                 </div>
               </div>
             </div>

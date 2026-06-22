@@ -118,7 +118,7 @@ const selectedCategory = computed(() => props.category.name)
 function categoryItems(items: CatalogNavigationItem[]): CatalogSidebarGroup['items'] {
   return items.map(item => ({
     label: item.name,
-    to: linkTarget(item.url),
+    to: item.is_clickable === true ? linkTarget(item.url) : undefined,
     active: props.category.path === item.path || props.category.path.startsWith(`${item.path}/`),
   }))
 }
@@ -134,7 +134,7 @@ const sidebarGroups = computed<CatalogSidebarGroup[]>(() => {
       title: parentCategory.value?.name ?? props.category.name,
       items: siblingItems.map(item => ({
         label: item.name,
-        to: linkTarget(item.url),
+        to: item.is_clickable === true ? linkTarget(item.url) : undefined,
         active: item.path === props.category.path,
       })),
     })

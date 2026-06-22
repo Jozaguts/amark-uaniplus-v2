@@ -37,6 +37,7 @@ function toggleGroup(title: string): void {
             :key="item.label"
           >
             <NuxtLink
+              v-if="item.to"
               :to="item.to"
               class="inline-block hover:text-black hover:underline"
               :class="{
@@ -46,6 +47,16 @@ function toggleGroup(title: string): void {
             >
               {{ item.label }}
             </NuxtLink>
+            <span
+              v-else
+              class="inline-block"
+              :class="{
+                'text-black': item.active,
+                'text-[#c62118]': item.danger,
+              }"
+            >
+              {{ item.label }}
+            </span>
           </li>
         </ul>
       </section>
@@ -80,6 +91,7 @@ function toggleGroup(title: string): void {
             :key="item.label"
           >
             <NuxtLink
+              v-if="item.to"
               :to="item.to"
               class="inline-block hover:text-black hover:underline"
               :class="{
@@ -89,6 +101,16 @@ function toggleGroup(title: string): void {
             >
               {{ item.label }}
             </NuxtLink>
+            <span
+              v-else
+              class="inline-block"
+              :class="{
+                'text-black': item.active,
+                'text-[#c62118]': item.danger,
+              }"
+            >
+              {{ item.label }}
+            </span>
           </li>
         </ul>
       </div>

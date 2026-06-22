@@ -59,7 +59,7 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
 
 <template>
   <div
-      class="fixed flex justify-center items-center inset-x-0 top-34 border-b border-[#f4f4f4] bg-white text-left normal-case tracking-normal pt-4">
+      class="fixed inset-x-0 top-[63px] flex items-center justify-center border-b border-[#f4f4f4] bg-white pt-4 text-left normal-case tracking-normal">
     <div class="mx-72 overflow-x-auto scrollbar-thin h-100">
       <div class="grid grid-cols-12 gap-4 h-full min-w-330">
         <div class="col-span-12">
@@ -71,7 +71,7 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
               :class="columnSpanClass(column)"
             >
               <NuxtLink
-                v-if="column.url"
+                v-if="column.isClickable && column.url"
                 :to="linkTarget(column.url)"
                 class="mb-1.5 block border-b border-[#e4e4e4] pb-2 text-[14px] font-semibold uppercase leading-none tracking-[0.083em] text-black"
               >
@@ -98,11 +98,18 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
                     :key="linkKey(item)"
                   >
                     <NuxtLink
+                      v-if="item.isClickable"
                       :to="linkTarget(item.url)"
                       class="text-[14px] font-normal text-[#6e6e6e] hover:underline"
                     >
                       {{ item.label }}
                     </NuxtLink>
+                    <span
+                      v-else
+                      class="text-[14px] font-normal text-[#6e6e6e]"
+                    >
+                      {{ item.label }}
+                    </span>
 
                     <ul
                       v-if="hasChildren(item)"
@@ -113,11 +120,18 @@ function hasChildren(item: CatalogNavigationMenuLink): boolean {
                         :key="linkKey(child)"
                       >
                         <NuxtLink
+                          v-if="child.isClickable"
                           :to="linkTarget(child.url)"
                           class="text-[13px] font-normal text-[#8a8a8a]"
                         >
                           {{ child.label }}
                         </NuxtLink>
+                        <span
+                          v-else
+                          class="text-[13px] font-normal text-[#8a8a8a]"
+                        >
+                          {{ child.label }}
+                        </span>
                       </li>
                     </ul>
                   </li>

@@ -29,6 +29,7 @@ export interface CatalogNavigationItem {
   level: number
   sort_order?: number
   is_active?: boolean
+  is_clickable?: boolean
   children?: CatalogNavigationItem[]
 
   // Presentación del mega-menú (columnas visuales). Sólo cuando existe.
@@ -61,6 +62,7 @@ export interface CatalogNavigationColumn {
   id?: number | string
   title: string
   url?: string
+  isClickable: boolean
   items: CatalogNavigationMenuLink[]
 }
 
@@ -69,5 +71,6 @@ export interface CatalogNavigationMenuLink {
   label: string
   url: string
   path?: string
+  isClickable: boolean
   children?: CatalogNavigationMenuLink[]
 }
