@@ -4,6 +4,7 @@ import type {
   LandingPage,
   LandingSection,
 } from '~/types/landing-page'
+import DirectionAwareHoverDemo from "~/components/shared/DirectionAwareHoverDemo.vue";
 
 const props = defineProps<{
   page: LandingPage
@@ -26,6 +27,10 @@ function itemAriaLabel(item: LandingItem): string {
 
 function itemCtaTarget(item: LandingItem): string {
   return linkTarget(item.cta_url || item.url)
+}
+
+function hasItemOverlay(item: LandingItem): boolean {
+  return Boolean(item.overlay?.count || item.overlay?.text)
 }
 
 function sectionMaxWidth(section: LandingSection): string {
@@ -118,29 +123,39 @@ function gridColumnsClass(section: LandingSection): string {
                   </span>
                 </div>
 
-                <div
-                  class="relative block w-full overflow-hidden bg-[#c00]"
+                <DirectionAwareHoverDemo
+                  class="relative block w-full overflow-hidden "
+                  :image-url="item.image.src"
+                  :srcset="item.image.srcset"
+                  :alt="item.image.alt"
+                  image-class="absolute left-0 top-0 h-full w-full object-cover align-middle"
+                  children-class="absolute inset-x-0 bottom-0 z-40 p-6 md:p-8"
                   :style="aspectRatioStyle(section)"
                 >
-                  <img
-                    class="absolute left-0 top-0 h-full w-full object-cover align-middle"
-                    :src="item.image.src"
-                    :srcset="item.image.srcset || undefined"
-                    :alt="item.image.alt"
+                  <div
+                    v-if="hasItemOverlay(item)"
+                    class="max-w-[260px] rounded-md bg-black/70 p-4 text-left text-white shadow-lg backdrop-blur-sm md:p-5"
                   >
-                  <p
-                    v-if="item.overlay?.count || item.overlay?.text"
-                    class="absolute inset-0 flex flex-col items-center justify-center text-center text-[56px] font-semibold uppercase leading-[0.92] tracking-[0.142em] text-white"
-                  >
-                    <span
+                    <p
+                      v-if="item.overlay?.text"
+                      class="m-0 text-[20px] font-semibold normal-case leading-[1.2] tracking-normal md:text-[22px]"
+                    >
+                      {{ item.overlay.text }}
+                    </p>
+                    <p
                       v-if="item.overlay?.count"
-                      class="text-[96px] leading-none tracking-normal"
+                      class="mt-3 text-[15px] font-normal normal-case leading-[1.45] tracking-normal text-white/90"
                     >
                       {{ item.overlay.count }}
+                    </p>
+                    <span
+                      v-if="item.cta_label"
+                      class="mt-5 inline-flex rounded-md bg-white px-4 py-2 text-[14px] font-medium normal-case leading-none tracking-normal text-black"
+                    >
+                      {{ item.cta_label }}
                     </span>
-                    {{ item.overlay?.text }}
-                  </p>
-                </div>
+                  </div>
+                </DirectionAwareHoverDemo>
               </NuxtLink>
             </article>
           </div>
@@ -207,17 +222,14 @@ function gridColumnsClass(section: LandingSection): string {
                   </h3>
                 </div>
 
-                <div
+                <DirectionAwareHoverDemo
                   class="relative block w-full overflow-hidden"
+                  :image-url="item.image.src"
+                  :srcset="item.image.srcset"
+                  :alt="item.image.alt"
+                  image-class="absolute left-0 top-0 h-full w-full object-cover align-middle"
                   :style="aspectRatioStyle(section)"
-                >
-                  <img
-                    class="absolute left-0 top-0 h-full w-full object-cover align-middle"
-                    :src="item.image.src"
-                    :srcset="item.image.srcset || undefined"
-                    :alt="item.image.alt"
-                  >
-                </div>
+                />
               </NuxtLink>
 
               <NuxtLink
