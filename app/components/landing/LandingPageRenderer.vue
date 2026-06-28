@@ -31,8 +31,10 @@ function itemCtaTarget(item: LandingItem): string {
 }
 
 function hasItemOverlay(item: LandingItem): boolean {
-  return Boolean(item.overlay?.count || item.overlay?.text)
+  return Boolean(item.overlay?.text)
 }
+
+const overlayTextClass = 'max-w-[260px] rounded-md bg-black/70 p-4 text-left text-white shadow-lg backdrop-blur-sm md:p-5'
 
 function sectionMaxWidth(section: LandingSection): string {
   return section.layout?.max_width || '1400px'
@@ -80,15 +82,25 @@ function gridColumnsClass(section: LandingSection): string {
             :key="item.id"
             :to="linkTarget(item.url)"
             class="relative block"
-            :style="aspectRatioStyle(section)"
             :aria-label="itemAriaLabel(item)"
           >
-            <img
-              class="absolute left-0 top-0 h-full w-full object-contain align-middle"
-              :src="item.image.src"
-              :srcset="item.image.srcset || undefined"
+            <DirectionAwareHoverDemo
+              class="relative block w-full overflow-hidden"
+              :image-url="item.image.src"
+              :srcset="item.image.srcset"
               :alt="item.image.alt"
+              :hover-video-url="item.video_url"
+              image-class="absolute left-0 top-0 h-full w-full object-contain align-middle"
+              children-class="absolute inset-x-0 bottom-0 z-40 p-6 md:p-8"
+              :style="aspectRatioStyle(section)"
             >
+              <div
+                v-if="hasItemOverlay(item)"
+                :class="overlayTextClass"
+              >
+                <OverlayText :text="item.overlay?.text" />
+              </div>
+            </DirectionAwareHoverDemo>
           </NuxtLink>
         </div>
       </section>
@@ -136,9 +148,9 @@ function gridColumnsClass(section: LandingSection): string {
                 >
                   <div
                     v-if="hasItemOverlay(item)"
-                    class="max- rounded-md bg-black/70 p-4 text-left text-white shadow-lg backdrop-blur-sm md:p-5"
+                    :class="overlayTextClass"
                   >
-                    <OverlayText :text="item.overlay?.text" ></OverlayText>
+                    <OverlayText :text="item.overlay?.text" />
                   </div>
                 </DirectionAwareHoverDemo>
               </NuxtLink>
@@ -214,8 +226,16 @@ function gridColumnsClass(section: LandingSection): string {
                   :alt="item.image.alt"
                   :hover-video-url="item.video_url"
                   image-class="absolute left-0 top-0 h-full w-full object-cover align-middle"
+                  children-class="absolute inset-x-0 bottom-0 z-40 p-6 md:p-8"
                   :style="aspectRatioStyle(section)"
-                />
+                >
+                  <div
+                    v-if="hasItemOverlay(item)"
+                    :class="overlayTextClass"
+                  >
+                    <OverlayText :text="item.overlay?.text" />
+                  </div>
+                </DirectionAwareHoverDemo>
               </NuxtLink>
 
               <NuxtLink
@@ -242,12 +262,22 @@ function gridColumnsClass(section: LandingSection): string {
             class="mt-[32px] block pt-[32px]"
             :aria-label="itemAriaLabel(item)"
           >
-            <img
-              class="block h-auto w-full align-middle"
-              :src="item.image.src"
-              :srcset="item.image.srcset || undefined"
+            <DirectionAwareHoverDemo
+              class="relative block w-full overflow-hidden"
+              :image-url="item.image.src"
+              :srcset="item.image.srcset"
               :alt="item.image.alt"
+              :hover-video-url="item.video_url"
+              image-class="block h-auto w-full align-middle"
+              children-class="absolute inset-x-0 bottom-0 z-40 p-6 md:p-8"
             >
+              <div
+                v-if="hasItemOverlay(item)"
+                :class="overlayTextClass"
+              >
+                <OverlayText :text="item.overlay?.text" />
+              </div>
+            </DirectionAwareHoverDemo>
           </NuxtLink>
         </div>
       </section>
