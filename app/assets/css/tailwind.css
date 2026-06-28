@@ -20,6 +20,7 @@
     --color-tertiary: #686f72;
     --shadow-input: inset 0 0 0 1px #dcdfe6;
     --shadow-input-hover: inset 0 0 0 1px #0e0e11;
+    --color-red-fied: #B20000;
 }
 
 @font-face {

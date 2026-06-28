@@ -5,6 +5,7 @@ import type {
   LandingSection,
 } from '~/types/landing-page'
 import DirectionAwareHoverDemo from "~/components/shared/DirectionAwareHoverDemo.vue";
+import OverlayText from "~/components/landing/OverlayText.vue";
 
 const props = defineProps<{
   page: LandingPage
@@ -128,32 +129,16 @@ function gridColumnsClass(section: LandingSection): string {
                   :image-url="item.image.src"
                   :srcset="item.image.srcset"
                   :alt="item.image.alt"
+                  :hover-video-url="item.video_url"
                   image-class="absolute left-0 top-0 h-full w-full object-cover align-middle"
                   children-class="absolute inset-x-0 bottom-0 z-40 p-6 md:p-8"
                   :style="aspectRatioStyle(section)"
                 >
                   <div
                     v-if="hasItemOverlay(item)"
-                    class="max-w-[260px] rounded-md bg-black/70 p-4 text-left text-white shadow-lg backdrop-blur-sm md:p-5"
+                    class="max- rounded-md bg-black/70 p-4 text-left text-white shadow-lg backdrop-blur-sm md:p-5"
                   >
-                    <p
-                      v-if="item.overlay?.text"
-                      class="m-0 text-[20px] font-semibold normal-case leading-[1.2] tracking-normal md:text-[22px]"
-                    >
-                      {{ item.overlay.text }}
-                    </p>
-                    <p
-                      v-if="item.overlay?.count"
-                      class="mt-3 text-[15px] font-normal normal-case leading-[1.45] tracking-normal text-white/90"
-                    >
-                      {{ item.overlay.count }}
-                    </p>
-                    <span
-                      v-if="item.cta_label"
-                      class="mt-5 inline-flex rounded-md bg-white px-4 py-2 text-[14px] font-medium normal-case leading-none tracking-normal text-black"
-                    >
-                      {{ item.cta_label }}
-                    </span>
+                    <OverlayText :text="item.overlay?.text" ></OverlayText>
                   </div>
                 </DirectionAwareHoverDemo>
               </NuxtLink>
@@ -227,6 +212,7 @@ function gridColumnsClass(section: LandingSection): string {
                   :image-url="item.image.src"
                   :srcset="item.image.srcset"
                   :alt="item.image.alt"
+                  :hover-video-url="item.video_url"
                   image-class="absolute left-0 top-0 h-full w-full object-cover align-middle"
                   :style="aspectRatioStyle(section)"
                 />

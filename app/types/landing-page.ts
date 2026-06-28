@@ -52,6 +52,7 @@ export interface LandingItem {
   url: string
   cta_url?: string | null
   image: LandingImage
+  video_url?: string | null
   overlay?: LandingOverlay | null
   sort_order?: number
 }

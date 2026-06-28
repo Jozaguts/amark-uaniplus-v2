@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, shallowRef } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, shallowRef, useTemplateRef } from 'vue'
 
 type HoverDirection = 'top' | 'bottom' | 'left' | 'right'
 
@@ -7,6 +7,7 @@ interface Props {
   imageUrl: string
   alt?: string
   srcset?: string | null
+  hoverVideoUrl?: string | null
   childrenClass?: string
   imageClass?: string
   imageContainerClass?: string
@@ -16,18 +17,23 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   alt: '',
   srcset: undefined,
+  hoverVideoUrl: undefined,
   childrenClass: undefined,
   imageClass: undefined,
   imageContainerClass: undefined,
   contentAlwaysVisible: false,
 })
 const divRef = ref<HTMLDivElement | null>(null)
+const videoRef = useTemplateRef<HTMLVideoElement>('hoverVideo')
 const direction = shallowRef<HoverDirection>('left')
 const isActive = shallowRef(false)
 const isTouched = shallowRef(false)
 const isMobile = shallowRef(false)
+const shouldLoadVideo = shallowRef(false)
+const isVideoVisible = shallowRef(false)
 
 let touchTimer: ReturnType<typeof setTimeout> | null = null
+let observer: IntersectionObserver | null = null
 
 function detectMobile() {
   isMobile.value = window.matchMedia('(max-width: 768px)').matches || 'ontouchstart' in window
@@ -62,6 +68,7 @@ function handleMouseEnter(event: MouseEvent) {
 
   setDirection(getDirection(event, divRef.value))
   isActive.value = true
+  playHoverVideo()
 }
 
 function handleMouseLeave() {
@@ -69,6 +76,7 @@ function handleMouseLeave() {
     return
 
   isActive.value = false
+  pauseHoverVideo()
 }
 
 function handleTouchStart(event: TouchEvent) {
@@ -94,6 +102,43 @@ function handleTouchStart(event: TouchEvent) {
   touchTimer = setTimeout(() => {
     handleTouchEnd()
   }, 3000)
+}
+
+function hasHoverVideo() {
+  return Boolean(props.hoverVideoUrl)
+}
+
+async function prepareHoverVideo() {
+  if (!hasHoverVideo() || shouldLoadVideo.value)
+    return
+
+  shouldLoadVideo.value = true
+  await nextTick()
+  videoRef.value?.load()
+}
+
+async function playHoverVideo() {
+  await prepareHoverVideo()
+
+  if (!videoRef.value)
+    return
+
+  try {
+    await videoRef.value.play()
+    isVideoVisible.value = true
+  }
+  catch {
+    isVideoVisible.value = false
+  }
+}
+
+function pauseHoverVideo() {
+  if (!videoRef.value)
+    return
+
+  videoRef.value.pause()
+  videoRef.value.currentTime = 0
+  isVideoVisible.value = false
 }
 
 function handleTouchEnd() {
@@ -164,10 +209,24 @@ const imageContainerClass = computed(() => ({
 onMounted(() => {
   detectMobile()
   window.addEventListener('resize', detectMobile)
+
+  if (props.hoverVideoUrl && divRef.value && 'IntersectionObserver' in window) {
+    observer = new IntersectionObserver((entries) => {
+      if (!entries.some(entry => entry.isIntersecting))
+        return
+
+      prepareHoverVideo()
+      observer?.disconnect()
+      observer = null
+    }, { rootMargin: '600px 0px' })
+
+    observer.observe(divRef.value)
+  }
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', detectMobile)
+  observer?.disconnect()
   if (touchTimer) {
     clearTimeout(touchTimer)
   }
@@ -199,6 +258,18 @@ onUnmounted(() => {
           :class="imageClass"
           width="1000"
           height="1000"
+        />
+        <video
+          v-if="props.hoverVideoUrl && shouldLoadVideo"
+          ref="hoverVideo"
+          class="pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-200"
+          :class="isVideoVisible ? 'opacity-100' : 'opacity-0'"
+          :src="props.hoverVideoUrl"
+          :poster="imageUrl"
+          preload="auto"
+          muted
+          loop
+          playsinline
         />
       </div>
       <transition name="fade">
