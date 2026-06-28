@@ -34,7 +34,7 @@ function hasItemOverlay(item: LandingItem): boolean {
   return Boolean(item.overlay?.text)
 }
 
-const overlayTextClass = 'max-w-[260px] rounded-md bg-black/70 p-4 text-left text-white shadow-lg backdrop-blur-sm md:p-5'
+const overlayTextClass = 'rounded-md bg-black/70 p-4 text-left text-white shadow-lg backdrop-blur-sm md:p-5'
 
 function sectionMaxWidth(section: LandingSection): string {
   return section.layout?.max_width || '1400px'
