@@ -34,7 +34,7 @@ function hasItemOverlay(item: LandingItem): boolean {
   return Boolean(item.overlay?.text)
 }
 
-const overlayTextClass = 'rounded-md bg-black/70 p-4 text-left text-white shadow-lg backdrop-blur-sm md:p-5'
+const overlayTextClass = 'rounded-md bg-black/70 p-3 text-left text-white shadow-lg backdrop-blur-sm sm:p-4 md:p-5'
 
 function sectionMaxWidth(section: LandingSection): string {
   return section.layout?.max_width || '1400px'
@@ -91,7 +91,7 @@ function gridColumnsClass(section: LandingSection): string {
               :alt="item.image.alt"
               :hover-video-url="item.video_url"
               image-class="absolute left-0 top-0 h-full w-full object-contain align-middle"
-              children-class="absolute inset-x-0 bottom-0 z-40 p-6 md:p-8"
+              children-class="absolute inset-x-0 bottom-0 z-40 p-4 sm:p-6 md:p-8"
               :style="aspectRatioStyle(section)"
             >
               <div
@@ -109,7 +109,7 @@ function gridColumnsClass(section: LandingSection): string {
         v-else-if="section.type === 'two_tile_grid'"
         class="mt-8 flex justify-center"
       >
-        <div class="mx-auto mt-4 w-full max-w-[1400px] px-8">
+        <div class="mx-auto mt-4 w-full max-w-[1400px] px-4 sm:px-8">
           <div class="grid gap-4 pt-[2%] md:grid-cols-2">
             <article
               v-for="item in section.items"
@@ -143,7 +143,7 @@ function gridColumnsClass(section: LandingSection): string {
                   :alt="item.image.alt"
                   :hover-video-url="item.video_url"
                   image-class="absolute left-0 top-0 h-full w-full object-cover align-middle"
-                  children-class="absolute inset-x-0 bottom-0 z-40 p-6 md:p-8"
+                  children-class="absolute inset-x-0 bottom-0 z-40 p-4 sm:p-6 md:p-8"
                   :style="aspectRatioStyle(section)"
                 >
                   <div
@@ -164,7 +164,7 @@ function gridColumnsClass(section: LandingSection): string {
         class="flex justify-center pt-[11px]"
         :aria-labelledby="section.heading ? `landing-section-${section.id}` : undefined"
       >
-        <div class="w-full max-w-[1400px] px-8">
+        <div class="w-full max-w-[1400px] px-4 sm:px-8">
           <div
             v-if="section.heading || section.description || section.cta"
             class="text-center"
@@ -226,7 +226,7 @@ function gridColumnsClass(section: LandingSection): string {
                   :alt="item.image.alt"
                   :hover-video-url="item.video_url"
                   image-class="absolute left-0 top-0 h-full w-full object-cover align-middle"
-                  children-class="absolute inset-x-0 bottom-0 z-40 p-6 md:p-8"
+                  children-class="absolute inset-x-0 bottom-0 z-40 p-4 sm:p-6 md:p-8"
                   :style="aspectRatioStyle(section)"
                 >
                   <div
@@ -254,7 +254,7 @@ function gridColumnsClass(section: LandingSection): string {
         v-else-if="section.type === 'promo_banner'"
         class="flex justify-center"
       >
-        <div class="w-full max-w-[1400px] px-8">
+        <div class="w-full max-w-[1400px] px-4 sm:px-8">
           <NuxtLink
             v-for="item in section.items"
             :key="item.id"
@@ -269,7 +269,7 @@ function gridColumnsClass(section: LandingSection): string {
               :alt="item.image.alt"
               :hover-video-url="item.video_url"
               image-class="block h-auto w-full align-middle"
-              children-class="absolute inset-x-0 bottom-0 z-40 p-6 md:p-8"
+              children-class="absolute inset-x-0 bottom-0 z-40 p-4 sm:p-6 md:p-8"
             >
               <div
                 v-if="hasItemOverlay(item)"

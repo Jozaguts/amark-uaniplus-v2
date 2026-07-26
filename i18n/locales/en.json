@@ -354,7 +354,9 @@
     },
     "mobile": {
       "signIn": "Sign in / Sign Up",
-      "close": "Close menu"
+      "close": "Close menu",
+      "shopAll": "Shop all {section}",
+      "viewAll": "View all"
     },
     "actions": {
       "menu": "Open menu",
@@ -955,17 +957,16 @@
       "privacy": "Privacy Policy",
       "emailLabel": "Email Address",
       "placeholder": "Enter your e-mail.",
-      "submit": "Sign up"
-    },
-    "survey": {
-      "title": "Help Us Improve",
-      "copy": "Take a brief survey about today's visit.",
-      "cta": "Begin Survey"
+      "submit": "Sign up",
+      "success": "You're in — check your inbox for the next drop.",
+      "error": "We couldn't subscribe that email right now. Try again in a moment.",
+      "invalidEmail": "Enter a valid email address."
     },
     "app": {
       "title": "Get uandiplus on the go",
       "copy": "Download our super easy-to-use app available for your iPhone, iPad and Android.",
-      "download": "Download on the App Store"
+      "download": "Download on the App Store",
+      "playStore": "Get it on Google Play"
     },
     "customerCare": {
       "title": "Customer Care",

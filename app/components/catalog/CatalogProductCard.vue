@@ -16,18 +16,7 @@ function productText(value?: string | null, key?: string): string {
 </script>
 
 <template>
-  <article class="group relative text-center">
-    <button
-      type="button"
-      class="absolute right-4 top-4 z-10 grid size-8 place-items-center rounded-full border border-[#e4e4e4] bg-white text-black"
-      :aria-label="$t('catalog.category.filters.favorite')"
-    >
-      <Icon
-        name="icon:heart"
-        class="size-4.5"
-      />
-    </button>
-
+  <article class="relative text-center">
     <NuxtLink
       :to="product.to"
       class="block text-black no-underline"
@@ -37,14 +26,11 @@ function productText(value?: string | null, key?: string): string {
           :src="product.image"
           :srcset="product.srcset"
           :alt="productText(product.alt, product.altKey)"
-          class="h-full w-full   object-[2/3]"
+          class="h-full w-full object-cover object-[2/3]"
           loading="lazy"
           width="576"
           height="864"
         >
-        <span class="absolute bottom-26.25 left-1/2 hidden h-8.5 w-40 -translate-x-1/2 items-center justify-center border border-[#d6d6d6] bg-white text-[13px] font-semibold uppercase tracking-[0.16em] group-hover:flex">
-          {{ $t('catalog.category.filters.quickView') }}
-        </span>
       </div>
 
       <div class="mt-[15px] min-h-[65px] px-[10px]">

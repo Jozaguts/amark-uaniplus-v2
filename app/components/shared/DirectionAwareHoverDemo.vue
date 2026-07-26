@@ -23,20 +23,21 @@ const props = withDefaults(defineProps<Props>(), {
   imageContainerClass: undefined,
   contentAlwaysVisible: false,
 })
+
 const divRef = ref<HTMLDivElement | null>(null)
 const videoRef = useTemplateRef<HTMLVideoElement>('hoverVideo')
 const direction = shallowRef<HoverDirection>('left')
 const isActive = shallowRef(false)
-const isTouched = shallowRef(false)
-const isMobile = shallowRef(false)
+/** Fine pointer + hover capability (desktop). Touch/coarse devices skip hover choreography. */
+const prefersHover = shallowRef(true)
 const shouldLoadVideo = shallowRef(false)
 const isVideoVisible = shallowRef(false)
 
-let touchTimer: ReturnType<typeof setTimeout> | null = null
 let observer: IntersectionObserver | null = null
+let hoverMedia: MediaQueryList | null = null
 
-function detectMobile() {
-  isMobile.value = window.matchMedia('(max-width: 768px)').matches || 'ontouchstart' in window
+function detectHoverCapability() {
+  prefersHover.value = window.matchMedia('(hover: hover) and (pointer: fine)').matches
 }
 
 function setDirection(fetchedDirection: number) {
@@ -60,10 +61,7 @@ function setDirection(fetchedDirection: number) {
 }
 
 function handleMouseEnter(event: MouseEvent) {
-  if (isMobile.value)
-    return
-
-  if (!divRef.value)
+  if (!prefersHover.value || !divRef.value)
     return
 
   setDirection(getDirection(event, divRef.value))
@@ -72,36 +70,11 @@ function handleMouseEnter(event: MouseEvent) {
 }
 
 function handleMouseLeave() {
-  if (isMobile.value)
+  if (!prefersHover.value)
     return
 
   isActive.value = false
   pauseHoverVideo()
-}
-
-function handleTouchStart(event: TouchEvent) {
-  if (!isMobile.value)
-    return
-
-  isTouched.value = true
-
-  if (!divRef.value)
-    return
-
-  const touch = event.touches[0]
-  const mouseEvent = new MouseEvent('mouseenter', {
-    clientX: touch.clientX,
-    clientY: touch.clientY,
-  })
-
-  setDirection(getDirection(mouseEvent, divRef.value))
-  isActive.value = true
-
-  if (touchTimer)
-    clearTimeout(touchTimer)
-  touchTimer = setTimeout(() => {
-    handleTouchEnd()
-  }, 3000)
 }
 
 function hasHoverVideo() {
@@ -141,19 +114,6 @@ function pauseHoverVideo() {
   isVideoVisible.value = false
 }
 
-function handleTouchEnd() {
-  if (touchTimer) {
-    clearTimeout(touchTimer)
-    touchTimer = null
-  }
-
-  isActive.value = false
-
-  setTimeout(() => {
-    isTouched.value = false
-  }, 300)
-}
-
 function getDirection(ev: MouseEvent, obj: HTMLElement) {
   const { width: w, height: h, left, top } = obj.getBoundingClientRect()
   const x = ev.clientX - left - (w / 2) * (w > h ? h / w : 1)
@@ -162,9 +122,13 @@ function getDirection(ev: MouseEvent, obj: HTMLElement) {
   return Math.round(Math.atan2(y, x) / 1.57079633 + 5) % 4
 }
 
+const showSlotContent = computed(() =>
+  props.contentAlwaysVisible || !prefersHover.value || isActive.value,
+)
+
 const containerClass = computed(() => [
-  'group/card relative block w-full overflow-hidden bg-transparent transition-all duration-300',
-  'touch-manipulation active:scale-[0.98] md:active:scale-100',
+  'group/card relative block w-full overflow-hidden bg-transparent',
+  'touch-manipulation',
 ])
 
 const imageClass = computed(() => [
@@ -179,8 +143,12 @@ const childrenClass = computed(() => [
 ])
 
 const overlayClass = computed(() => {
-  const baseClasses = 'absolute inset-0 z-10 transition-transform duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]'
+  const baseClasses = 'pointer-events-none absolute inset-0 z-10 transition-transform duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]'
   const backgroundClasses = 'bg-black/10 dark:bg-black/10'
+
+  // On touch devices, keep a light static scrim so overlay text stays readable.
+  if (!prefersHover.value)
+    return [baseClasses, backgroundClasses, 'translate-x-0 translate-y-0']
 
   if (isActive.value)
     return [baseClasses, backgroundClasses, 'translate-x-0 translate-y-0']
@@ -199,16 +167,22 @@ const overlayClass = computed(() => {
   }
 })
 
-const imageContainerClass = computed(() => ({
-  'translate-y-2 md:translate-y-5': isActive.value && direction.value === 'top',
-  '-translate-y-2 md:-translate-y-5': isActive.value && direction.value === 'bottom',
-  'translate-x-2 md:translate-x-5': isActive.value && direction.value === 'left',
-  '-translate-x-2 md:-translate-x-5': isActive.value && direction.value === 'right',
-}))
+const imageContainerClass = computed(() => {
+  if (!prefersHover.value || !isActive.value)
+    return {}
+
+  return {
+    'translate-y-2 md:translate-y-5': direction.value === 'top',
+    '-translate-y-2 md:-translate-y-5': direction.value === 'bottom',
+    'translate-x-2 md:translate-x-5': direction.value === 'left',
+    '-translate-x-2 md:-translate-x-5': direction.value === 'right',
+  }
+})
 
 onMounted(() => {
-  detectMobile()
-  window.addEventListener('resize', detectMobile)
+  detectHoverCapability()
+  hoverMedia = window.matchMedia('(hover: hover) and (pointer: fine)')
+  hoverMedia.addEventListener('change', detectHoverCapability)
 
   if (props.hoverVideoUrl && divRef.value && 'IntersectionObserver' in window) {
     observer = new IntersectionObserver((entries) => {
@@ -225,11 +199,8 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', detectMobile)
+  hoverMedia?.removeEventListener('change', detectHoverCapability)
   observer?.disconnect()
-  if (touchTimer) {
-    clearTimeout(touchTimer)
-  }
 })
 </script>
 
@@ -239,8 +210,6 @@ onUnmounted(() => {
     :class="containerClass"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
-    @touchstart="handleTouchStart"
-    @touchend="handleTouchEnd"
   >
     <div class="relative size-full overflow-hidden">
       <div :class="overlayClass" />
@@ -258,7 +227,7 @@ onUnmounted(() => {
           :class="imageClass"
           width="1000"
           height="1000"
-        />
+        >
         <video
           v-if="props.hoverVideoUrl && shouldLoadVideo"
           ref="hoverVideo"
@@ -274,8 +243,9 @@ onUnmounted(() => {
       </div>
       <transition name="fade">
         <div
-          v-show="contentAlwaysVisible || isActive || isTouched"
+          v-show="showSlotContent"
           :class="childrenClass"
+          class="pointer-events-none"
         >
           <slot />
         </div>
@@ -295,15 +265,6 @@ onUnmounted(() => {
   opacity: 0;
 }
 
-/* Enhanced mobile touch targets */
-@media (max-width: 768px) {
-  .group\/card {
-    min-height: 44px; /* iOS minimum touch target */
-    min-width: 44px;
-  }
-}
-
-/* Smooth transitions for mobile */
 @media (prefers-reduced-motion: reduce) {
   * {
     transition-duration: 0.1s !important;

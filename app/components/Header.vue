@@ -6,7 +6,7 @@ import type { CatalogNavigationColumn, CatalogNavigationItem, CatalogNavigationM
 const route = useRoute()
 const localePath = useLocalePath()
 const switchLocalePath = useSwitchLocalePath()
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 const { itemCount } = useDesignCart()
 const { authReady, displayName, hydrateAuth, isAuthenticated, logout } = useStorefrontAuth()
 interface MobileNavLink {
@@ -66,7 +66,13 @@ function linkTarget(url: string): string {
 
 function isActiveNavigationItem(item: CatalogNavigationItem): boolean {
   const currentPath = activeNavPath.value
+  // Index and other non-section routes have no active primary nav link.
+  if (currentPath === '/')
+    return false
+
   const itemPath = normalizePath(item.url)
+  if (!itemPath || itemPath === '/')
+    return false
 
   return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`)
 }
@@ -78,7 +84,7 @@ const nextLocalePath = computed(() => switchLocalePath(nextLocale.value))
 const nextLocaleLabel = computed(() => nextLocale.value.toUpperCase())
 
 const activeMainItem = computed(() => {
-  return navItems.value.find(isActiveNavigationItem) ?? navItems.value[0] ?? null
+  return navItems.value.find(isActiveNavigationItem) ?? null
 })
 
 const mobileSubNavigationItems = computed<CatalogNavigationColumn[]>(() => subColumnsFor(mobileActiveMainItem.value))
@@ -171,9 +177,27 @@ const currentMobilePanel = computed<MobileNavPanel | null>(() =>
     : null,
 )
 
+function withViewAllLink(url: string, children: MobileNavLink[]): MobileNavLink[] {
+  return [
+    {
+      label: t('header.mobile.viewAll'),
+      url,
+      isClickable: true,
+      children: [],
+    },
+    ...children,
+  ]
+}
+
 function mobileOpenColumn(column: CatalogNavigationColumn): void {
-  const links = columnToNavLinks(column)
-  if (!links.length) return
+  let links = columnToNavLinks(column)
+
+  if (column.isClickable && column.url)
+    links = withViewAllLink(column.url, links)
+
+  if (!links.length)
+    return
+
   mobileNavGoingBack.value = false
   mobileNavStack.value = [{
     title: column.title,
@@ -183,13 +207,19 @@ function mobileOpenColumn(column: CatalogNavigationColumn): void {
 }
 
 function mobileOpenLink(link: MobileNavLink): void {
-  if (!link.children.length) return
+  if (!link.children.length)
+    return
+
+  let links = link.children
+  if (link.isClickable)
+    links = withViewAllLink(link.url, links)
+
   mobileNavGoingBack.value = false
   const current = mobileNavStack.value[mobileNavStack.value.length - 1]
   mobileNavStack.value = [...mobileNavStack.value, {
     title: link.label,
     backLabel: current?.title ?? '',
-    links: link.children,
+    links,
   }]
 }
 
@@ -421,7 +451,12 @@ onMounted(() => {
       <div class="lg:hidden">
         <div class="flex h-[58px] items-center justify-between bg-white pl-[15px] pr-[15px]">
           <div class="flex min-w-0 items-center gap-[12px]">
-            <button type="button" :aria-label="$t('header.actions.menu')" class="flex size-[21px] items-center justify-center" @click="isMobileMenuOpen = true">
+            <button
+              type="button"
+              :aria-label="$t('header.actions.menu')"
+              class="flex size-11 shrink-0 items-center justify-center -ml-2"
+              @click="isMobileMenuOpen = true"
+            >
               <Icon name="icon:menu" class="size-[21px]" />
             </button>
 
@@ -521,7 +556,7 @@ onMounted(() => {
     <Transition name="mobile-drawer">
       <div
         v-if="isMobileMenuOpen"
-        class="fixed inset-y-0 left-0 z-[70] flex w-[85%] max-w-[360px] flex-col overflow-hidden bg-white"
+        class="fixed inset-y-0 left-0 z-[70] flex w-[85%] max-w-[360px] flex-col bg-white shadow-[8px_0_24px_rgba(0,0,0,0.12)]"
         role="dialog"
         :aria-label="$t('header.actions.menu')"
       >
@@ -530,7 +565,7 @@ onMounted(() => {
           <NuxtLink
             v-if="!isAuthenticated"
             :to="localePath('/login')"
-            class="text-[13px] font-semibold text-white"
+            class="min-h-11 py-2 text-[13px] font-semibold text-white"
             @click="isMobileMenuOpen = false"
           >
             {{ $t('header.mobile.signIn') }}
@@ -541,62 +576,51 @@ onMounted(() => {
           <button
             type="button"
             :aria-label="$t('header.mobile.close')"
-            class="ml-4 shrink-0 text-white"
+            class="ml-4 flex size-11 shrink-0 items-center justify-center text-white"
             @click="isMobileMenuOpen = false"
           >
             <Icon name="ph:x" class="size-[18px]" />
           </button>
         </div>
 
-        <!-- Search -->
-        <div class="shrink-0 border-b border-[#e8e8e8] px-4 py-3">
+        <!-- Search: overflow visible so results are not clipped by the drawer shell -->
+        <div
+          data-mobile-search
+          class="relative z-[80] shrink-0 border-b border-[#e8e8e8] px-4 py-3"
+        >
           <HeaderSearch :full-width="true" />
         </div>
 
-        <!-- Main nav tabs -->
+        <!-- Main nav tabs: full-width tap switches section only (does not navigate/close) -->
         <div class="flex shrink-0 border-b border-[#e8e8e8]">
           <template
             v-for="item in navItems"
             :key="itemKey(item)"
           >
-            <div
+            <button
               v-if="itemHasDropdown(item)"
-              class="flex flex-1 items-center justify-center border-b-2 text-[11px] font-semibold uppercase tracking-[0.1em] transition-colors"
+              type="button"
+              class="flex min-h-11 flex-1 items-center justify-center border-b-2 px-1 text-[11px] font-semibold uppercase tracking-[0.1em] transition-colors"
               :class="mobileActiveMainItem && itemKey(mobileActiveMainItem) === itemKey(item)
                 ? 'border-black text-black'
                 : 'border-transparent text-[#8c8c8c]'"
+              aria-haspopup="true"
+              :aria-pressed="mobileActiveMainItem ? itemKey(mobileActiveMainItem) === itemKey(item) : false"
+              @click="setMobileSection(item)"
             >
-              <NuxtLink
-                v-if="itemCanNavigate(item)"
-                :to="linkTarget(item.url)"
-                class="py-3.5"
-                @click="isMobileMenuOpen = false"
-              >
-                {{ item.name }}
-              </NuxtLink>
-              <button
-                type="button"
-                class="flex items-center py-3.5"
-                :class="itemCanNavigate(item) ? 'ml-1' : ''"
-                :aria-label="itemCanNavigate(item) ? item.name : undefined"
-                aria-haspopup="true"
-                @click="setMobileSection(item)"
-              >
-                <span v-if="!itemCanNavigate(item)">{{ item.name }}</span>
-                <Icon v-else name="ph:caret-down" class="size-[11px]" />
-              </button>
-            </div>
+              {{ item.name }}
+            </button>
             <NuxtLink
               v-else-if="itemCanNavigate(item)"
               :to="linkTarget(item.url)"
-              class="flex-1 border-b-2 border-transparent py-3.5 text-center text-[11px] font-semibold uppercase tracking-[0.1em] text-[#8c8c8c]"
+              class="flex min-h-11 flex-1 items-center justify-center border-b-2 border-transparent px-1 text-center text-[11px] font-semibold uppercase tracking-[0.1em] text-[#8c8c8c]"
               @click="isMobileMenuOpen = false"
             >
               {{ item.name }}
             </NuxtLink>
             <span
               v-else
-              class="flex-1 border-b-2 border-transparent py-3.5 text-center text-[11px] font-semibold uppercase tracking-[0.1em] text-[#8c8c8c]"
+              class="flex min-h-11 flex-1 items-center justify-center border-b-2 border-transparent px-1 text-center text-[11px] font-semibold uppercase tracking-[0.1em] text-[#bbbbbb]"
             >
               {{ item.name }}
             </span>
@@ -604,49 +628,58 @@ onMounted(() => {
         </div>
 
         <!-- Multi-level nav panels -->
-        <div class="relative flex-1 overflow-hidden">
+        <div class="relative min-h-0 flex-1 overflow-hidden">
           <Transition :name="mobileNavGoingBack ? 'mobile-panel-back' : 'mobile-panel-forward'">
             <!-- Level 0: section columns -->
             <div
               v-if="!currentMobilePanel"
               key="level-0"
-              class="absolute inset-0 overflow-y-auto divide-y divide-[#efefef]"
+              class="absolute inset-0 overflow-y-auto overscroll-contain"
             >
-              <div
-                v-for="column in mobileSubNavigationItems"
-                :key="column.url ?? column.title"
+              <NuxtLink
+                v-if="mobileActiveMainItem && itemCanNavigate(mobileActiveMainItem)"
+                :to="linkTarget(mobileActiveMainItem.url)"
+                class="flex min-h-12 items-center justify-between border-b border-[#efefef] px-4 py-4 text-[14px] font-semibold text-[#222]"
+                @click="isMobileMenuOpen = false"
               >
+                <span>{{ $t('header.mobile.shopAll', { section: mobileActiveMainItem.name }) }}</span>
+                <Icon name="ph:caret-right" class="size-4 shrink-0 text-[#bbb]" />
+              </NuxtLink>
+
+              <div class="divide-y divide-[#efefef]">
                 <div
-                  v-if="columnToNavLinks(column).length"
-                  class="flex w-full items-center justify-between px-4 py-4 text-[14px] text-[#222]"
+                  v-for="column in mobileSubNavigationItems"
+                  :key="column.url ?? column.title"
                 >
+                  <!-- Has children: entire row opens nested panel -->
+                  <button
+                    v-if="columnToNavLinks(column).length"
+                    type="button"
+                    class="flex min-h-12 w-full items-center justify-between px-4 py-4 text-left text-[14px] text-[#222]"
+                    @click="mobileOpenColumn(column)"
+                  >
+                    <span>{{ column.title }}</span>
+                    <Icon name="ph:caret-right" class="size-4 shrink-0 text-[#bbb]" />
+                  </button>
+
+                  <!-- Leaf navigable column -->
                   <NuxtLink
-                    v-if="column.isClickable && column.url"
+                    v-else-if="column.isClickable && column.url"
                     :to="linkTarget(column.url)"
+                    class="flex min-h-12 items-center px-4 py-4 text-[14px] text-[#222]"
                     @click="isMobileMenuOpen = false"
                   >
                     {{ column.title }}
                   </NuxtLink>
-                  <span v-else>{{ column.title }}</span>
-                  <button type="button" class="p-1" :aria-label="column.title" @click="mobileOpenColumn(column)">
-                    <Icon name="ph:caret-right" class="size-[14px] shrink-0 text-[#bbb]" />
-                  </button>
-                </div>
 
-                <NuxtLink
-                  v-else-if="column.isClickable && column.url"
-                  :to="linkTarget(column.url ?? '/')"
-                  class="flex items-center px-4 py-4 text-[14px] text-[#222]"
-                  @click="isMobileMenuOpen = false"
-                >
-                  {{ column.title }}
-                </NuxtLink>
-                <span
-                  v-else
-                  class="flex items-center px-4 py-4 text-[14px] text-[#222]"
-                >
-                  {{ column.title }}
-                </span>
+                  <!-- Non-actionable label (not styled as a control) -->
+                  <span
+                    v-else
+                    class="flex min-h-12 items-center px-4 py-4 text-[14px] text-[#aaaaaa]"
+                  >
+                    {{ column.title }}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -656,55 +689,47 @@ onMounted(() => {
               :key="`panel-${mobileNavStack.length}`"
               class="absolute inset-0 flex flex-col"
             >
-              <!-- Back button -->
               <button
                 type="button"
-                class="flex shrink-0 items-center gap-1.5 bg-[#f5f5f3] px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#444]"
+                class="flex min-h-11 shrink-0 items-center gap-1.5 bg-[#f5f5f3] px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#444]"
                 @click="mobileNavBack"
               >
-                <Icon name="ph:caret-left" class="size-[11px]" />
+                <Icon name="ph:caret-left" class="size-3.5" />
                 {{ currentMobilePanel.backLabel }}
               </button>
 
-              <!-- Panel title -->
-              <h2 class="shrink-0 px-4 pb-3 pt-4 text-[18px] font-bold uppercase leading-tight tracking-[0.08em]">
+              <h2 class="shrink-0 px-4 pb-2 pt-4 text-[18px] font-bold uppercase leading-tight tracking-[0.08em]">
                 {{ currentMobilePanel.title }}
               </h2>
 
-              <!-- Links -->
-              <div class="flex-1 overflow-y-auto divide-y divide-[#efefef]">
+              <div class="flex-1 overflow-y-auto overscroll-contain divide-y divide-[#efefef]">
                 <div
-                  v-for="link in currentMobilePanel.links"
-                  :key="link.url"
+                  v-for="(link, linkIndex) in currentMobilePanel.links"
+                  :key="`${link.url}-${linkIndex}`"
                 >
-                  <div
+                  <!-- Has children: entire row drills in -->
+                  <button
                     v-if="link.children.length"
-                    class="flex w-full items-center justify-between px-4 py-4 text-[14px] text-[#222]"
+                    type="button"
+                    class="flex min-h-12 w-full items-center justify-between px-4 py-4 text-left text-[14px] text-[#222]"
+                    @click="mobileOpenLink(link)"
                   >
-                    <NuxtLink
-                      v-if="link.isClickable"
-                      :to="linkTarget(link.url)"
-                      @click="isMobileMenuOpen = false"
-                    >
-                      {{ link.label }}
-                    </NuxtLink>
-                    <span v-else>{{ link.label }}</span>
-                    <button type="button" class="p-1" :aria-label="link.label" @click="mobileOpenLink(link)">
-                      <Icon name="ph:caret-right" class="size-[14px] shrink-0 text-[#bbb]" />
-                    </button>
-                  </div>
+                    <span>{{ link.label }}</span>
+                    <Icon name="ph:caret-right" class="size-4 shrink-0 text-[#bbb]" />
+                  </button>
 
                   <NuxtLink
                     v-else-if="link.isClickable"
                     :to="linkTarget(link.url)"
-                    class="flex items-center px-4 py-4 text-[14px] text-[#222]"
+                    class="flex min-h-12 items-center px-4 py-4 text-[14px] text-[#222]"
                     @click="isMobileMenuOpen = false"
                   >
                     {{ link.label }}
                   </NuxtLink>
+
                   <span
                     v-else
-                    class="flex items-center px-4 py-4 text-[14px] text-[#222]"
+                    class="flex min-h-12 items-center px-4 py-4 text-[14px] text-[#aaaaaa]"
                   >
                     {{ link.label }}
                   </span>

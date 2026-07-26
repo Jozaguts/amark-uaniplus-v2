@@ -354,7 +354,9 @@
     },
     "mobile": {
       "signIn": "Iniciar sesión / Regístrate",
-      "close": "Cerrar menú"
+      "close": "Cerrar menú",
+      "shopAll": "Ver todo {section}",
+      "viewAll": "Ver todo"
     },
     "actions": {
       "menu": "Abrir menú",
@@ -955,17 +957,16 @@
       "privacy": "Política de privacidad",
       "emailLabel": "Correo electrónico",
       "placeholder": "Ingresa tu e-mail.",
-      "submit": "Suscribirse"
-    },
-    "survey": {
-      "title": "Ayúdanos a mejorar",
-      "copy": "Responde una breve encuesta sobre tu visita de hoy.",
-      "cta": "Iniciar encuesta"
+      "submit": "Suscribirse",
+      "success": "Listo: revisa tu correo para los próximos lanzamientos.",
+      "error": "No pudimos suscribir ese correo ahora. Intenta de nuevo en un momento.",
+      "invalidEmail": "Ingresa un correo válido."
     },
     "app": {
       "title": "Lleva uandiplus contigo",
       "copy": "Descarga nuestra app fácil de usar, disponible para iPhone, iPad y Android.",
-      "download": "Descargar en App Store"
+      "download": "Descargar en App Store",
+      "playStore": "Disponible en Google Play"
     },
     "customerCare": {
       "title": "Atención al cliente",

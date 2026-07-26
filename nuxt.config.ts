@@ -69,6 +69,13 @@ export default defineNuxtConfig({
       apiBase: process.env.NUXT_PUBLIC_API_BASE ?? '/api',
       googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY ?? '',
       stripePublishableKey: process.env.NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? process.env.STRIPE_PUBLISHABLE_KEY ?? '',
+      // Optional footer destinations — omit or leave empty to hide dead controls
+      socialTiktokUrl: process.env.NUXT_PUBLIC_SOCIAL_TIKTOK_URL ?? '',
+      socialYoutubeUrl: process.env.NUXT_PUBLIC_SOCIAL_YOUTUBE_URL ?? '',
+      socialInstagramUrl: process.env.NUXT_PUBLIC_SOCIAL_INSTAGRAM_URL ?? '',
+      socialFacebookUrl: process.env.NUXT_PUBLIC_SOCIAL_FACEBOOK_URL ?? '',
+      appStoreUrl: process.env.NUXT_PUBLIC_APP_STORE_URL ?? '',
+      playStoreUrl: process.env.NUXT_PUBLIC_PLAY_STORE_URL ?? '',
     },
   },
   ssr: process.env.NUXT_PUBLIC_SSR !== 'false',

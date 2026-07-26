@@ -11,6 +11,13 @@ const props = defineProps<{
 
 const { categoryPath, productPath, slugFromKey } = useCatalogNavigation(props.section)
 
+const swiperBreakpoints = {
+  0: { slidesPerView: 1.35, spaceBetween: 10 },
+  480: { slidesPerView: 2.1, spaceBetween: 10 },
+  768: { slidesPerView: 3.2, spaceBetween: 12 },
+  1024: { slidesPerView: 5, spaceBetween: 8 },
+}
+
 function productHref(product: ProductCard) {
   return product.href || productPath(product.slug || slugFromKey(product.nameKey))
 }
@@ -21,26 +28,27 @@ function productCategoryHref(product: ProductCard) {
 </script>
 
 <template>
-  <section class="flex container px-8 mx-auto max-w-[100em] flex-col justify-center">
-    <div class="container px-16 py-8 mx-auto max-w-[100em] w-full">
+  <section class="mx-auto flex w-full max-w-[100em] flex-col justify-center px-4 sm:px-8">
+    <div class="mx-auto w-full max-w-[100em] py-6 sm:py-8">
       <NuxtLink
         :to="categoryPath(slugFromKey(titleKey))"
-        class="inline-block text-black no-underline hover:no-underline mt-8"
+        class="mt-4 inline-block text-black no-underline hover:no-underline sm:mt-8"
         :aria-label="$t(ctaLabelKey)"
       >
-        <span class="mb-5 block h-px w-[350px] max-w-full bg-black" aria-hidden="true" />
-        <h2 class="text-[30px] font-bold uppercase leading-tight tracking-normal">
+        <span class="mb-4 block h-px w-full max-w-[350px] bg-black sm:mb-5" aria-hidden="true" />
+        <h2 class="text-[22px] font-bold uppercase leading-tight tracking-normal sm:text-[30px]">
           {{ $t(titleKey) }}
         </h2>
       </NuxtLink>
 
-      <div class="relative w-full container mx-auto">
+      <div class="relative mx-auto w-full">
         <ClientOnly>
           <swiper-container
             class="mt-6 w-full"
-            slides-per-view="5"
-            space-between="8"
-            navigation="true"
+            slides-per-view="1.35"
+            :space-between="10"
+            :navigation="true"
+            :breakpoints="swiperBreakpoints"
           >
             <swiper-slide
               v-for="(product, index) in products"
@@ -53,12 +61,12 @@ function productCategoryHref(product: ProductCard) {
                   :aria-label="$t(product.ctaLabelKey)"
                 >
                   <img
-                    class="max-w-57.5 h-full max-h-87.5 w-full object-cover aspect-2/3 align-middle"
+                    class="aspect-2/3 h-full max-h-87.5 w-full object-cover align-middle"
                     :src="product.src"
                     :srcset="product.srcset"
                     :alt="$t(product.altKey)"
                   >
-                  <h3 class="text-center mt-4 text-xs leading-4.5 tracking-1 font-bold">
+                  <h3 class="mt-4 text-center text-xs font-bold leading-4.5 tracking-1">
                     {{ $t(product.nameKey) }}
                   </h3>
                 </NuxtLink>
@@ -72,7 +80,7 @@ function productCategoryHref(product: ProductCard) {
 
                 <NuxtLink
                   :to="productHref(product)"
-                  class="block text-center text-xs leading-4.5 tracking-1 font-bold text-black no-underline hover:underline"
+                  class="block text-center text-xs font-bold leading-4.5 tracking-1 text-black no-underline hover:underline"
                   :aria-label="$t(product.ctaLabelKey)"
                 >
                   {{ $t(product.priceKey) }}
@@ -82,11 +90,11 @@ function productCategoryHref(product: ProductCard) {
           </swiper-container>
 
           <template #fallback>
-            <div class="mt-6 flex gap-9 overflow-x-auto pb-3">
+            <div class="mt-6 flex gap-3 overflow-x-auto overscroll-x-contain pb-3 sm:gap-6">
               <article
                 v-for="(product, index) in products"
                 :key="`${product.nameKey}-fallback-${index}`"
-                class="w-[220px] shrink-0 text-center sm:w-[240px]"
+                class="w-[42vw] max-w-[220px] shrink-0 text-center sm:w-[240px]"
               >
                 <NuxtLink
                   :to="productHref(product)"
@@ -99,7 +107,7 @@ function productCategoryHref(product: ProductCard) {
                     :srcset="product.srcset"
                     :alt="$t(product.altKey)"
                   >
-                  <h3 class="mt-5 min-h-[38px] text-[13px] font-semibold leading-[1.35]">
+                  <h3 class="mt-4 min-h-[38px] text-[13px] font-semibold leading-[1.35] sm:mt-5">
                     {{ $t(product.nameKey) }}
                   </h3>
                 </NuxtLink>
@@ -129,5 +137,11 @@ function productCategoryHref(product: ProductCard) {
 swiper-container {
   --swiper-navigation-color: #000;
   --swiper-navigation-size: 22px;
+}
+
+@media (max-width: 767px) {
+  swiper-container {
+    --swiper-navigation-size: 18px;
+  }
 }
 </style>
