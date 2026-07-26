@@ -20,7 +20,7 @@ const newsletterStatus = shallowRef<'idle' | 'success' | 'error' | 'invalid'>('i
 
 const customerCareColumns = [
   [
-    { labelKey: 'footer.customerCare.links.contact', href: 'mailto:hello@uandiplus.com' },
+    { labelKey: 'footer.customerCare.links.contact', href: 'mailto:hello@trendfied.com' },
     { labelKey: 'footer.customerCare.links.phone', href: 'tel:+18008720441' },
     { labelKey: 'footer.customerCare.links.trackOrder', href: '/account/orders' },
   ],
@@ -176,12 +176,12 @@ const newsletterMessage = computed(() => {
           >
             <label
               class="sr-only"
-              for="uandiplus-subscribe"
+              for="trendfied-subscribe"
             >
               {{ $t('footer.newsletter.emailLabel') }}
             </label>
             <input
-              id="uandiplus-subscribe"
+              id="trendfied-subscribe"
               v-model="newsletterEmail"
               class="min-h-11 flex-1 border border-r-0 border-black bg-transparent px-3 py-2 text-[13px] leading-none text-black placeholder:text-[#666]"
               type="email"

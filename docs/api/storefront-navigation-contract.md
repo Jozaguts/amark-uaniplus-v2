@@ -23,7 +23,7 @@ Accept: application/json
 - Middleware: `tenant.api` (lectura pública, sin sesión).
 - El tenant se resuelve por `Host`. **No** enviar `tenant_id`.
 - Usar el dominio tenant del storefront. Ejemplo:
-  `http://uandiplus.test/api/catalog/navigation?locale=en`.
+  `http://trendfied.test/api/catalog/navigation?locale=en`.
 - No usar `b.test` para leer catálogo tenant; `b.test` es central/admin.
 - `locale` es opcional (`en` por defecto).
 

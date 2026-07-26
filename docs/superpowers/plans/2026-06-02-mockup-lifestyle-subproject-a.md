@@ -750,7 +750,7 @@ Expected: PASS — all `app/utils/mockupRender.test.ts` tests green.
 
 - [ ] **Step 5: Verify in the browser**
 
-Run: `pnpm dev` (ensure `uandiplus.test` maps to `127.0.0.1` per CLAUDE.md "Dev Server Notes").
+Run: `pnpm dev` (ensure `trendfied.test` maps to `127.0.0.1` per CLAUDE.md "Dev Server Notes").
 Then, in the browser:
 1. Open a design editor page (`/design/<id>`), add a design image/text on the front view, and pick a non-white product color in the **Design** tab.
 2. Switch to the **Mockups** tab.

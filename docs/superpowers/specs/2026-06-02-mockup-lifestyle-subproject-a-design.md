@@ -2,7 +2,7 @@
 
 **Fecha:** 2026-06-02
 **Estado:** Diseño aprobado, listo para plan de implementación
-**Repo:** uandiplus (Nuxt 4 storefront)
+**Repo:** trendfied (Nuxt 4 storefront)
 
 ## Resumen
 

@@ -14,7 +14,7 @@ No test or lint commands are configured yet. When added, prefer Vitest for unit 
 
 ## Architecture
 
-**uandiplus** is a Nuxt 4 e-commerce storefront with an integrated canvas-based design editor. Key layers:
+**trendfied** is a Nuxt 4 e-commerce storefront with an integrated canvas-based design editor. Key layers:
 
 - **Pages** (`app/pages/`) — file-based routing. Category pages (`women`, `men`, `kids`, `dogs`, `cats`) share a common structure via `app/pages/content/[section].vue`. The design editor lives at `app/pages/design/[id].vue` and uses Konva (via `app/plugins/vue-konva.client.ts`).
 - **Composables** (`app/composables/`) — all data-fetching and shared state lives here. `useStorefront.ts` wraps the `$storefront` plugin for typed API calls. `useDesignCart.ts` and `useDesignDrafts.ts` manage editor state.
@@ -47,4 +47,4 @@ Runtime config (`.env`): `NUXT_PUBLIC_API_BASE`, `GOOGLE_CLIENT_ID`, `GOOGLE_MAP
 
 ## Dev Server Notes
 
-The Vite server is configured to run on `127.0.0.1:5173` with `strictPort: true` and expects host `uandiplus.test` (or `NUXT_PUBLIC_HOST` env override). The Nuxt dev server binds to `127.0.0.1:3000`. Ensure your local hosts file maps `uandiplus.test` to `127.0.0.1` for HMR to work correctly.
+The Vite server is configured to run on `127.0.0.1:5173` with `strictPort: true` and expects host `trendfied.test` (or `NUXT_PUBLIC_HOST` env override). The Nuxt dev server binds to `127.0.0.1:3000`. Ensure your local hosts file maps `trendfied.test` to `127.0.0.1` for HMR to work correctly.

@@ -620,7 +620,7 @@ To:
 
 - [ ] **Step 6: Verify in browser**
 
-Run `pnpm dev` and open the design editor (`http://uandiplus.test:3000/design/<slug>`).
+Run `pnpm dev` and open the design editor (`http://trendfied.test:3000/design/<slug>`).
 
 Expected:
 - **Design tab** (default): editor looks exactly as before — tools panel visible, Konva canvas visible, attributes panel visible

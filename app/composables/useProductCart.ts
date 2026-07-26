@@ -30,14 +30,14 @@ type PendingProductCartAction = {
   returnTo: string
 }
 
-const PENDING_PRODUCT_CART_ACTION_KEY = 'uandiplus-pending-product-cart-action'
+const PENDING_PRODUCT_CART_ACTION_KEY = 'trendfied-pending-product-cart-action'
 
 function parseProductTypeFromUrl(url?: string | null): string | undefined {
   if (!url)
     return undefined
 
   try {
-    const parsedUrl = new URL(url, 'http://uandiplus.local')
+    const parsedUrl = new URL(url, 'http://trendfied.local')
     const type = parsedUrl.searchParams.get('type')
 
     return type || undefined

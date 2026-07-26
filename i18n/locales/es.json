@@ -8,7 +8,7 @@
     "error": "Algo salió mal. Por favor intenta de nuevo."
   },
   "auth": {
-    "brand": "UANDI PLUS",
+    "brand": "trendfied",
     "or": "O",
     "coverAlt": "Imagen de acceso a la cuenta",
     "forgotPassword": "¿Olvidaste tu contraseña?",
@@ -37,8 +37,8 @@
       "googleLabel": "Iniciar sesión con Google",
       "submitLabel": "Iniciar sesión",
       "seo": {
-        "title": "Login | UANDI PLUS",
-        "description": "Inicia sesión en tu cuenta de UANDI PLUS."
+        "title": "Login | trendfied",
+        "description": "Inicia sesión en tu cuenta de trendfied."
       }
     },
     "register": {
@@ -48,8 +48,8 @@
       "googleLabel": "Registrarse con Google",
       "submitLabel": "Registrarse",
       "seo": {
-        "title": "Registro | UANDI PLUS",
-        "description": "Crea tu cuenta de UANDI PLUS."
+        "title": "Registro | trendfied",
+        "description": "Crea tu cuenta de trendfied."
       }
     }
   },
@@ -158,9 +158,9 @@
           }
         }
       },
-      "uandiplusPromo": {
-        "ctaLabel": "Comprar en uandiplus",
-        "alt": "Comprar en uandiplus.com"
+      "trendfiedPromo": {
+        "ctaLabel": "Comprar en trendfied",
+        "alt": "Comprar en trendfied.com"
       }
     }
   },
@@ -377,7 +377,7 @@
     "mega": {
       "common": {
         "viewAll": "Ver todo",
-        "uandiplus": "uandiplus"
+        "trendfied": "trendfied"
       },
       "clothing": {
         "category": {
@@ -648,7 +648,7 @@
         "laceUp": "Ajuste con agujetas",
         "roundToe": "Punta redonda",
         "heel": "Tacón aprox. de 44 mm / 1.75 pulgadas y plataforma aprox. de 25 mm / 1 pulgada",
-        "styleNo": "uandiplus Style No. RGBR-MZ51",
+        "styleNo": "trendfied Style No. RGBR-MZ51",
         "manufacturerStyleNo": "Manufacturer Style No. MGF24FF000LE0"
       },
       "sizeFit": {
@@ -662,7 +662,7 @@
   "account": {
     "cart": {
       "seo": {
-        "title": "Carrito | UANDI PLUS",
+        "title": "Carrito | trendfied",
         "description": "Revisa los artículos de tu carrito antes de pagar."
       },
       "title": "Carrito({count})",
@@ -697,8 +697,8 @@
     },
     "orders": {
       "seo": {
-        "title": "Órdenes de cuenta | UANDI PLUS",
-        "description": "Revisa tus órdenes de UANDI PLUS y su estado de producción."
+        "title": "Órdenes de cuenta | trendfied",
+        "description": "Revisa tus órdenes de trendfied y su estado de producción."
       },
       "title": "Órdenes",
       "manage": "Gestionar órdenes",
@@ -741,7 +741,7 @@
     },
     "orderDetail": {
       "seo": {
-        "title": "{number} | UANDI PLUS",
+        "title": "{number} | trendfied",
         "description": "Revisa el detalle de la orden y el estado del envío."
       },
       "fallbackOrder": "Orden",
@@ -795,7 +795,7 @@
   },
   "checkout": {
     "seo": {
-      "title": "Checkout | UANDI PLUS",
+      "title": "Checkout | trendfied",
       "description": "Completa tus datos de envío y revisa tu orden antes del pago."
     },
     "title": "Checkout",
@@ -902,7 +902,7 @@
   },
   "checkoutResult": {
     "seo": {
-      "title": "Estado de pago | UANDI PLUS",
+      "title": "Estado de pago | trendfied",
       "description": "Revisa el estado actual de tu pago."
     },
     "status": {
@@ -963,7 +963,7 @@
       "invalidEmail": "Ingresa un correo válido."
     },
     "app": {
-      "title": "Lleva uandiplus contigo",
+      "title": "Lleva trendfied contigo",
       "copy": "Descarga nuestra app fácil de usar, disponible para iPhone, iPad y Android.",
       "download": "Descargar en App Store",
       "playStore": "Disponible en Google Play"
@@ -979,8 +979,8 @@
         "shipping": "Envíos y entregas",
         "returns": "Devoluciones y cambios",
         "sizeGuide": "Guía de tallas",
-        "gifting": "Regalos uandiplus",
-        "why": "Por qué uandiplus",
+        "gifting": "Regalos trendfied",
+        "why": "Por qué trendfied",
         "feedback": "Comentarios",
         "accessibility": "Accesibilidad"
       }
@@ -1001,19 +1001,19 @@
     "social": {
       "title": "Conecta",
       "links": {
-        "tiktok": "Conectar con uandiplus TikTok, se abre en una ventana nueva",
-        "youtube": "Conectar con uandiplus YouTube, se abre en una ventana nueva",
-        "instagram": "Conectar con uandiplus Instagram, se abre en una ventana nueva",
-        "facebook": "Conectar con uandiplus Facebook, se abre en una ventana nueva"
+        "tiktok": "Conectar con trendfied TikTok, se abre en una ventana nueva",
+        "youtube": "Conectar con trendfied YouTube, se abre en una ventana nueva",
+        "instagram": "Conectar con trendfied Instagram, se abre en una ventana nueva",
+        "facebook": "Conectar con trendfied Facebook, se abre en una ventana nueva"
       }
     },
     "promo": {
-      "ctaLabel": "Comprar en uandiplus",
-      "alt": "Comprar en uandiplus.com"
+      "ctaLabel": "Comprar en trendfied",
+      "alt": "Comprar en trendfied.com"
     },
     "legal": {
       "navLabel": "Enlaces legales del pie de página",
-      "copyright": "2026 © uandiplus. Todos los derechos reservados.",
+      "copyright": "2026 © trendfied. Todos los derechos reservados.",
       "terms": "Términos",
       "privacy": "Privacidad",
       "cookiePreferences": "Preferencias de cookies",

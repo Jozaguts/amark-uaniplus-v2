@@ -304,7 +304,7 @@ onMounted(() => {
 
         <NuxtLink
           :to="localePath('/')"
-          aria-label="uandiplus"
+          aria-label="trendfied"
           class="font-serif text-[28px] font-bold leading-none tracking-[0.24em]"
         >
           <client-only>
@@ -462,10 +462,10 @@ onMounted(() => {
 
             <NuxtLink
               :to="localePath('/')"
-              aria-label="U&I"
+              aria-label="trendfied"
               class="flex items-center"
             >
-              <Icon name="icon:uandi" size="40" />
+              <Icon name="icon:trendfied" size="40" />
             </NuxtLink>
           </div>
 

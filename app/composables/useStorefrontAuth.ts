@@ -6,7 +6,7 @@ import type {
 } from '~~/types/auth'
 import type { StorefrontFetchError } from '~~/types/storefront'
 
-const STOREFRONT_AUTH_STORAGE_KEY = 'uandiplus-storefront-auth-account'
+const STOREFRONT_AUTH_STORAGE_KEY = 'trendfied-storefront-auth-account'
 
 const getDisplayNameFromAccount = (account: StorefrontAuthAccount | null) => {
   if (!account)

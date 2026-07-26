@@ -476,7 +476,7 @@ Run the dev server and open the design editor:
 pnpm dev
 ```
 
-Open `http://uandiplus.test:3000/design/<any-product-slug>` in the browser.
+Open `http://trendfied.test:3000/design/<any-product-slug>` in the browser.
 
 Expected:
 - No red errors in terminal or browser console

@@ -28,11 +28,11 @@ export default defineNuxtConfig({
       sourcemap: false,
     },
     server: {
-      allowedHosts: [process.env.NUXT_PUBLIC_HOST ?? 'uandiplus.test','uandiplus.com'],
+      allowedHosts: [process.env.NUXT_PUBLIC_HOST ?? 'trendfied.test','trendfied.com'],
       strictPort: true,
       hmr: {
         protocol: 'ws',
-        host: process.env.NUXT_PUBLIC_HOST ?? 'uandiplus.test',
+        host: process.env.NUXT_PUBLIC_HOST ?? 'trendfied.test',
         port: 80,
         clientPort: 80,
       },

@@ -407,7 +407,7 @@ The mobile drawer header ends at line 591 (`</div>`) and the nav tabs start at l
 
 - [ ] **Step 4: Verify in the browser**
 
-Run `pnpm dev` and open `http://uandiplus.test:3000` (or `http://127.0.0.1:3000`).
+Run `pnpm dev` and open `http://trendfied.test:3000` (or `http://127.0.0.1:3000`).
 
 Expected:
 - Desktop header: search input with underline style appears to the left of the cart icon

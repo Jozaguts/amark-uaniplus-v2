@@ -42,10 +42,10 @@ onMounted(() => {
     <div class="flex h-[66px] items-center justify-between px-8 sm:px-10 lg:px-[37px]">
       <NuxtLink
         :to="localePath('/')"
-        aria-label="uandiplus"
+        aria-label="trendfied"
         class="flex items-center"
       >
-        <Icon name="icon:uandi" size="50" />
+        <Icon name="icon:trendfied" size="50" />
       </NuxtLink>
 
       <div class="flex items-center gap-[18px] text-[16px] font-bold leading-none">

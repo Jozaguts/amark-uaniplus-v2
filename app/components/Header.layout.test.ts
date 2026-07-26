@@ -6,7 +6,7 @@ const megaMenuSource = readFileSync(new URL('./header/MegaMenu.vue', import.meta
 
 describe('desktop header layout', () => {
   it('keeps the upper-left grid cell empty and renders catalog sections below the logo', () => {
-    expect(headerSource).toMatch(/lg:grid">\s*<div aria-hidden="true"\s*\/>\s*<NuxtLink[\s\S]*?aria-label="uandiplus"/)
+    expect(headerSource).toMatch(/lg:grid">\s*<div aria-hidden="true"\s*\/>\s*<NuxtLink[\s\S]*?aria-label="trendfied"/)
     expect(headerSource).toMatch(/<nav[\s\S]*?class="hidden h-\[41px\][^"]*lg:flex"[\s\S]*?v-for="item in navItems"/)
   })
 
