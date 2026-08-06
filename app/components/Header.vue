@@ -25,11 +25,13 @@ interface MobileNavPanel {
 const activeMegaMenuKey = shallowRef<string | null>(null)
 const isUserMenuOpen = shallowRef(false)
 const isMobileMenuOpen = shallowRef(false)
+const isMobileSearchOpen = shallowRef(false)
 const mobileActiveMainItem = shallowRef<CatalogNavigationItem | null>(null)
 const mobileNavStack = shallowRef<MobileNavPanel[]>([])
 const mobileNavGoingBack = shallowRef(false)
 const logoutPending = shallowRef(false)
 const userMenuRef = shallowRef<HTMLElement | null>(null)
+const mobileSearchPanelRef = shallowRef<HTMLElement | null>(null)
 const { items: navItems, menuForItem, subColumnsFor } = useCatalogNavigationTree()
 const { activeCategoryPath } = useActiveNavigation()
 
@@ -254,8 +256,10 @@ watch(activeMainItem, () => {
 })
 
 watch(isMobileMenuOpen, (open) => {
-  if (open)
+  if (open) {
+    isMobileSearchOpen.value = false
     mobileActiveMainItem.value = activeMainItem.value ?? navItems.value[0] ?? null
+  }
 
   if (!open) {
     mobileNavStack.value = []
@@ -268,7 +272,17 @@ watch(isMobileMenuOpen, (open) => {
 
 watch(route, () => {
   isMobileMenuOpen.value = false
+  isMobileSearchOpen.value = false
   closeMegaMenu()
+})
+
+function toggleMobileSearch(): void {
+  isMobileSearchOpen.value = !isMobileSearchOpen.value
+}
+
+onClickOutside(mobileSearchPanelRef, () => {
+  if (isMobileSearchOpen.value)
+    isMobileSearchOpen.value = false
 })
 
 watch(
@@ -448,104 +462,77 @@ onMounted(() => {
         </Transition>
       </div>
 
+      <!-- Mobile top bar — black Revolve-style bar: menu + brand + search/wishlist/cart -->
       <div class="lg:hidden">
-        <div class="flex h-[58px] items-center justify-between bg-white pl-[15px] pr-[15px]">
-          <div class="flex min-w-0 items-center gap-[12px]">
+        <div class="flex h-[50px] items-center justify-between bg-black px-3 text-white">
+          <div class="flex min-w-0 items-center gap-2.5">
             <button
               type="button"
               :aria-label="$t('header.actions.menu')"
-              class="flex size-11 shrink-0 items-center justify-center -ml-2"
+              class="flex size-10 shrink-0 items-center justify-center -ml-1 text-white"
               @click="isMobileMenuOpen = true"
             >
-              <Icon name="icon:menu" class="size-[21px]" />
+              <Icon name="icon:menu" class="size-5" />
             </button>
 
             <NuxtLink
               :to="localePath('/')"
-              aria-label="trendfied"
-              class="flex items-center"
+              class="truncate font-serif text-[18px] font-bold uppercase leading-none tracking-[0.16em] text-white"
             >
-              <Icon name="icon:trendfied" size="40" />
+              {{ $t('auth.brand') }}
             </NuxtLink>
           </div>
 
-          <div class="flex items-center gap-[15px]">
-            <NuxtLink :to="localePath('/account/cart')" :aria-label="$t('header.actions.cart')" class="relative">
-              <Icon name="icon:shopping-cart" class="size-[25px]" />
+          <div class="flex shrink-0 items-center gap-0.5">
+            <button
+              type="button"
+              :aria-label="$t('header.actions.search')"
+              class="flex size-10 items-center justify-center text-white"
+              :aria-expanded="isMobileSearchOpen"
+              @click="toggleMobileSearch"
+            >
+              <Icon name="icon:search" class="size-[20px]" />
+            </button>
+
+            <NuxtLink
+              :to="localePath('/login')"
+              :aria-label="$t('header.actions.wishlist')"
+              class="flex size-10 items-center justify-center text-white"
+            >
+              <Icon name="icon:heart" class="size-[20px]" />
+            </NuxtLink>
+
+            <NuxtLink
+              :to="localePath('/account/cart')"
+              :aria-label="$t('header.actions.cart')"
+              class="relative flex size-10 items-center justify-center text-white"
+            >
+              <Icon name="icon:shopping-cart" class="size-[22px]" />
               <span
                 v-if="itemCount"
-                class="absolute -right-2 -top-2 flex min-h-[17px] min-w-[17px] items-center justify-center rounded-full bg-black px-1 text-[10px] font-semibold leading-none text-white"
+                class="absolute right-0.5 top-0.5 flex min-h-[16px] min-w-[16px] items-center justify-center rounded-full bg-white px-1 text-[10px] font-bold leading-none text-black"
               >
                 {{ itemCount }}
               </span>
             </NuxtLink>
-
-            <NuxtLink :to="nextLocalePath" :aria-label="$t('header.actions.language')" class="flex items-center gap-[4px] text-[13px] font-bold">
-              <Icon name="icon:globe-light" class="size-[24px]" />
-              <span>{{ nextLocaleLabel }}</span>
-            </NuxtLink>
-
-            <div
-              v-if="authReady && isAuthenticated"
-              ref="userMenuRef"
-              class="relative"
-            >
-              <button
-                type="button"
-                class="inline-flex max-w-[110px] items-center gap-[4px] text-[13px] font-bold"
-                :aria-expanded="isUserMenuOpen"
-                aria-haspopup="menu"
-                @click="isUserMenuOpen = !isUserMenuOpen"
-              >
-                <span class="truncate">{{ displayName || $t('header.user.account') }}</span>
-                <Icon
-                  name="ph:caret-down"
-                  class="size-[13px] shrink-0 transition"
-                  :class="isUserMenuOpen ? 'rotate-180' : ''"
-                />
-              </button>
-
-              <div
-                v-if="isUserMenuOpen"
-                class="absolute right-0 top-[calc(100%+12px)] z-[80] w-40 overflow-hidden border border-[#d7d7d7] bg-white py-2 text-[13px] font-semibold text-black shadow-[0_18px_40px_rgba(17,19,20,0.12)]"
-                role="menu"
-              >
-                <NuxtLink
-                  :to="localePath('/account/orders')"
-                  class="flex items-center gap-2 px-4 py-2 hover:bg-[#f5f5f3]"
-                  role="menuitem"
-                  @click="isUserMenuOpen = false"
-                >
-                  <Icon name="icon:package" class="size-[15px]" />
-                  <span>{{ $t('header.user.orders') }}</span>
-                </NuxtLink>
-                <button
-                  type="button"
-                  class="flex w-full items-center gap-2 px-4 py-2 text-left hover:bg-[#f5f5f3] disabled:cursor-not-allowed disabled:opacity-60"
-                  :disabled="logoutPending"
-                  role="menuitem"
-                  @click="handleLogout"
-                >
-                  <Icon name="icon:sign-out" class="size-[15px]" />
-                  <span>{{ logoutPending ? $t('header.user.loggingOut') : $t('header.user.logout') }}</span>
-                </button>
-              </div>
-            </div>
-
-            <NuxtLink
-              v-else-if="authReady"
-              :to="localePath('/login')"
-              class="text-[13px] font-bold"
-            >
-              {{ $t('header.actions.login') }}
-            </NuxtLink>
           </div>
         </div>
 
+        <div
+          v-if="isMobileSearchOpen"
+          ref="mobileSearchPanelRef"
+          class="border-b border-[#e8e8e8] bg-white px-3 py-3"
+        >
+          <HeaderSearch :full-width="true" />
+        </div>
       </div>
     </div>
 
-    <div class="h-[58px] lg:h-[136px]" aria-hidden="true" />
+    <div
+      class="lg:h-[136px]"
+      :class="isMobileSearchOpen ? 'h-[106px]' : 'h-[50px]'"
+      aria-hidden="true"
+    />
   </header>
 
   <Teleport to="body">

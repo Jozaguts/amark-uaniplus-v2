@@ -11,7 +11,8 @@ describe('desktop header layout', () => {
   })
 
   it('places the mega menu below both desktop header rows', () => {
-    expect(headerSource).toContain('class="h-[58px] lg:h-[136px]"')
+    expect(headerSource).toMatch(/lg:h-\[136px\]/)
+    expect(headerSource).toMatch(/h-\[50px\]/)
     expect(megaMenuSource).toContain('top-34')
   })
 
@@ -29,6 +30,19 @@ describe('desktop header layout', () => {
   it('never marks a nav item active on the site root path', () => {
     expect(headerSource).toMatch(
       /if \(currentPath === '\/'\)\s*return false/,
+    )
+  })
+})
+
+describe('mobile top bar', () => {
+  it('uses a black Revolve-style bar with brand text and no language switcher', () => {
+    expect(headerSource).toMatch(/lg:hidden[\s\S]*?bg-black[\s\S]*?auth\.brand/)
+    expect(headerSource).toMatch(/icon:search/)
+    expect(headerSource).toMatch(/icon:heart/)
+    expect(headerSource).toMatch(/icon:shopping-cart/)
+    // Language control stays desktop-only for this layout.
+    expect(headerSource).not.toMatch(
+      /lg:hidden[\s\S]*?nextLocalePath[\s\S]*?icon:globe-light/,
     )
   })
 })
