@@ -50,6 +50,8 @@ const backTo = computed<RouteLocationRaw>(() => {
   return lastCategory?.url ? linkTarget(lastCategory.url) : props.fallbackBackTo
 })
 
+const { track: trackRecentlyViewed } = useRecentlyViewed()
+
 // Si el producto trae breadcrumbs de categoría, fija el nav activo (útil en
 // enlaces directos/recarga). Si no, se conserva la última categoría navegada.
 watch(product, (current) => {
@@ -57,6 +59,18 @@ watch(product, (current) => {
 
   if (lastCategory)
     setActiveCategoryPath(lastCategory.url)
+
+  // Client-only recently viewed history (localStorage, max 4).
+  if (import.meta.client && current?.slug) {
+    trackRecentlyViewed({
+      slug: current.slug,
+      name: current.name,
+      brand: current.brand ?? null,
+      price: current.price?.formatted ?? null,
+      image: current.gallery?.[0]?.src || current.gallery?.[0]?.thumb || '',
+      url: current.url || `/products/${current.slug}`,
+    })
+  }
 }, { immediate: true })
 
 const designTo = computed<RouteLocationRaw | undefined>(() => {

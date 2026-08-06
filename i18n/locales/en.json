@@ -1,5 +1,8 @@
 {
   "welcome": "Welcome",
+  "recentlyViewed": {
+    "title": "Recently Viewed"
+  },
   "landing": {
     "card": {
       "addYourDesign": "Add your design",
