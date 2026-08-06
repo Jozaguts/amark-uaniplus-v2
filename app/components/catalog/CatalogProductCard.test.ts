@@ -13,4 +13,10 @@ describe('CatalogProductCard mobile', () => {
     expect(source).not.toMatch(/group-hover:flex/)
     expect(source).not.toMatch(/catalog\.category\.filters\.quickView/)
   })
+
+  it('renders dual product card actions for design and cart', () => {
+    expect(source).toContain('ProductCardActions')
+    expect(source).toMatch(/design-to|designTo/)
+    expect(source).toMatch(/cart-to|cartTo/)
+  })
 })

@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { CatalogProduct } from '~/types/catalog'
+import ProductCardActions from '~/components/shared/ProductCardActions.vue'
 
-defineProps<{
+const props = defineProps<{
   product: CatalogProduct
 }>()
 
 const { t } = useI18n()
+const localePath = useLocalePath()
 
 function productText(value?: string | null, key?: string): string {
   if (value)
@@ -13,6 +15,15 @@ function productText(value?: string | null, key?: string): string {
 
   return key ? t(key) : ''
 }
+
+const designTo = computed(() => {
+  if (props.product.designTo)
+    return props.product.designTo
+
+  return props.product.to
+})
+
+const cartTo = computed(() => localePath('/order/checkout'))
 </script>
 
 <template>
@@ -52,12 +63,11 @@ function productText(value?: string | null, key?: string): string {
       </div>
     </NuxtLink>
 
-    <NuxtLink
-      v-if="product.isDesignable && product.designTo"
-      :to="product.designTo"
-      class="mx-[10px] mt-[13px] flex h-[42px] items-center justify-center border border-black bg-black text-[12px] font-semibold uppercase tracking-[0.16em] text-white transition-colors hover:bg-white hover:text-black"
-    >
-      {{ $t('catalog.category.design.cta') }}
-    </NuxtLink>
+    <div class="px-[10px]">
+      <ProductCardActions
+        :design-to="designTo"
+        :cart-to="cartTo"
+      />
+    </div>
   </article>
 </template>
