@@ -14,6 +14,7 @@ const props = defineProps<{
 
 const route = useRoute()
 const localePath = useLocalePath()
+const { localizedHref } = useLocalizedHref()
 const { locale, t } = useI18n()
 const { findByPath } = useCatalogNavigationTree()
 
@@ -168,12 +169,15 @@ const paginationPages = computed(() => {
 })
 
 function productToCatalogProduct(product: CatalogProductsItem): CatalogProduct {
-  const designTo = product.is_designable === true && product.design_url
-    ? linkTarget(product.design_url)
-    : undefined
+  const designTo = product.design_url
+    ? localizedHref(product.design_url)
+    : product.is_designable
+      ? localizedHref(`/design/${product.slug}`)
+      : undefined
 
   return {
     id: String(product.id),
+    slug: product.slug,
     name: product.name,
     brand: product.brand ?? '',
     salePrice: product.price.formatted,
@@ -183,6 +187,7 @@ function productToCatalogProduct(product: CatalogProductsItem): CatalogProduct {
     srcset: product.image.srcset ?? undefined,
     to: linkTarget(product.url),
     designTo,
+    designUrl: product.design_url ?? null,
     isDesignable: product.is_designable === true,
   }
 }
