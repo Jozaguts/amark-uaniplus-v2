@@ -4,8 +4,9 @@ import type {
   LandingPage,
   LandingSection,
 } from '~/types/landing-page'
-import DirectionAwareHoverDemo from "~/components/shared/DirectionAwareHoverDemo.vue";
-import OverlayText from "~/components/landing/OverlayText.vue";
+import DirectionAwareHoverDemo from '~/components/shared/DirectionAwareHoverDemo.vue'
+import ProductCardActions from '~/components/shared/ProductCardActions.vue'
+import OverlayText from '~/components/landing/OverlayText.vue'
 
 const props = defineProps<{
   page: LandingPage
@@ -26,8 +27,21 @@ function itemAriaLabel(item: LandingItem): string {
   return item.aria_label || item.cta_label || item.title || item.image.alt
 }
 
-function itemCtaTarget(item: LandingItem): string {
-  return linkTarget(item.cta_url || item.url)
+/** Studio / design editor for card CTA */
+function itemDesignTarget(item: LandingItem): string {
+  if (item.design_url)
+    return linkTarget(item.design_url)
+
+  const productMatch = item.url.match(/\/products\/([^/?#]+)/i)
+  if (productMatch?.[1])
+    return localePath(`/design/${productMatch[1]}`)
+
+  return linkTarget(item.url)
+}
+
+/** Payment / checkout destination for card CTA */
+function itemPaymentTarget(_item: LandingItem): string {
+  return localePath('/order/checkout')
 }
 
 function hasItemOverlay(item: LandingItem): boolean {
@@ -114,30 +128,15 @@ function gridColumnsClass(section: LandingSection): string {
             <article
               v-for="item in section.items"
               :key="item.id"
-              class="relative mb-[58px] flex min-w-0 flex-col justify-between"
+              class="relative mb-[58px] flex min-w-0 flex-col"
             >
               <NuxtLink
                 :to="linkTarget(item.url)"
-                class="flex flex-1 flex-col text-black no-underline hover:no-underline"
+                class="block text-black no-underline hover:no-underline"
                 :aria-label="itemAriaLabel(item)"
               >
-                <div class="flex w-full flex-grow flex-col items-center justify-center pb-[15px] text-center">
-                  <h2
-                    v-if="item.title"
-                    class="mb-0 mt-[11px] text-[18px] font-semibold uppercase leading-tight tracking-[0.142em]"
-                  >
-                    {{ item.title }}
-                  </h2>
-                  <span
-                    v-if="item.cta_label"
-                    class="relative text-[12px] font-semibold uppercase leading-[1.15] tracking-[0.05em] hover:underline"
-                  >
-                    {{ item.cta_label }}
-                  </span>
-                </div>
-
                 <DirectionAwareHoverDemo
-                  class="relative block w-full overflow-hidden "
+                  class="relative block w-full overflow-hidden"
                   :image-url="item.image.src"
                   :srcset="item.image.srcset"
                   :alt="item.image.alt"
@@ -153,7 +152,19 @@ function gridColumnsClass(section: LandingSection): string {
                     <OverlayText :text="item.overlay?.text" />
                   </div>
                 </DirectionAwareHoverDemo>
+
+                <h2
+                  v-if="item.title"
+                  class="mb-0 mt-3 text-center text-[18px] font-semibold uppercase leading-tight tracking-[0.142em]"
+                >
+                  {{ item.title }}
+                </h2>
               </NuxtLink>
+
+              <ProductCardActions
+                :design-to="itemDesignTarget(item)"
+                :cart-to="itemPaymentTarget(item)"
+              />
             </article>
           </div>
         </div>
@@ -203,18 +214,18 @@ function gridColumnsClass(section: LandingSection): string {
             <article
               v-for="item in section.items"
               :key="item.id"
-              class="relative mb-[58px] flex min-w-0 flex-col justify-between"
+              class="relative mb-[58px] flex min-w-0 flex-col"
             >
               <NuxtLink
                 :to="linkTarget(item.url)"
-                class="flex flex-1 flex-col text-black no-underline hover:no-underline"
+                class="block text-black no-underline hover:no-underline"
                 :aria-label="itemAriaLabel(item)"
               >
-                <div class="flex w-full flex-grow flex-col items-center justify-center pb-[15px] text-center">
-                  <h3
-                    v-if="item.title"
-                    class="m-0 text-[18px] font-semibold uppercase leading-tight tracking-[0.142em]"
-                  >
+                <div
+                  v-if="item.title"
+                  class="flex w-full flex-col items-center justify-center pb-[15px] text-center"
+                >
+                  <h3 class="m-0 text-[18px] font-semibold uppercase leading-tight tracking-[0.142em]">
                     {{ item.title }}
                   </h3>
                 </div>
@@ -238,13 +249,10 @@ function gridColumnsClass(section: LandingSection): string {
                 </DirectionAwareHoverDemo>
               </NuxtLink>
 
-              <NuxtLink
-                v-if="item.cta_label"
-                :to="itemCtaTarget(item)"
-                class="relative mt-[4px] text-center text-[12px] font-semibold uppercase leading-[1.15] tracking-[0.05em] text-black hover:underline"
-              >
-                {{ item.cta_label }}
-              </NuxtLink>
+              <ProductCardActions
+                :design-to="itemDesignTarget(item)"
+                :cart-to="itemPaymentTarget(item)"
+              />
             </article>
           </div>
         </div>
