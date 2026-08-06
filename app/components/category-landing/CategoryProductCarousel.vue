@@ -10,8 +10,15 @@ const props = defineProps<{
   section?: CatalogSection
 }>()
 
-const localePath = useLocalePath()
+const route = useRoute()
+const { t } = useI18n()
+const { localizedHref } = useLocalizedHref()
+const { addProductToCartBySlug } = useProductCart()
 const { categoryPath, productPath, slugFromKey } = useCatalogNavigation(props.section)
+
+const cartPendingKey = shallowRef<string | null>(null)
+const cartMessageByKey = shallowRef<Record<string, string>>({})
+const cartErrorByKey = shallowRef<Record<string, string>>({})
 
 const swiperBreakpoints = {
   0: { slidesPerView: 1.35, spaceBetween: 10 },
@@ -28,13 +35,51 @@ function productCategoryHref(product: ProductCard) {
   return product.categoryHref || categoryPath(product.categorySlug || slugFromKey(product.categoryKey))
 }
 
-function productDesignHref(product: ProductCard) {
-  const slug = product.slug || slugFromKey(product.nameKey)
-  return localePath(`/design/${slug}`)
+function productSlug(product: ProductCard) {
+  return product.slug || slugFromKey(product.nameKey)
 }
 
-function productPaymentHref() {
-  return localePath('/order/checkout')
+function productDesignHref(product: ProductCard) {
+  return localizedHref(`/design/${productSlug(product)}`)
+}
+
+function productKey(product: ProductCard, index: number) {
+  return `${product.nameKey}-${index}`
+}
+
+async function handleAddToCart(product: ProductCard, index: number) {
+  const slug = productSlug(product)
+  const key = productKey(product, index)
+
+  if (!slug || cartPendingKey.value === key)
+    return
+
+  cartPendingKey.value = key
+  cartMessageByKey.value = { ...cartMessageByKey.value, [key]: '' }
+  cartErrorByKey.value = { ...cartErrorByKey.value, [key]: '' }
+
+  try {
+    const result = await addProductToCartBySlug(slug, { returnTo: route.fullPath })
+
+    if (result.status === 'added') {
+      cartMessageByKey.value = {
+        ...cartMessageByKey.value,
+        [key]: t('landing.card.addedToCart'),
+      }
+    }
+  }
+  catch (error) {
+    const code = error instanceof Error ? error.message : ''
+    cartErrorByKey.value = {
+      ...cartErrorByKey.value,
+      [key]: code === 'product_unavailable' || code === 'product_not_found'
+        ? t('landing.card.productUnavailable')
+        : t('landing.card.addToCartError'),
+    }
+  }
+  finally {
+    cartPendingKey.value = null
+  }
 }
 </script>
 
@@ -99,8 +144,21 @@ function productPaymentHref() {
 
                 <ProductCardActions
                   :design-to="productDesignHref(product)"
-                  :cart-to="productPaymentHref()"
+                  :cart-pending="cartPendingKey === productKey(product, index)"
+                  @add-to-cart="handleAddToCart(product, index)"
                 />
+                <p
+                  v-if="cartMessageByKey[productKey(product, index)]"
+                  class="mt-1 text-center text-[11px] font-semibold text-[#1f7a1f]"
+                >
+                  {{ cartMessageByKey[productKey(product, index)] }}
+                </p>
+                <p
+                  v-if="cartErrorByKey[productKey(product, index)]"
+                  class="mt-1 text-center text-[11px] font-semibold text-[#b00000]"
+                >
+                  {{ cartErrorByKey[productKey(product, index)] }}
+                </p>
               </article>
             </swiper-slide>
           </swiper-container>
@@ -143,8 +201,21 @@ function productPaymentHref() {
 
                 <ProductCardActions
                   :design-to="productDesignHref(product)"
-                  :cart-to="productPaymentHref()"
+                  :cart-pending="cartPendingKey === productKey(product, index)"
+                  @add-to-cart="handleAddToCart(product, index)"
                 />
+                <p
+                  v-if="cartMessageByKey[productKey(product, index)]"
+                  class="mt-1 text-center text-[11px] font-semibold text-[#1f7a1f]"
+                >
+                  {{ cartMessageByKey[productKey(product, index)] }}
+                </p>
+                <p
+                  v-if="cartErrorByKey[productKey(product, index)]"
+                  class="mt-1 text-center text-[11px] font-semibold text-[#b00000]"
+                >
+                  {{ cartErrorByKey[productKey(product, index)] }}
+                </p>
               </article>
             </div>
           </template>
