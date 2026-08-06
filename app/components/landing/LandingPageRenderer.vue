@@ -13,35 +13,88 @@ const props = defineProps<{
 }>()
 
 const localePath = useLocalePath()
+const route = useRoute()
+const { t } = useI18n()
+const { localizedHref, productSlugFromHref, designQueryPrefs } = useLocalizedHref()
+const { addProductToCartBySlug } = useProductCart()
 
 const sections = computed(() => props.page.sections)
+const cartPendingId = shallowRef<string | number | null>(null)
+const cartMessageById = shallowRef<Record<string, string>>({})
+const cartErrorById = shallowRef<Record<string, string>>({})
 
 function linkTarget(url: string): string {
   if (/^https?:\/\//.test(url))
     return url
 
-  return localePath(url)
+  return localizedHref(url)
 }
 
 function itemAriaLabel(item: LandingItem): string {
   return item.aria_label || item.cta_label || item.title || item.image.alt
 }
 
-/** Studio / design editor for card CTA */
+/** Studio URL with query: /design/{slug}?type=&color=&size= */
 function itemDesignTarget(item: LandingItem): string {
   if (item.design_url)
-    return linkTarget(item.design_url)
+    return localizedHref(item.design_url)
 
-  const productMatch = item.url.match(/\/products\/([^/?#]+)/i)
-  if (productMatch?.[1])
-    return localePath(`/design/${productMatch[1]}`)
+  const slug = itemProductSlug(item)
+  if (slug)
+    return localizedHref(`/design/${slug}`)
 
-  return linkTarget(item.url)
+  return localizedHref(item.url)
 }
 
-/** Payment / checkout destination for card CTA */
-function itemPaymentTarget(_item: LandingItem): string {
-  return localePath('/order/checkout')
+function itemProductSlug(item: LandingItem): string | null {
+  if (item.slug)
+    return item.slug
+
+  return productSlugFromHref(item.design_url) || productSlugFromHref(item.url)
+}
+
+async function handleItemAddToCart(item: LandingItem) {
+  const key = String(item.id)
+
+  if (cartPendingId.value === item.id)
+    return
+
+  cartPendingId.value = item.id
+  cartMessageById.value = { ...cartMessageById.value, [key]: '' }
+  cartErrorById.value = { ...cartErrorById.value, [key]: '' }
+
+  try {
+    const slug = itemProductSlug(item)
+    if (!slug)
+      throw new Error('product_not_found')
+
+    const prefs = designQueryPrefs(item.design_url)
+    const result = await addProductToCartBySlug(slug, {
+      colorValue: prefs.colorValue,
+      sizeValue: prefs.sizeValue,
+      returnTo: route.fullPath,
+    })
+
+    // Guest / 401 → login page; pending payload is replayed after session.
+    if (result.status === 'added') {
+      cartMessageById.value = {
+        ...cartMessageById.value,
+        [key]: t('landing.card.addedToCart'),
+      }
+    }
+  }
+  catch (error) {
+    const code = error instanceof Error ? error.message : ''
+    cartErrorById.value = {
+      ...cartErrorById.value,
+      [key]: code === 'product_unavailable' || code === 'product_not_found'
+        ? t('landing.card.productUnavailable')
+        : t('landing.card.addToCartError'),
+    }
+  }
+  finally {
+    cartPendingId.value = null
+  }
 }
 
 function hasItemOverlay(item: LandingItem): boolean {
@@ -163,8 +216,23 @@ function gridColumnsClass(section: LandingSection): string {
 
               <ProductCardActions
                 :design-to="itemDesignTarget(item)"
-                :cart-to="itemPaymentTarget(item)"
+                :cart-pending="cartPendingId === item.id"
+                @add-to-cart="handleItemAddToCart(item)"
               />
+              <p
+                v-if="cartMessageById[String(item.id)]"
+                class="mt-1 text-center text-[11px] font-semibold text-[#1f7a1f]"
+                role="status"
+              >
+                {{ cartMessageById[String(item.id)] }}
+              </p>
+              <p
+                v-if="cartErrorById[String(item.id)]"
+                class="mt-1 text-center text-[11px] font-semibold text-[#b00000]"
+                role="alert"
+              >
+                {{ cartErrorById[String(item.id)] }}
+              </p>
             </article>
           </div>
         </div>
@@ -251,8 +319,23 @@ function gridColumnsClass(section: LandingSection): string {
 
               <ProductCardActions
                 :design-to="itemDesignTarget(item)"
-                :cart-to="itemPaymentTarget(item)"
+                :cart-pending="cartPendingId === item.id"
+                @add-to-cart="handleItemAddToCart(item)"
               />
+              <p
+                v-if="cartMessageById[String(item.id)]"
+                class="mt-1 text-center text-[11px] font-semibold text-[#1f7a1f]"
+                role="status"
+              >
+                {{ cartMessageById[String(item.id)] }}
+              </p>
+              <p
+                v-if="cartErrorById[String(item.id)]"
+                class="mt-1 text-center text-[11px] font-semibold text-[#b00000]"
+                role="alert"
+              >
+                {{ cartErrorById[String(item.id)] }}
+              </p>
             </article>
           </div>
         </div>
