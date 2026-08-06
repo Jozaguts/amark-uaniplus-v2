@@ -50,6 +50,11 @@ export interface LandingItem {
   cta_label?: string | null
   aria_label?: string | null
   url: string
+  /**
+   * Destination for "Add your design" CTA.
+   * Put the full studio URL here, e.g.
+   * /design/all-over-print-...?type=accessories&color=black&size=2xl
+   */
   cta_url?: string | null
   /**
    * Product link fields (from ProductStorefrontLinkBuilder when

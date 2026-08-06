@@ -34,8 +34,15 @@ function itemAriaLabel(item: LandingItem): string {
   return item.aria_label || item.cta_label || item.title || item.image.alt
 }
 
-/** Studio URL with query: /design/{slug}?type=&color=&size= */
+/**
+ * "Add your design" destination.
+ * Priority: cta_url (admin puts full /design/{slug}?type&color&size here)
+ * then design_url, then derived /design/{slug}, never bare category urls.
+ */
 function itemDesignTarget(item: LandingItem): string {
+  if (item.cta_url)
+    return localizedHref(item.cta_url)
+
   if (item.design_url)
     return localizedHref(item.design_url)
 
@@ -43,6 +50,7 @@ function itemDesignTarget(item: LandingItem): string {
   if (slug)
     return localizedHref(`/design/${slug}`)
 
+  // No studio target — keep on current product/item url rather than inventing paths
   return localizedHref(item.url)
 }
 
@@ -50,7 +58,14 @@ function itemProductSlug(item: LandingItem): string | null {
   if (item.slug)
     return item.slug
 
-  return productSlugFromHref(item.design_url) || productSlugFromHref(item.url)
+  // cta_url often holds /design/{slug}?… — useful for cart defaults too
+  return productSlugFromHref(item.cta_url)
+    || productSlugFromHref(item.design_url)
+    || productSlugFromHref(item.url)
+}
+
+function itemDesignSourceUrl(item: LandingItem): string | null {
+  return item.cta_url || item.design_url || null
 }
 
 async function handleItemAddToCart(item: LandingItem) {
@@ -68,7 +83,7 @@ async function handleItemAddToCart(item: LandingItem) {
     if (!slug)
       throw new Error('product_not_found')
 
-    const prefs = designQueryPrefs(item.design_url)
+    const prefs = designQueryPrefs(itemDesignSourceUrl(item))
     const result = await addProductToCartBySlug(slug, {
       colorValue: prefs.colorValue,
       sizeValue: prefs.sizeValue,
