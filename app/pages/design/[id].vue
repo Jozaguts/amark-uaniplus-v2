@@ -1395,7 +1395,10 @@ const transformerConfig = computed(() => {
   }
 
   return {
-    rotateEnabled: false,
+    // Free rotation for text, numbers, and images on the canvas.
+    rotateEnabled: true,
+    rotationSnaps: [],
+    rotateAnchorOffset: 28,
     enabledAnchors: ['top-left', 'top-center', 'top-right', 'middle-left', 'middle-right', 'bottom-left', 'bottom-center', 'bottom-right'],
     keepRatio: false,
     borderStroke: '#111314',
@@ -1404,13 +1407,23 @@ const transformerConfig = computed(() => {
     anchorFill: '#ffffff',
     anchorStroke: '#111314',
     anchorStrokeWidth: 1.5,
-    boundBoxFunc: (_oldBox: { x: number, y: number, width: number, height: number }, newBox: { x: number, y: number, width: number, height: number }) => {
+    boundBoxFunc: (
+      oldBox: { x: number, y: number, width: number, height: number, rotation?: number },
+      newBox: { x: number, y: number, width: number, height: number, rotation?: number },
+    ) => {
+      if (newBox.width < minWidth || newBox.height < minHeight) {
+        return oldBox
+      }
+
+      // Do not block free rotation: AABB of a rotated rect often exceeds the
+      // print-area axis-aligned bounds even when the object is still usable.
+      const isRotating = Math.abs((newBox.rotation ?? 0) - (oldBox.rotation ?? 0)) > 0.01
+      if (isRotating) {
+        return newBox
+      }
+
       const nextRight = newBox.x + newBox.width
       const nextBottom = newBox.y + newBox.height
-
-      if (newBox.width < minWidth || newBox.height < minHeight) {
-        return _oldBox
-      }
 
       if (
         newBox.x < areaBounds.x
@@ -1418,7 +1431,7 @@ const transformerConfig = computed(() => {
         || nextRight > areaBounds.x + areaBounds.width
         || nextBottom > areaBounds.y + areaBounds.height
       ) {
-        return _oldBox
+        return oldBox
       }
 
       return newBox
@@ -2591,7 +2604,7 @@ useHead(() => ({
                   aria-label="Zoom to max"
                   @click="zoomCanvasToMax"
                 >
-                  <Icon name="icon:corners-out" size="20px" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M216 48v40a8 8 0 0 1-16 0V56h-32a8 8 0 0 1 0-16h40a8 8 0 0 1 8 8M88 200H56v-32a8 8 0 0 0-16 0v40a8 8 0 0 0 8 8h40a8 8 0 0 0 0-16m120-40a8 8 0 0 0-8 8v32h-32a8 8 0 0 0 0 16h40a8 8 0 0 0 8-8v-40a8 8 0 0 0-8-8M88 40H48a8 8 0 0 0-8 8v40a8 8 0 0 0 16 0V56h32a8 8 0 0 0 0-16"/></svg>
                 </button>
                 <button
                   type="button"
@@ -2600,7 +2613,7 @@ useHead(() => ({
                   aria-label="Zoom out"
                   @click="zoomCanvasOut"
                 >
-                  <Icon name="icon:magnifying-glass-minus" size="20px" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M152 112a8 8 0 0 1-8 8H80a8 8 0 0 1 0-16h64a8 8 0 0 1 8 8m77.66 117.66a8 8 0 0 1-11.32 0l-50.06-50.07a88.11 88.11 0 1 1 11.31-11.31l50.07 50.06a8 8 0 0 1 0 11.32M112 184a72 72 0 1 0-72-72a72.08 72.08 0 0 0 72 72"/></svg>
                 </button>
                 <button
                   type="button"
@@ -2609,9 +2622,9 @@ useHead(() => ({
                   aria-label="Zoom in"
                   @click="zoomCanvasIn"
                 >
-                  <Icon name="icon:magnifying-glass-plus" size="20px" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M152 112a8 8 0 0 1-8 8h-24v24a8 8 0 0 1-16 0v-24H80a8 8 0 0 1 0-16h24V80a8 8 0 0 1 16 0v24h24a8 8 0 0 1 8 8m77.66 117.66a8 8 0 0 1-11.32 0l-50.06-50.07a88.11 88.11 0 1 1 11.31-11.31l50.07 50.06a8 8 0 0 1 0 11.32M112 184a72 72 0 1 0-72-72a72.08 72.08 0 0 0 72 72"/></svg>
                 </button>
-                <div class="ml-1 hidden min-w-[52px] items-center justify-center rounded-md bg-cotton-grey-1 px-2 py-1 text-xs font-semibold text-primary sm:flex">
+                <div class="ml-1 hidden min-w-13 items-center justify-center rounded-md bg-cotton-grey-1 px-2 py-1 text-xs font-semibold text-primary sm:flex">
                   {{ zoomPercentage }}%
                 </div>
               </div>
