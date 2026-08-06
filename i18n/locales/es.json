@@ -1,5 +1,11 @@
 {
   "welcome": "Bienvenido",
+  "landing": {
+    "card": {
+      "addYourDesign": "Agrega tu diseño",
+      "addToCart": "Agregar al carrito"
+    }
+  },
   "search": {
     "placeholder": "Buscar",
     "viewAll": "Ver todos los resultados",

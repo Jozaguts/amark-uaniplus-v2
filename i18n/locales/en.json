@@ -1,5 +1,11 @@
 {
   "welcome": "Welcome",
+  "landing": {
+    "card": {
+      "addYourDesign": "Add your design",
+      "addToCart": "Add to cart"
+    }
+  },
   "search": {
     "placeholder": "Search",
     "viewAll": "View all results",
