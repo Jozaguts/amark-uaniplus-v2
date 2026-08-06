@@ -51,6 +51,8 @@ export interface LandingItem {
   aria_label?: string | null
   url: string
   cta_url?: string | null
+  /** Optional studio / design-editor destination for card CTAs */
+  design_url?: string | null
   image: LandingImage
   video_url?: string | null
   overlay?: LandingOverlay | null
