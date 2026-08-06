@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router'
 
-defineProps<{
+withDefaults(defineProps<{
   designTo: RouteLocationRaw
-  cartTo: RouteLocationRaw
+  cartPending?: boolean
+}>(), {
+  cartPending: false,
+})
+
+const emit = defineEmits<{
+  addToCart: []
 }>()
 </script>
 
 <template>
-  <!-- Thin dual CTAs — black primary + white outline, matching storefront bag/customize style -->
+  <!-- Thin dual CTAs — design → studio, cart always clickable (auth handled on click) -->
   <div class="mt-2 grid w-full grid-cols-2 gap-2">
     <NuxtLink
       :to="designTo"
@@ -16,11 +22,13 @@ defineProps<{
     >
       {{ $t('landing.card.addYourDesign') }}
     </NuxtLink>
-    <NuxtLink
-      :to="cartTo"
+    <button
+      type="button"
       class="flex h-9 items-center justify-center border border-black bg-white px-1.5 text-center text-[10px] font-semibold uppercase leading-tight tracking-[0.14em] text-black transition-colors hover:bg-[#f5f5f5] sm:h-10 sm:text-[11px]"
+      :aria-busy="cartPending || undefined"
+      @click="emit('addToCart')"
     >
-      {{ $t('landing.card.addToCart') }}
-    </NuxtLink>
+      {{ cartPending ? $t('landing.card.addingToCart') : $t('landing.card.addToCart') }}
+    </button>
   </div>
 </template>
