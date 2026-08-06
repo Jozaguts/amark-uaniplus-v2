@@ -1,4 +1,4 @@
-import type { ProductDetail, ProductOption } from '~/types/product-detail'
+import type { ProductDetail, ProductDetailResponse, ProductOption } from '~/types/product-detail'
 import type { StorefrontFetchError } from '~~/types/storefront'
 
 type ProductCartPayload = {
@@ -71,6 +71,7 @@ function isUnauthorizedError(error: unknown) {
 
 export function useProductCart() {
   const storefront = useStorefront()
+  const { locale } = useI18n()
   const { hydrateAuth, isAuthenticated, syncProfile } = useStorefrontAuth()
   const { syncCart } = useDesignCart()
 
@@ -267,11 +268,45 @@ export function useProductCart() {
     return { status: 'checkout' as const }
   }
 
+  async function fetchProductDetail(slug: string): Promise<ProductDetail | null> {
+    const response = await storefront<ProductDetailResponse>(`/storefront/products/${slug}`, {
+      query: { locale: locale.value },
+    })
+
+    return response?.data ?? null
+  }
+
+  /**
+   * Card-level add-to-cart: load product detail, apply optional color/size prefs
+   * (e.g. from design_url query), then add. If guest → login with pending replay.
+   */
+  async function addProductToCartBySlug(
+    slug: string,
+    options: {
+      colorValue?: string
+      sizeValue?: string
+      techniqueId?: string
+      returnTo: string
+    },
+  ) {
+    const product = await fetchProductDetail(slug)
+
+    if (!product)
+      throw new Error('product_not_found')
+
+    if (product.is_available === false)
+      throw new Error('product_unavailable')
+
+    return addProductToCart(product, options)
+  }
+
   return {
     addProductToCart,
+    addProductToCartBySlug,
     buyProductNow,
     buildProductCartPayload,
     clearPendingProductCartAction,
+    fetchProductDetail,
     persistPendingProductCartAction,
     readPendingProductCartAction,
     replayPendingProductCartAction,
