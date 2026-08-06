@@ -12,6 +12,7 @@ export interface CatalogSidebarGroup {
 
 export interface CatalogProduct {
   id: string
+  slug?: string
   name?: string
   nameKey?: string
   brand?: string
@@ -25,7 +26,10 @@ export interface CatalogProduct {
   image: string
   srcset?: string
   to: RouteLocationRaw
+  /** Full design studio URL, e.g. /design/slug?type=accessories&color=black&size=2xl */
   designTo?: RouteLocationRaw
+  /** Raw design_url from API (keeps query prefs for cart defaults) */
+  designUrl?: string | null
   isDesignable?: boolean
 }
 

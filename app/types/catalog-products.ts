@@ -59,6 +59,7 @@ export interface CatalogProductsItem {
   brand?: string | null
   url: string
   design_url?: string | null
+  product_type?: string | null
   image: {
     src: string
     srcset?: string | null

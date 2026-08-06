@@ -51,8 +51,15 @@ export interface LandingItem {
   aria_label?: string | null
   url: string
   cta_url?: string | null
-  /** Optional studio / design-editor destination for card CTAs */
+  /**
+   * Product link fields (from ProductStorefrontLinkBuilder when
+   * landing item has linked_product_id). Null on pure category tiles.
+   */
+  slug?: string | null
   design_url?: string | null
+  is_designable?: boolean | null
+  is_available?: boolean | null
+  product_type?: string | null
   image: LandingImage
   video_url?: string | null
   overlay?: LandingOverlay | null
