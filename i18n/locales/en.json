@@ -3,7 +3,11 @@
   "landing": {
     "card": {
       "addYourDesign": "Add your design",
-      "addToCart": "Add to cart"
+      "addToCart": "Add to cart",
+      "addingToCart": "Adding…",
+      "addedToCart": "Added to cart",
+      "addToCartError": "Could not add this product to the cart.",
+      "productUnavailable": "This product is not available."
     }
   },
   "search": {
