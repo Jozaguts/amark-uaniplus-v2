@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ProductCard } from '~/types/category-landing'
 import type { CatalogSection } from '~/composables/useCatalogNavigation'
+import ProductCardActions from '~/components/shared/ProductCardActions.vue'
 
 const props = defineProps<{
   titleKey: string
@@ -9,6 +10,7 @@ const props = defineProps<{
   section?: CatalogSection
 }>()
 
+const localePath = useLocalePath()
 const { categoryPath, productPath, slugFromKey } = useCatalogNavigation(props.section)
 
 const swiperBreakpoints = {
@@ -24,6 +26,15 @@ function productHref(product: ProductCard) {
 
 function productCategoryHref(product: ProductCard) {
   return product.categoryHref || categoryPath(product.categorySlug || slugFromKey(product.categoryKey))
+}
+
+function productDesignHref(product: ProductCard) {
+  const slug = product.slug || slugFromKey(product.nameKey)
+  return localePath(`/design/${slug}`)
+}
+
+function productPaymentHref() {
+  return localePath('/order/checkout')
 }
 </script>
 
@@ -85,6 +96,11 @@ function productCategoryHref(product: ProductCard) {
                 >
                   {{ $t(product.priceKey) }}
                 </NuxtLink>
+
+                <ProductCardActions
+                  :design-to="productDesignHref(product)"
+                  :cart-to="productPaymentHref()"
+                />
               </article>
             </swiper-slide>
           </swiper-container>
@@ -124,6 +140,11 @@ function productCategoryHref(product: ProductCard) {
                 >
                   {{ $t(product.priceKey) }}
                 </NuxtLink>
+
+                <ProductCardActions
+                  :design-to="productDesignHref(product)"
+                  :cart-to="productPaymentHref()"
+                />
               </article>
             </div>
           </template>
