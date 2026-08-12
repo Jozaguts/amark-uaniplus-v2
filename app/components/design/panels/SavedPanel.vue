@@ -121,7 +121,7 @@ watch(() => props.refreshKey, () => {
     <div v-if="draftsPending" class="flex flex-1 items-center justify-center p-6">
       <div class="flex max-w-[220px] flex-col items-center text-center">
         <span class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-cotton-grey-1 text-primary">
-          <Icon name="icon:spinner-gap" size="26px" class="animate-spin" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="26" height="26" fill="currentColor" class="animate-spin inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M136 32v32a8 8 0 0 1-16 0V32a8 8 0 0 1 16 0m88 88h-32a8 8 0 0 0 0 16h32a8 8 0 0 0 0-16m-45.09 47.6a8 8 0 0 0-11.31 11.31l22.62 22.63a8 8 0 0 0 11.32-11.32ZM128 184a8 8 0 0 0-8 8v32a8 8 0 0 0 16 0v-32a8 8 0 0 0-8-8m-50.91-16.4l-22.63 22.62a8 8 0 0 0 11.32 11.32l22.62-22.63a8 8 0 0 0-11.31-11.31M72 128a8 8 0 0 0-8-8H32a8 8 0 0 0 0 16h32a8 8 0 0 0 8-8m-6.22-73.54a8 8 0 0 0-11.32 11.32L77.09 88.4A8 8 0 0 0 88.4 77.09Z"/></svg>
         </span>
         <p class="text-[15px] font-medium leading-6 text-primary">
           Loading saved designs
@@ -135,7 +135,7 @@ watch(() => props.refreshKey, () => {
     >
       <div class="flex max-w-[240px] flex-col items-center text-center">
         <span class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-cotton-grey-1 text-primary">
-          <Icon name="icon:warning-circle" size="26px" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="26" height="26" fill="currentColor" class="inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88m-8-80V80a8 8 0 0 1 16 0v56a8 8 0 0 1-16 0m20 36a12 12 0 1 1-12-12a12 12 0 0 1 12 12"/></svg>
         </span>
         <p class="text-[15px] font-medium leading-6 text-primary">
           {{ draftsErrorMessage }}
@@ -190,7 +190,7 @@ watch(() => props.refreshKey, () => {
               v-else
               class="flex h-full w-full items-center justify-center text-[#8a8f98]"
             >
-              <Icon name="icon:image-square" size="26px" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="26" height="26" fill="currentColor" class="inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M208 32H48a16 16 0 0 0-16 16v160a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16M48 48h160v77.38l-24.69-24.7a16 16 0 0 0-22.62 0L53.37 208H48Zm160 160H76l96-96l36 36zM96 120a24 24 0 1 0-24-24a24 24 0 0 0 24 24m0-32a8 8 0 1 1-8 8a8 8 0 0 1 8-8"/></svg>
             </div>
           </div>
 

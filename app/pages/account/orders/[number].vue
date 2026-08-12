@@ -196,7 +196,9 @@ onMounted(() => {
           :to="localePath('/account/orders')"
           class="flex h-11 items-center gap-3 rounded-lg bg-white px-4 text-sm font-semibold text-primary shadow-[0_8px_20px_rgba(17,19,20,0.03)]"
         >
-          <Icon name="icon:package" class="size-[18px]" />
+          <svg class="size-4.5" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256"><!--
+           Icon from
+          Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m223.68 66.15l-88-48.15a15.88 15.88 0 0 0-15.36 0l-88 48.17a16 16 0 0 0-8.32 14v95.64a16 16 0 0 0 8.32 14l88 48.17a15.88 15.88 0 0 0 15.36 0l88-48.17a16 16 0 0 0 8.32-14V80.18a16 16 0 0 0-8.32-14.03M128 32l80.34 44l-29.77 16.3l-80.35-44Zm0 88L47.66 76l33.9-18.56l80.34 44ZM40 90l80 43.78v85.79l-80-43.75Zm176 85.78l-80 43.79v-85.75l32-17.51V152a8 8 0 0 0 16 0v-44.45L216 90v85.77Z"/></svg>
           <span>{{ $t('account.orders.title') }}</span>
         </NuxtLink>
       </aside>
@@ -207,7 +209,7 @@ onMounted(() => {
             :to="localePath('/account/orders')"
             class="inline-flex items-center gap-2 text-sm font-semibold text-[#667085] transition hover:text-primary"
           >
-            <Icon name="icon:arrow-left" class="size-[16px]" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[16px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M224 128a8 8 0 0 1-8 8H59.31l58.35 58.34a8 8 0 0 1-11.32 11.32l-72-72a8 8 0 0 1 0-11.32l72-72a8 8 0 0 1 11.32 11.32L59.31 120H216a8 8 0 0 1 8 8"/></svg>
             <span>{{ $t('account.orderDetail.back') }}</span>
           </NuxtLink>
 
@@ -227,7 +229,7 @@ onMounted(() => {
               :disabled="orderLoading"
               @click="fetchOrder"
             >
-              <Icon name="icon:arrow-clockwise" class="size-[16px]" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[16px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M240 56v48a8 8 0 0 1-8 8h-48a8 8 0 0 1 0-16h27.4l-26.59-24.36l-.25-.24a80 80 0 1 0-1.67 114.78a8 8 0 0 1 11 11.63A95.44 95.44 0 0 1 128 224h-1.32a96 96 0 1 1 69.07-164L224 85.8V56a8 8 0 1 1 16 0"/></svg>
               <span>{{ orderLoading ? $t('account.orderDetail.refreshing') : $t('account.orderDetail.refresh') }}</span>
             </button>
           </div>
@@ -243,7 +245,7 @@ onMounted(() => {
             v-else-if="orderError"
             class="mt-10 flex min-h-[360px] flex-col items-center justify-center rounded-3xl border border-borderSecondary text-center"
           >
-            <Icon name="icon:warning-circle" class="size-[48px] text-[#f04438]" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[48px] text-[#f04438] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88m-8-80V80a8 8 0 0 1 16 0v56a8 8 0 0 1-16 0m20 36a12 12 0 1 1-12-12a12 12 0 0 1 12 12"/></svg>
             <p class="mt-4 text-sm text-[#f04438]">
               {{ orderError }}
             </p>
@@ -327,7 +329,7 @@ onMounted(() => {
                         v-else
                         class="flex h-full w-full items-center justify-center text-[#9aa0a8]"
                       >
-                        <Icon name="icon:package" class="size-[24px]" />
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[24px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m223.68 66.15l-88-48.15a15.88 15.88 0 0 0-15.36 0l-88 48.17a16 16 0 0 0-8.32 14v95.64a16 16 0 0 0 8.32 14l88 48.17a15.88 15.88 0 0 0 15.36 0l88-48.17a16 16 0 0 0 8.32-14V80.18a16 16 0 0 0-8.32-14.03M128 32l80.34 44l-29.77 16.3l-80.35-44Zm0 88L47.66 76l33.9-18.56l80.34 44ZM40 90l80 43.78v85.79l-80-43.75Zm176 85.78l-80 43.79v-85.75l32-17.51V152a8 8 0 0 0 16 0v-44.45L216 90v85.77Z"/></svg>
                       </div>
                     </div>
 

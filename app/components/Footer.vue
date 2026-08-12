@@ -6,7 +6,7 @@ type FooterLink = {
 }
 
 type SocialLink = FooterLink & {
-  iconName: string
+  icon: 'tiktok' | 'youtube' | 'instagram' | 'facebook'
 }
 
 const localePath = useLocalePath()
@@ -54,10 +54,10 @@ function configString(key: string): string {
 
 const socialLinks = computed<SocialLink[]>(() => {
   const candidates: SocialLink[] = [
-    { labelKey: 'footer.social.links.tiktok', href: configString('socialTiktokUrl'), iconName: 'icon:tiktok' },
-    { labelKey: 'footer.social.links.youtube', href: configString('socialYoutubeUrl'), iconName: 'icon:youtube' },
-    { labelKey: 'footer.social.links.instagram', href: configString('socialInstagramUrl'), iconName: 'icon:instagram' },
-    { labelKey: 'footer.social.links.facebook', href: configString('socialFacebookUrl'), iconName: 'icon:facebook' },
+    { labelKey: 'footer.social.links.tiktok', href: configString('socialTiktokUrl'), icon: 'tiktok' },
+    { labelKey: 'footer.social.links.youtube', href: configString('socialYoutubeUrl'), icon: 'youtube' },
+    { labelKey: 'footer.social.links.instagram', href: configString('socialInstagramUrl'), icon: 'instagram' },
+    { labelKey: 'footer.social.links.facebook', href: configString('socialFacebookUrl'), icon: 'facebook' },
   ]
 
   return candidates.filter(link => isActionableHref(link.href))
@@ -212,10 +212,20 @@ const newsletterMessage = computed(() => {
                   rel="noreferrer noopener"
                   :aria-label="$t(link.labelKey)"
                 >
-                  <Icon
-                    :name="link.iconName"
-                    class="size-4"
-                  />
+                  <template v-if="link.icon === 'tiktok'"><svg viewBox="0 0 54.88 64" aria-hidden="true" focusable="false" role="presentation" fill="currentColor" class="size-4 inline-block shrink-0">
+    <g id="Layer_1-2" data-name="Layer 1" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+        <path d="m39.95,0c1.06,9.08,6.12,14.5,14.94,15.07v10.21c-5.11.5-9.58-1.17-14.78-4.32v19.1c0,24.27-26.46,31.85-37.1,14.46C-3.83,43.34.35,23.69,22.28,22.91v10.77c-1.67.27-3.46.69-5.09,1.25-4.88,1.65-7.64,4.74-6.87,10.2,1.48,10.45,20.64,13.54,19.05-6.87V.02h10.58v-.02Z" style="fill-rule: evenodd;"></path>
+    </g>
+</svg></template>
+                  <template v-else-if="link.icon === 'youtube'"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false" role="presentation" fill="currentColor" class="size-4 inline-block shrink-0">
+    <path d="M15.84 4.8a3.461 3.461 0 0 0-.636-1.588 2.288 2.288 0 0 0-1.603-.678l-5.605-.162-5.598.162a2.289 2.289 0 0 0-1.603.678A3.46 3.46 0 0 0 .16 4.801 24.194 24.194 0 0 0 0 7.391v1.214a24.193 24.193 0 0 0 .16 2.59 3.461 3.461 0 0 0 .636 1.588 2.713 2.713 0 0 0 1.764.684c1.28.123 5.44.16 5.44.16l5.6-.167a2.288 2.288 0 0 0 1.603-.678 3.461 3.461 0 0 0 .636-1.588 24.229 24.229 0 0 0 .16-2.59V7.39a24.231 24.231 0 0 0-.16-2.589zm-9.492 5.274L6.347 5.58l4.323 2.256z"></path>
+</svg></template>
+                  <template v-else-if="link.icon === 'instagram'"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false" role="presentation" fill="currentColor" class="size-4 inline-block shrink-0">
+    <path d="M15.952 4.702a5.87 5.87 0 0 0-.372-1.942 3.921 3.921 0 0 0-.923-1.417A3.92 3.92 0 0 0 13.24.42a5.874 5.874 0 0 0-1.942-.372L8 0 4.702.048A5.874 5.874 0 0 0 2.76.42a3.92 3.92 0 0 0-1.417.923A3.921 3.921 0 0 0 .42 2.76a5.87 5.87 0 0 0-.372 1.942L0 8l.048 3.298A5.87 5.87 0 0 0 .42 13.24a3.921 3.921 0 0 0 .923 1.417 3.922 3.922 0 0 0 1.417.923 5.874 5.874 0 0 0 1.942.372L8 16l3.298-.048a5.874 5.874 0 0 0 1.942-.372 4.091 4.091 0 0 0 2.34-2.34 5.87 5.87 0 0 0 .372-1.942L16 8l-.048-3.298zm-1.44 6.53a4.427 4.427 0 0 1-.276 1.486 2.649 2.649 0 0 1-1.518 1.518 4.425 4.425 0 0 1-1.486.275L8 14.56c-2.136 0-2.39-.008-3.233-.047a4.425 4.425 0 0 1-1.486-.275 2.479 2.479 0 0 1-.92-.598 2.48 2.48 0 0 1-.598-.92 4.427 4.427 0 0 1-.276-1.486L1.44 8l.047-3.233a4.426 4.426 0 0 1 .276-1.485 2.479 2.479 0 0 1 .598-.92 2.48 2.48 0 0 1 .92-.598 4.429 4.429 0 0 1 1.486-.275L8 1.44l3.233.047a4.429 4.429 0 0 1 1.486.275 2.479 2.479 0 0 1 .92.598 2.478 2.478 0 0 1 .598.92 4.426 4.426 0 0 1 .276 1.485L14.56 8l-.047 3.233zM8 3.892A4.108 4.108 0 1 0 12.108 8 4.108 4.108 0 0 0 8 3.892zm0 6.775A2.667 2.667 0 1 1 10.667 8 2.667 2.667 0 0 1 8 10.667zm4.27-7.897a.96.96 0 1 0 .96.96.96.96 0 0 0-.96-.96z"></path>
+</svg></template>
+                  <template v-else-if="link.icon === 'facebook'"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false" role="presentation" fill="currentColor" class="size-4 inline-block shrink-0">
+    <path d="M12.69 3.3h-2.68c-.3 0-.67.464-.67 1.03v1.7h3.35v3.352H9.34V16H5.99V9.382H3.31V6.03h2.68V4.382A4.213 4.213 0 0 1 10.011 0h2.68z"></path>
+</svg></template>
                 </a>
               </li>
             </ul>
@@ -258,10 +268,12 @@ const newsletterMessage = computed(() => {
                 :to="localePath('/content/privacy-choices')"
               >
                 {{ $t('footer.legal.privacyChoices') }}
-                <Icon
-                  name="icon:verification"
-                  class="h-[14px] w-[30px]"
-                />
+                <svg aria-hidden="true" focusable="false" role="presentation" viewBox="0 0 30 14" fill="currentColor" class="h-[14px] w-[30px] inline-block shrink-0">
+    <path d="M7.4 12.8h6.8l3.1-11.6H7.4C4.2 1.2 1.6 3.8 1.6 7s2.6 5.8 5.8 5.8z" style="fill-rule:evenodd;clip-rule:evenodd;fill:#fff"></path>
+    <path d="M22.6 0H7.4c-3.9 0-7 3.1-7 7s3.1 7 7 7h15.2c3.9 0 7-3.1 7-7s-3.2-7-7-7zm-21 7c0-3.2 2.6-5.8 5.8-5.8h9.9l-3.1 11.6H7.4c-3.2 0-5.8-2.6-5.8-5.8z" style="fill-rule:evenodd;clip-rule:evenodd;fill:#06f"></path>
+    <path d="M24.6 4c.2.2.2.6 0 .8L22.5 7l2.2 2.2c.2.2.2.6 0 .8-.2.2-.6.2-.8 0l-2.2-2.2-2.2 2.2c-.2.2-.6.2-.8 0-.2-.2-.2-.6 0-.8L20.8 7l-2.2-2.2c-.2-.2-.2-.6 0-.8.2-.2.6-.2.8 0l2.2 2.2L23.8 4c.2-.2.6-.2.8 0z" style="fill:#fff"></path>
+    <path d="M12.7 4.1c.2.2.3.6.1.8L8.6 9.8c-.1.1-.2.2-.3.2-.2.1-.5.1-.7-.1L5.4 7.7c-.2-.2-.2-.6 0-.8.2-.2.6-.2.8 0L8 8.6l3.8-4.5c.2-.2.6-.2.9 0z" style="fill:#06f"></path>
+</svg>
               </NuxtLink>
             </li>
           </ul>

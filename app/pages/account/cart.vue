@@ -178,7 +178,7 @@ onMounted(() => {
 
           <div v-if="!cartItems.length" class="mt-6">
             <div class="flex min-h-[calc(100vh-180px)] flex-col items-center justify-center rounded-[22px] bg-white px-6 text-center shadow-[0_20px_60px_rgba(17,19,20,0.04)]">
-              <Icon name="icon:shopping-cart-simple" class="size-[72px] text-primary" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[72px] text-primary inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><path fill="currentColor" d="M104 216a16 16 0 1 1-16-16a16 16 0 0 1 16 16m88-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m47.71-125.86l-25.64 92.28A24.06 24.06 0 0 1 191 184H92.16A24.06 24.06 0 0 1 69 166.42L33.92 40H16a8 8 0 0 1 0-16h24a8 8 0 0 1 7.71 5.86L57.19 64H232a8 8 0 0 1 7.71 10.14M221.47 80H61.64l22.81 82.14a8 8 0 0 0 7.71 5.86H191a8 8 0 0 0 7.71-5.86Z"/></svg>
               <p class="mt-4 text-xl font-medium text-[#8a8f98]">
                 {{ $t('account.cart.empty.title') }}
               </p>
@@ -264,7 +264,7 @@ onMounted(() => {
                           v-else
                           class="flex h-full w-full items-center justify-center text-[#9aa0a8]"
                         >
-                          <Icon name="icon:t-shirt-light" class="size-[34px]" />
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[34px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m246.64 63l-51.77-28.26A5.9 5.9 0 0 0 192 34h-32a6 6 0 0 0-6 6a26 26 0 0 1-52 0a6 6 0 0 0-6-6H64a5.9 5.9 0 0 0-2.88.74L9.36 63a13.77 13.77 0 0 0-5.78 18.55l19.28 36.81A14.38 14.38 0 0 0 35.67 126H58v82a14 14 0 0 0 14 14h112a14 14 0 0 0 14-14v-82h22.34a14.38 14.38 0 0 0 12.81-7.64l19.28-36.81A13.77 13.77 0 0 0 246.64 63m-211 51a2.42 2.42 0 0 1-2.18-1.21L14.21 76a1.82 1.82 0 0 1 .9-2.47L58 50.11V114ZM186 208a2 2 0 0 1-2 2H72a2 2 0 0 1-2-2V46h20.48a38 38 0 0 0 75 0H186Zm55.8-132l-19.28 36.8a2.42 2.42 0 0 1-2.18 1.21H198v-63.9l42.9 23.4a1.83 1.83 0 0 1 .89 2.49Z"/></svg>
                         </div>
                       </div>
 
@@ -324,7 +324,7 @@ onMounted(() => {
                               :aria-label="$t('account.cart.actions.decreaseSize', { size: size.label })"
                               @click="updateCartItemSizeQuantity(item.id, size.id, size.quantity - 1)"
                             >
-                              <Icon name="icon:minus" class="size-[14px]" />
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[14px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M224 128a8 8 0 0 1-8 8H40a8 8 0 0 1 0-16h176a8 8 0 0 1 8 8"/></svg>
                             </button>
                             <div class="flex h-8 min-w-[44px] items-center justify-center rounded-lg border border-borderSecondary bg-white px-2 text-sm font-medium text-primary">
                               {{ size.quantity }}
@@ -335,7 +335,7 @@ onMounted(() => {
                               :aria-label="$t('account.cart.actions.increaseSize', { size: size.label })"
                               @click="updateCartItemSizeQuantity(item.id, size.id, size.quantity + 1)"
                             >
-                              <Icon name="icon:plus" class="size-[14px]" />
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[14px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M224 128a8 8 0 0 1-8 8h-80v80a8 8 0 0 1-16 0v-80H40a8 8 0 0 1 0-16h80V40a8 8 0 0 1 16 0v80h80a8 8 0 0 1 8 8"/></svg>
                             </button>
                           </div>
                         </div>
@@ -346,7 +346,7 @@ onMounted(() => {
                       <p class="text-[1.8rem] font-semibold leading-none text-primary">
                         {{ formatCurrency(item.summary.totalPrice * item.quantity) }}
                       </p>
-                      <Icon name="icon:caret-down" class="size-[16px] text-[#686f72]" />
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[16px] text-[#686f72] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m213.66 101.66l-80 80a8 8 0 0 1-11.32 0l-80-80a8 8 0 0 1 11.32-11.32L128 164.69l74.34-74.35a8 8 0 0 1 11.32 11.32"/></svg>
                     </div>
                   </div>
                 </article>
@@ -370,7 +370,7 @@ onMounted(() => {
                         v-else
                         class="flex h-full w-full items-center justify-center text-[#9aa0a8]"
                       >
-                        <Icon name="icon:t-shirt-light" class="size-[26px]" />
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[26px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m246.64 63l-51.77-28.26A5.9 5.9 0 0 0 192 34h-32a6 6 0 0 0-6 6a26 26 0 0 1-52 0a6 6 0 0 0-6-6H64a5.9 5.9 0 0 0-2.88.74L9.36 63a13.77 13.77 0 0 0-5.78 18.55l19.28 36.81A14.38 14.38 0 0 0 35.67 126H58v82a14 14 0 0 0 14 14h112a14 14 0 0 0 14-14v-82h22.34a14.38 14.38 0 0 0 12.81-7.64l19.28-36.81A13.77 13.77 0 0 0 246.64 63m-211 51a2.42 2.42 0 0 1-2.18-1.21L14.21 76a1.82 1.82 0 0 1 .9-2.47L58 50.11V114ZM186 208a2 2 0 0 1-2 2H72a2 2 0 0 1-2-2V46h20.48a38 38 0 0 0 75 0H186Zm55.8-132l-19.28 36.8a2.42 2.42 0 0 1-2.18 1.21H198v-63.9l42.9 23.4a1.83 1.83 0 0 1 .89 2.49Z"/></svg>
                       </div>
                       <span class="absolute right-1 top-0 flex min-h-[20px] min-w-[20px] items-center justify-center rounded-full border border-white bg-white px-1 text-[11px] font-semibold text-primary shadow-[0_10px_24px_rgba(17,19,20,0.08)]">
                         {{ summaryPreviewItem.quantity }}

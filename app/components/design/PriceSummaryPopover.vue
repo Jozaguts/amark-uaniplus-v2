@@ -40,12 +40,7 @@ const isOpen = ref(false)
           </p>
         </div>
 
-        <Icon
-          name="ruuul:chevron-down"
-          size="1.1em"
-          class="shrink-0 text-white transition-transform duration-200"
-          :class="isOpen ? 'rotate-180' : ''"
-        />
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256" fill="currentColor" class="shrink-0 text-white transition-transform duration-200 inline-block" aria-hidden="true" focusable="false" role="presentation" :class="isOpen ? 'rotate-180' : ''"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m213.66 101.66l-80 80a8 8 0 0 1-11.32 0l-80-80a8 8 0 0 1 11.32-11.32L128 164.69l74.34-74.35a8 8 0 0 1 11.32 11.32"/></svg>
       </button>
     </template>
 

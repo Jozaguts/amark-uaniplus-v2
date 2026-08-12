@@ -1204,7 +1204,7 @@ onMounted(async () => {
           v-else-if="!checkoutItems.length"
           class="mx-auto flex min-h-[calc(100vh-180px)] max-w-[1240px] flex-col items-center justify-center rounded-[24px] bg-white px-6 text-center shadow-[0_20px_60px_rgba(17,19,20,0.04)]"
         >
-          <Icon name="icon:shopping-cart-simple" size="72" class="text-primary" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="72" height="72" fill="currentColor" class="text-primary inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M104 216a16 16 0 1 1-16-16a16 16 0 0 1 16 16m88-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m47.71-125.86l-25.64 92.28A24.06 24.06 0 0 1 191 184H92.16A24.06 24.06 0 0 1 69 166.42L33.92 40H16a8 8 0 0 1 0-16h24a8 8 0 0 1 7.71 5.86L57.19 64H232a8 8 0 0 1 7.71 10.14M221.47 80H61.64l22.81 82.14a8 8 0 0 0 7.71 5.86H191a8 8 0 0 0 7.71-5.86Z"/></svg>
           <p class="mt-4 text-xl font-medium text-[#8a8f98]">
             {{ t('checkout.empty.title') }}
           </p>
@@ -1250,7 +1250,7 @@ onMounted(async () => {
                     @click="startAddressEdit"
                   >
                     <span>{{ t('checkout.address.change') }}</span>
-                    <Icon name="icon:caret-right" size="16px" />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="16" height="16" fill="currentColor" class="inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m181.66 133.66l-80 80a8 8 0 0 1-11.32-11.32L164.69 128L90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32"/></svg>
                   </button>
                 </div>
               </div>
@@ -1530,7 +1530,7 @@ onMounted(async () => {
                         class="inline-flex items-center gap-1 text-sm font-medium text-primary transition hover:opacity-70"
                         @click="startAddressEdit"
                       >
-                        <Icon name="icon:pencil-simple-line" size="16px" />
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="16" height="16" fill="currentColor" class="inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m227.32 73.37l-44.69-44.68a16 16 0 0 0-22.63 0L36.69 152A15.86 15.86 0 0 0 32 163.31V208a16 16 0 0 0 16 16h168a8 8 0 0 0 0-16H115.32l112-112a16 16 0 0 0 0-22.63M92.69 208H48v-44.69l88-88L180.69 120ZM192 108.69L147.32 64l24-24L216 84.69Z"/></svg>
                         <span>{{ t('checkout.address.edit') }}</span>
                       </button>
                     </div>
@@ -1746,7 +1746,7 @@ onMounted(async () => {
                         v-else
                         class="flex h-full w-full items-center justify-center text-[#9aa0a8]"
                       >
-                        <Icon name="icon:t-shirt-light" size="20px" />
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20" fill="currentColor" class="inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m246.64 63l-51.77-28.26A5.9 5.9 0 0 0 192 34h-32a6 6 0 0 0-6 6a26 26 0 0 1-52 0a6 6 0 0 0-6-6H64a5.9 5.9 0 0 0-2.88.74L9.36 63a13.77 13.77 0 0 0-5.78 18.55l19.28 36.81A14.38 14.38 0 0 0 35.67 126H58v82a14 14 0 0 0 14 14h112a14 14 0 0 0 14-14v-82h22.34a14.38 14.38 0 0 0 12.81-7.64l19.28-36.81A13.77 13.77 0 0 0 246.64 63m-211 51a2.42 2.42 0 0 1-2.18-1.21L14.21 76a1.82 1.82 0 0 1 .9-2.47L58 50.11V114ZM186 208a2 2 0 0 1-2 2H72a2 2 0 0 1-2-2V46h20.48a38 38 0 0 0 75 0H186Zm55.8-132l-19.28 36.8a2.42 2.42 0 0 1-2.18 1.21H198v-63.9l42.9 23.4a1.83 1.83 0 0 1 .89 2.49Z"/></svg>
                       </div>
                     </div>
                     <div class="min-w-0 flex-1">
@@ -1777,7 +1777,7 @@ onMounted(async () => {
                           class="flex h-6 w-6 items-center justify-center rounded-lg border border-borderSecondary bg-white text-primary transition hover:border-primary disabled:cursor-not-allowed disabled:opacity-40"
                           @click="handleSizeQuantityChange(item.id, size.id, size.quantity, -1)"
                         >
-                          <Icon name="icon:minus" size="12px" />
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="12" height="12" fill="currentColor" class="inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M224 128a8 8 0 0 1-8 8H40a8 8 0 0 1 0-16h176a8 8 0 0 1 8 8"/></svg>
                         </button>
                         <span class="w-5 text-center text-xs font-semibold text-primary tabular-nums">{{ size.quantity }}</span>
                         <button
@@ -1787,7 +1787,7 @@ onMounted(async () => {
                           class="flex h-6 w-6 items-center justify-center rounded-lg border border-borderSecondary bg-white text-primary transition hover:border-primary disabled:cursor-not-allowed disabled:opacity-40"
                           @click="handleSizeQuantityChange(item.id, size.id, size.quantity, 1)"
                         >
-                          <Icon name="icon:plus" size="12px" />
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="12" height="12" fill="currentColor" class="inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M224 128a8 8 0 0 1-8 8h-80v80a8 8 0 0 1-16 0v-80H40a8 8 0 0 1 0-16h80V40a8 8 0 0 1 16 0v80h80a8 8 0 0 1 8 8"/></svg>
                         </button>
                       </div>
                     </div>
@@ -1800,7 +1800,7 @@ onMounted(async () => {
                       class="flex w-full items-center justify-center gap-1.5 text-xs font-semibold text-[#f04438] transition hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-40"
                       @click="handleRemoveItem(item.id)"
                     >
-                      <Icon name="icon:x-circle" size="14px" />
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="14" height="14" fill="currentColor" class="inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M165.66 101.66L139.31 128l26.35 26.34a8 8 0 0 1-11.32 11.32L128 139.31l-26.34 26.35a8 8 0 0 1-11.32-11.32L116.69 128l-26.35-26.34a8 8 0 0 1 11.32-11.32L128 116.69l26.34-26.35a8 8 0 0 1 11.32 11.32M232 128A104 104 0 1 1 128 24a104.11 104.11 0 0 1 104 104m-16 0a88 88 0 1 0-88 88a88.1 88.1 0 0 0 88-88"/></svg>
                       <span>{{ isItemMutating(item.id) ? '…' : t('checkout.summary.removeItem') }}</span>
                     </button>
                   </div>

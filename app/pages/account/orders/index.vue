@@ -121,7 +121,7 @@ onMounted(() => {
           :to="localePath('/account/orders')"
           class="flex h-11 items-center gap-3 rounded-lg bg-white px-4 text-sm font-semibold text-primary shadow-[0_8px_20px_rgba(17,19,20,0.03)]"
         >
-          <Icon name="icon:package" class="size-[18px]" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[18px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m223.68 66.15l-88-48.15a15.88 15.88 0 0 0-15.36 0l-88 48.17a16 16 0 0 0-8.32 14v95.64a16 16 0 0 0 8.32 14l88 48.17a15.88 15.88 0 0 0 15.36 0l88-48.17a16 16 0 0 0 8.32-14V80.18a16 16 0 0 0-8.32-14.03M128 32l80.34 44l-29.77 16.3l-80.35-44Zm0 88L47.66 76l33.9-18.56l80.34 44ZM40 90l80 43.78v85.79l-80-43.75Zm176 85.78l-80 43.79v-85.75l32-17.51V152a8 8 0 0 0 16 0v-44.45L216 90v85.77Z"/></svg>
           <span>{{ $t('account.orders.title') }}</span>
         </NuxtLink>
       </aside>
@@ -138,7 +138,7 @@ onMounted(() => {
               class="inline-flex h-10 items-center gap-2 rounded-full border border-borderSecondary px-5 text-sm font-semibold text-primary transition hover:border-primary"
             >
               <span>{{ $t('account.orders.manage') }}</span>
-              <Icon name="icon:caret-down" class="size-[16px]" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[16px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m213.66 101.66l-80 80a8 8 0 0 1-11.32 0l-80-80a8 8 0 0 1 11.32-11.32L128 164.69l74.34-74.35a8 8 0 0 1 11.32 11.32"/></svg>
             </button>
           </div>
 
@@ -180,7 +180,7 @@ onMounted(() => {
               v-else-if="ordersError"
               class="flex min-h-[360px] flex-col items-center justify-center text-center"
             >
-              <Icon name="icon:warning-circle" class="size-[48px] text-[#f04438]" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[48px] text-[#f04438] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88m-8-80V80a8 8 0 0 1 16 0v56a8 8 0 0 1-16 0m20 36a12 12 0 1 1-12-12a12 12 0 0 1 12 12"/></svg>
               <p class="mt-4 text-sm text-[#f04438]">
                 {{ ordersError }}
               </p>
@@ -198,7 +198,7 @@ onMounted(() => {
               class="flex min-h-[360px] flex-col items-center justify-center text-center"
             >
               <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#f3f4f6] text-[#b8bdc5]">
-                <Icon name="icon:clipboard-text" class="size-[36px]" />
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[36px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M168 152a8 8 0 0 1-8 8H96a8 8 0 0 1 0-16h64a8 8 0 0 1 8 8m-8-40H96a8 8 0 0 0 0 16h64a8 8 0 0 0 0-16m56-64v168a16 16 0 0 1-16 16H56a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h36.26a47.92 47.92 0 0 1 71.48 0H200a16 16 0 0 1 16 16M96 64h64a32 32 0 0 0-64 0m104-16h-26.75A47.9 47.9 0 0 1 176 64v8a8 8 0 0 1-8 8H88a8 8 0 0 1-8-8v-8a47.9 47.9 0 0 1 2.75-16H56v168h144Z"/></svg>
               </div>
               <p class="mt-4 text-sm text-[#8a8f98]">
                 {{ $t('account.orders.empty') }}
@@ -232,7 +232,7 @@ onMounted(() => {
                       v-else
                       class="flex h-full w-full items-center justify-center text-[#9aa0a8]"
                     >
-                      <Icon name="icon:package" class="size-[22px]" />
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[22px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m223.68 66.15l-88-48.15a15.88 15.88 0 0 0-15.36 0l-88 48.17a16 16 0 0 0-8.32 14v95.64a16 16 0 0 0 8.32 14l88 48.17a15.88 15.88 0 0 0 15.36 0l88-48.17a16 16 0 0 0 8.32-14V80.18a16 16 0 0 0-8.32-14.03M128 32l80.34 44l-29.77 16.3l-80.35-44Zm0 88L47.66 76l33.9-18.56l80.34 44ZM40 90l80 43.78v85.79l-80-43.75Zm176 85.78l-80 43.79v-85.75l32-17.51V152a8 8 0 0 0 16 0v-44.45L216 90v85.77Z"/></svg>
                     </div>
                   </div>
                   <div class="min-w-0">

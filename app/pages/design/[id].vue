@@ -2346,11 +2346,9 @@ useHead(() => ({
               <h1 class="truncate text-sm font-medium text-white lg:max-w-[180px] xl:max-w-[280px] 2xl:max-w-[360px]">
                 {{ productName }}
               </h1>
-              <Icon
-                name="ruuul:switch"
-                size="20px"
-                class="cursor-pointer p-1 text-white"
-              />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false" width="20" height="20" class="cursor-pointer p-1 text-white inline-block shrink-0" role="presentation">
+  <path d="M80 168H32a8 8 0 0 0 0 16h48a8 8 0 0 0 0-16Zm136-80h-48a8 8 0 0 0 0 16h48a8 8 0 0 0 0-16Zm-48 48h48a8 8 0 0 0 0-16h-48a8 8 0 0 0 0 16ZM80 72H32a8 8 0 0 0 0 16h48a8 8 0 0 0 0-16Zm94.34 66.34a8 8 0 0 0-11.32 0L144 157.66 125 138.68a8 8 0 0 0-11.32 11.32l24 24a8 8 0 0 0 11.32 0l24-24a8 8 0 0 0 0-11.32Zm-48-64a8 8 0 0 0 11.32 0l24-24a8 8 0 0 0-11.32-11.32L144 66.34 125 47.32A8 8 0 0 0 113.68 58.64l24 24a8 8 0 0 0 11.32 0Z"/>
+</svg>
             </div>
 
             <p class="text-[11px] uppercase tracking-[0.12em] text-white/45 lg:hidden">
@@ -2583,19 +2581,19 @@ useHead(() => ({
 <!--                  type="button"-->
 <!--                  class="rounded-md p-2 text-primary transition hover:bg-cotton-grey-1"-->
 <!--                >-->
-<!--                  <Icon name="icon:arrow-counter-clockwise" size="20px" />-->
+<!--                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false" width="20" height="20" class="inline-block shrink-0" role="presentation"><path d="M224 128a96 96 0 0 1-94.71 96H128a95.05 95.05 0 0 1-65.66-26.16a8 8 0 1 1 11-11.63A80 80 0 1 0 71.43 71.39c.13.13.26.25.39.37L98 98.22A8 8 0 0 1 92.34 112H40a8 8 0 0 1-8-8V52.27a8 8 0 0 1 13.66-5.66l26.93 27A95.43 95.43 0 0 1 128 32a96 96 0 0 1 96 96"/></svg>-->
 <!--                </button>-->
 <!--                <button-->
 <!--                  type="button"-->
 <!--                  class="rounded-md p-2 text-[#b9bdbf]"-->
 <!--                >-->
-<!--                  <Icon name="icon:arrow-clockwise" size="20px" />-->
+<!--                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20" fill="currentColor" class="inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M240 56v48a8 8 0 0 1-8 8h-48a8 8 0 0 1 0-16h27.4l-26.59-24.36l-.25-.24a80 80 0 1 0-1.67 114.78a8 8 0 0 1 11 11.63A95.44 95.44 0 0 1 128 224h-1.32a96 96 0 1 1 69.07-164L224 85.8V56a8 8 0 1 1 16 0"/></svg>-->
 <!--                </button>-->
 <!--                <button-->
 <!--                  type="button"-->
 <!--                  class="rounded-md p-2 text-primary transition hover:bg-cotton-grey-1"-->
 <!--                >-->
-<!--                  <Icon name="icon:grid-four" size="20px" />-->
+<!--                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false" width="20" height="20" class="inline-block shrink-0" role="presentation"><path d="M104 40H56a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h48a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16m0 64H56V56h48zm96-64h-48a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h48a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16m0 64h-48V56h48zm-96 32H56a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h48a16 16 0 0 0 16-16v-48a16 16 0 0 0-16-16m0 64H56v-48h48zm96-64h-48a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h48a16 16 0 0 0 16-16v-48a16 16 0 0 0-16-16m0 64h-48v-48h48z"/></svg>-->
 <!--                </button>-->
                 <button
                   type="button"
@@ -2732,7 +2730,7 @@ useHead(() => ({
             aria-live="polite"
             class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-white/80 backdrop-blur-sm"
           >
-            <Icon name="icon:spinner-gap" size="32px" class="animate-spin text-primary" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="32" height="32" fill="currentColor" class="animate-spin text-primary inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M136 32v32a8 8 0 0 1-16 0V32a8 8 0 0 1 16 0m88 88h-32a8 8 0 0 0 0 16h32a8 8 0 0 0 0-16m-45.09 47.6a8 8 0 0 0-11.31 11.31l22.62 22.63a8 8 0 0 0 11.32-11.32ZM128 184a8 8 0 0 0-8 8v32a8 8 0 0 0 16 0v-32a8 8 0 0 0-8-8m-50.91-16.4l-22.63 22.62a8 8 0 0 0 11.32 11.32l22.62-22.63a8 8 0 0 0-11.31-11.31M72 128a8 8 0 0 0-8-8H32a8 8 0 0 0 0 16h32a8 8 0 0 0 8-8m-6.22-73.54a8 8 0 0 0-11.32 11.32L77.09 88.4A8 8 0 0 0 88.4 77.09Z"/></svg>
             <span class="text-sm font-medium text-primary">
               {{ t('catalog.designEditor.mockups.preparing') }}
             </span>
@@ -2768,7 +2766,7 @@ useHead(() => ({
                         type="button"
                         class="hidden rounded p-1 text-[#8b8f94] transition hover:bg-cotton-grey-1 lg:flex"
                       >
-                        <Icon name="icon:link-simple" size="16px" />
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="16" height="16" fill="currentColor" class="inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M165.66 90.34a8 8 0 0 1 0 11.32l-64 64a8 8 0 0 1-11.32-11.32l64-64a8 8 0 0 1 11.32 0M215.6 40.4a56 56 0 0 0-79.2 0l-30.06 30.05a8 8 0 0 0 11.32 11.32l30.06-30a40 40 0 0 1 56.57 56.56l-30.07 30.06a8 8 0 0 0 11.31 11.32l30.07-30.11a56 56 0 0 0 0-79.2m-77.26 133.82l-30.06 30.06a40 40 0 1 1-56.56-56.57l30.05-30.05a8 8 0 0 0-11.32-11.32L40.4 136.4a56 56 0 0 0 79.2 79.2l30.06-30.07a8 8 0 0 0-11.32-11.31"/></svg>
                       </button>
                     </div>
                     <div class="flex h-10 items-center justify-between rounded-lg border border-borderSecondary bg-white px-3 text-sm text-[#b4b7ba]">

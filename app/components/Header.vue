@@ -342,7 +342,7 @@ onMounted(() => {
         <div class="flex items-center justify-end gap-5 pt-[-1px] text-[16px] font-bold leading-none">
           <HeaderSearch />
           <NuxtLink :to="localePath('/account/cart')" :aria-label="$t('header.actions.cart')" class="relative pt-px">
-            <Icon name="icon:shopping-cart" class="size-6" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-6 inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M104 216a16 16 0 1 1-16-16a16 16 0 0 1 16 16m88-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m47.71-125.86l-25.64 92.28A24.06 24.06 0 0 1 191 184H92.16A24.06 24.06 0 0 1 69 166.42L33.92 40H16a8 8 0 0 1 0-16h24a8 8 0 0 1 7.71 5.86L57.19 64H232a8 8 0 0 1 7.71 10.14M221.47 80H61.64l22.81 82.14a8 8 0 0 0 7.71 5.86H191a8 8 0 0 0 7.71-5.86Z"/></svg>
             <span
               v-if="itemCount"
               class="absolute -right-2 -top-2 flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full bg-black px-1 text-[10px] font-semibold leading-none text-white"
@@ -352,7 +352,7 @@ onMounted(() => {
           </NuxtLink>
 
           <NuxtLink :to="nextLocalePath" :aria-label="$t('header.actions.language')" class="flex items-center gap-[6px]">
-            <Icon name="icon:globe-light" class="size-[26px]" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[26px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M128 26a102 102 0 1 0 102 102A102.12 102.12 0 0 0 128 26m81.57 64h-40.38a132.6 132.6 0 0 0-25.73-50.67A90.29 90.29 0 0 1 209.57 90m8.43 38a89.7 89.7 0 0 1-3.83 26h-42.36a155.4 155.4 0 0 0 0-52h42.36a89.7 89.7 0 0 1 3.83 26m-90 87.83a110 110 0 0 1-15.19-19.45A124.2 124.2 0 0 1 99.35 166h57.3a124.2 124.2 0 0 1-13.46 30.38A110 110 0 0 1 128 215.83M96.45 154a139.2 139.2 0 0 1 0-52h63.1a139.2 139.2 0 0 1 0 52ZM38 128a89.7 89.7 0 0 1 3.83-26h42.36a155.4 155.4 0 0 0 0 52H41.83A89.7 89.7 0 0 1 38 128m90-87.83a110 110 0 0 1 15.19 19.45A124.2 124.2 0 0 1 156.65 90h-57.3a124.2 124.2 0 0 1 13.46-30.38A110 110 0 0 1 128 40.17m-15.46-.84A132.6 132.6 0 0 0 86.81 90H46.43a90.29 90.29 0 0 1 66.11-50.67M46.43 166h40.38a132.6 132.6 0 0 0 25.73 50.67A90.29 90.29 0 0 1 46.43 166m97 50.67A132.6 132.6 0 0 0 169.19 166h40.38a90.29 90.29 0 0 1-66.11 50.67Z"/></svg>
             <span>{{ nextLocaleLabel }}</span>
           </NuxtLink>
 
@@ -387,7 +387,7 @@ onMounted(() => {
                 role="menuitem"
                 @click="isUserMenuOpen = false"
               >
-                <Icon name="icon:package" class="size-[16px]" />
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[16px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="m223.68 66.15l-88-48.15a15.88 15.88 0 0 0-15.36 0l-88 48.17a16 16 0 0 0-8.32 14v95.64a16 16 0 0 0 8.32 14l88 48.17a15.88 15.88 0 0 0 15.36 0l88-48.17a16 16 0 0 0 8.32-14V80.18a16 16 0 0 0-8.32-14.03M128 32l80.34 44l-29.77 16.3l-80.35-44Zm0 88L47.66 76l33.9-18.56l80.34 44ZM40 90l80 43.78v85.79l-80-43.75Zm176 85.78l-80 43.79v-85.75l32-17.51V152a8 8 0 0 0 16 0v-44.45L216 90v85.77Z"/></svg>
                 <span>{{ $t('header.user.orders') }}</span>
               </NuxtLink>
               <button
@@ -397,7 +397,7 @@ onMounted(() => {
                 role="menuitem"
                 @click="handleLogout"
               >
-                <Icon name="icon:sign-out" class="size-[16px]" />
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[16px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M120 216a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8V40a8 8 0 0 1 8-8h64a8 8 0 0 1 0 16H56v160h56a8 8 0 0 1 8 8m109.66-93.66l-40-40a8 8 0 0 0-11.32 11.32L204.69 120H112a8 8 0 0 0 0 16h92.69l-26.35 26.34a8 8 0 0 0 11.32 11.32l40-40a8 8 0 0 0 0-11.32"/></svg>
                 <span>{{ logoutPending ? $t('header.user.loggingOut') : $t('header.user.logout') }}</span>
               </button>
             </div>
@@ -472,8 +472,7 @@ onMounted(() => {
               class="flex size-10 shrink-0 items-center justify-center -ml-1 text-white"
               @click="isMobileMenuOpen = true"
             >
-              <svg viewBox="0 0 16 16" focusable="false" aria-hidden="true" role="presentation" fill="currentColor"
-                   class="h-5 ">
+              <svg viewBox="0 0 16 16" focusable="false" aria-hidden="true" role="presentation" fill="currentColor" class="size-5 inline-block shrink-0">
                 <path d="M1 3.25h14v1.5H1zm0 4h14v1.5H1zm0 4h14v1.5H1z"></path>
               </svg>
             </button>
@@ -494,7 +493,9 @@ onMounted(() => {
               :aria-expanded="isMobileSearchOpen"
               @click="toggleMobileSearch"
             >
-              <Icon name="icon:search" class="size-[20px]" />
+              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false" role="presentation" fill="currentColor" class="size-[20px] inline-block shrink-0">
+    <path d="M15.78 14.72l-4.45-4.46a6.346 6.346 0 1 0-1.055 1.066l4.444 4.454a.75.75 0 0 0 1.062-1.06zM1.5 6.353a4.84 4.84 0 1 1 4.84 4.853A4.852 4.852 0 0 1 1.5 6.353z"></path>
+</svg>
             </button>
 
             <NuxtLink
@@ -502,7 +503,9 @@ onMounted(() => {
               :aria-label="$t('header.actions.wishlist')"
               class="flex size-10 items-center justify-center text-white"
             >
-              <Icon name="icon:heart" class="size-[20px]" />
+              <svg viewBox="0 0 16 16" focusable="false" aria-hidden="true" role="presentation" fill="currentColor" class="size-[20px] inline-block shrink-0">
+    <path d="M4.155 2.5a2.62 2.62 0 0 1 1.872.784l.908.915L8 5.274l1.973-1.99a2.629 2.629 0 0 1 3.745 0 2.719 2.719 0 0 1 0 3.816L8 12.87 2.282 7.1a2.719 2.719 0 0 1 0-3.816A2.62 2.62 0 0 1 4.155 2.5m0-1.5a4.123 4.123 0 0 0-2.938 1.228 4.218 4.218 0 0 0 0 5.928L8 15l6.783-6.844a4.219 4.219 0 0 0 0-5.928 4.129 4.129 0 0 0-5.876 0L8 3.143l-.907-.915A4.124 4.124 0 0 0 4.155 1z"></path>
+</svg>
             </NuxtLink>
 
             <NuxtLink
@@ -510,7 +513,7 @@ onMounted(() => {
               :aria-label="$t('header.actions.cart')"
               class="relative flex size-10 items-center justify-center text-white"
             >
-              <Icon name="icon:shopping-cart" class="size-[22px]" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-[22px] inline-block shrink-0" aria-hidden="true" focusable="false" role="presentation"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE --><path fill="currentColor" d="M104 216a16 16 0 1 1-16-16a16 16 0 0 1 16 16m88-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m47.71-125.86l-25.64 92.28A24.06 24.06 0 0 1 191 184H92.16A24.06 24.06 0 0 1 69 166.42L33.92 40H16a8 8 0 0 1 0-16h24a8 8 0 0 1 7.71 5.86L57.19 64H232a8 8 0 0 1 7.71 10.14M221.47 80H61.64l22.81 82.14a8 8 0 0 0 7.71 5.86H191a8 8 0 0 0 7.71-5.86Z"/></svg>
               <span
                 v-if="itemCount"
                 class="absolute right-0.5 top-0.5 flex min-h-[16px] min-w-[16px] items-center justify-center rounded-full bg-white px-1 text-[10px] font-bold leading-none text-black"
