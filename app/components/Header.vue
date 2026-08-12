@@ -472,7 +472,10 @@ onMounted(() => {
               class="flex size-10 shrink-0 items-center justify-center -ml-1 text-white"
               @click="isMobileMenuOpen = true"
             >
-              <Icon name="icon:menu" class="size-5" />
+              <svg viewBox="0 0 16 16" focusable="false" aria-hidden="true" role="presentation" fill="currentColor"
+                   class="h-5 ">
+                <path d="M1 3.25h14v1.5H1zm0 4h14v1.5H1zm0 4h14v1.5H1z"></path>
+              </svg>
             </button>
 
             <NuxtLink

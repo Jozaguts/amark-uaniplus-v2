@@ -183,9 +183,9 @@ const { isReady, login } = useCodeClient({
           </NuxtLink>
 
           <div class="w-full">
-            <div class="lg:mx-auto lg:max-w-[480px]">
+            <div class="lg:mx-auto lg:max-w-120">
               <div class="mb-8 text-center text-[18px] font-semibold uppercase tracking-[0.2em] text-primary lg:hidden">
-                {{ $t('auth.brand') }}
+                <span  @click="$router.push('/')">  {{ $t('auth.brand') }}</span>
               </div>
 
               <div class="mb-8 space-y-4 text-center lg:text-left">

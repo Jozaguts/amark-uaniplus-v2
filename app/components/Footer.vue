@@ -38,11 +38,11 @@ const customerCareColumns = [
 
 const informationLinks = [
   { labelKey: 'footer.information.links.about', href: '/content/about' },
-  { labelKey: 'footer.information.links.stores', href: '/content/stores' },
-  { labelKey: 'footer.information.links.careers', href: '/content/careers' },
-  { labelKey: 'footer.information.links.ambassadors', href: '/content/ambassador' },
-  { labelKey: 'footer.information.links.affiliate', href: '/content/affiliate' },
-  { labelKey: 'footer.information.links.press', href: '/content/press' },
+  // { labelKey: 'footer.information.links.stores', href: '/content/stores' },
+  // { labelKey: 'footer.information.links.careers', href: '/content/careers' },
+  // { labelKey: 'footer.information.links.ambassadors', href: '/content/ambassador' },
+  // { labelKey: 'footer.information.links.affiliate', href: '/content/affiliate' },
+  // { labelKey: 'footer.information.links.press', href: '/content/press' },
 ] satisfies FooterLink[]
 
 const publicConfig = runtimeConfig.public as Record<string, unknown>
@@ -227,13 +227,7 @@ const newsletterMessage = computed(() => {
             :to="localePath('/')"
             :aria-label="$t('footer.promo.ctaLabel')"
           >
-            <img
-              class="block h-auto w-full"
-              src="https://is4.revolveassets.com/images/up/2025/July/070925_RW_FWRD_CrossPromoFooter_B_r.png"
-              srcset="https://is4.revolveassets.com/images/up/2025/July/070925_RW_FWRD_CrossPromoFooter_B_r.png 1x, https://is4.revolveassets.com/images/up/2025/July/070925_RW_FWRD_CrossPromoFooter_B_r.png 2x"
-              :alt="$t('footer.promo.alt')"
-              loading="lazy"
-            >
+
           </NuxtLink>
         </div>
       </div>
