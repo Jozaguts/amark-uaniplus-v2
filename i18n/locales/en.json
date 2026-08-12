@@ -598,6 +598,14 @@
         "design": "Design",
         "mockups": "Mockups"
       },
+      "text": {
+        "placeholder": "add text or numbers here",
+        "colorAria": "Choose text color",
+        "fontFamily": "Font family",
+        "fontFamilyPlaceholder": "Select a font",
+        "create": "Create WordArt",
+        "fallbackFonts": "Test fonts. Configure fonts"
+      },
       "mockups": {
         "previewAlt": "Mockup preview",
         "download": "Download",

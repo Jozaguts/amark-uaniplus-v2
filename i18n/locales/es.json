@@ -598,6 +598,14 @@
         "design": "Diseño",
         "mockups": "Mockups"
       },
+      "text": {
+        "placeholder": "agrega texto o números aquí",
+        "colorAria": "Elegir color de texto",
+        "fontFamily": "Familia tipográfica",
+        "fontFamilyPlaceholder": "Selecciona una fuente",
+        "create": "Crear WordArt",
+        "fallbackFonts": "Fuentes de prueba. Configura las fuentes"
+      },
       "mockups": {
         "previewAlt": "Vista previa del mockup",
         "download": "Descargar",
